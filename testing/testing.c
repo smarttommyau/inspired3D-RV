@@ -2,7 +2,6 @@
 #include "ch32v003fun.h"
 #include <stdio.h>
 #include "ch32v003_GPIO_branchless.h"
-#include "ch32v003_i2c.h"
 
 // #define LED_PINS GPIOA, 2
 
@@ -42,8 +41,6 @@
 int main(void) {
     SystemInit();
     GPIO_ADCinit();
-    i2c_init();
-    i2c_scan();
     Delay_Ms(1000);
 
 
