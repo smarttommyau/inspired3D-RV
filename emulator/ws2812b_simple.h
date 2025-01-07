@@ -1,11 +1,14 @@
 #pragma once
 #include "buttons.h"
 #include "ch32v003fun.h"
-#include "colors.h"
 
 #include <stdio.h>
 
 #define BORDER_X 2
+//dumy
+#define NUM_LEDS 0
+#define horizontalButtons 0
+#define verticalButtons 0
 
 void WS2812BSimpleSend(GPIO_TypeDef * port, int pin, uint8_t * data, int len_in_bytes) {
     (void)port;

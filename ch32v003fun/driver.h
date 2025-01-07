@@ -36,6 +36,10 @@ ARROW_KEY arrow_key_detect(uint16_t adc_reading){
     return ARROW_NOT_FOUND;
 }
 
+
+// Layout of ABCD button:
+//      A
+//  C   B   D
 typedef enum {
     ABCD_A = 1,
     ABCD_B = 2,
