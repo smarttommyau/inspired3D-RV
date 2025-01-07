@@ -21,9 +21,9 @@ press keyboard to control the matrix emulator, listing out the keys
 * J -> C
 * L -> D
 
-// Layout of ABCD button:
-//      A
-//  C   B   D
+Layout of ABCD button:\
+&emsp;&nbsp;&nbsp;&emsp;A\
+&emsp;C&emsp;B&emsp;D
 
 ## Notes for emulator
 
