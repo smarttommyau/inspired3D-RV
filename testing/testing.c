@@ -49,7 +49,7 @@ int main(void) {
 
     while(1){
         printf("ADC initialized\n");
-        printf("%d %d %d %d",GPIO_analogRead(GPIO_Ain2_C4),GPIO_analogRead(GPIO_Ain3_D2),GPIO_analogRead(GPIO_Ain4_D3));
+        printf("%d %d",GPIO_analogRead(GPIO_Ain2_C4),GPIO_analogRead(GPIO_Ain3_D2));
         Delay_Ms(500);
     }
 }
