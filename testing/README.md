@@ -1,4 +1,4 @@
-# Whac-a-mole
+# Testing
 
 ## Description
-`whac-a-mole.c`:
+Test adc values for buttons
