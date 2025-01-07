@@ -23,7 +23,7 @@ uint16_t arrow_key_read_ADC(void){
     return GPIO_analogRead(GPIO_Ain2_C4);
 }
 
-ARROW_KEY arrow_key_detect(uint16_t adc_reading){
+ARROW_KEY arrow_key_down(uint16_t adc_reading){
     if(adc_reading >= ARROW_DOWN_L && adc_reading <= ARROW_DOWN_U){
         return ARROW_DOWN;
     } else if(adc_reading >= ARROW_RIGHT_L && adc_reading <= ARROW_RIGHT_U){
@@ -53,7 +53,7 @@ uint16_t abcd_key_read_ADC(void){
     return GPIO_analogRead(GPIO_Ain3_D2);
 }
 
-ABCD_KEY abcd_key_detect(uint16_t adc_reading){
+ABCD_KEY abcd_key_down(uint16_t adc_reading){
     if(adc_reading >= ABCD_D_U && adc_reading <= ABCD_D_L){
         return ABCD_D;
     } else if(adc_reading >= ABCD_C_L && adc_reading <= ABCD_C_U){
