@@ -12,20 +12,18 @@
 
 press keyboard to control the matrix emulator, listing out the keys
 
-* Y -> up
-* G -> left
-* N -> down
-* J -> right
-* H -> XKey (center)
-* T -> top left
-* U -> top right
-* B -> bottom left
-* M -> bottom right
+* W -> up
+* A -> left
+* S -> down
+* D -> right
+* I -> A
+* K -> B
+* J -> C
+* L -> D
 
-for the buttons on the matrix, it follows the coding writting on the circuit board
-<!-- ![circuit board](/inspire_matrix.jpeg) -->
-
-first press ```ABCD``` on button to choose row, the press ```0-F``` to choose the specific button in HEX
+// Layout of ABCD button:
+//      A
+//  C   B   D
 
 ## Notes for emulator
 
