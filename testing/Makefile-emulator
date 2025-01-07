@@ -5,8 +5,10 @@ LDFLAGS =
 
 ifeq ($(OS),Windows_NT)
     UNAME_S := Windows
+	RM = del
 else
     UNAME_S := $(shell uname -s)
+	RM = rm -f
 endif
 ifeq ($(UNAME_S), Darwin)
     LDFLAGS += -framework CoreFoundation -framework ApplicationServices -pthread
@@ -33,7 +35,7 @@ $(TARGET): $(OBJS)
 
 # Clean up
 clean:
-	rm -f $(OBJS) $(TARGET) *.exe
+	$(RM) *.hex *.bin *.map *.elf *.exe
 
 # Phony targets
 .PHONY: all clean
