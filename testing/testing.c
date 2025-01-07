@@ -1,6 +1,7 @@
 // #define WS2812BSIMPLE_IMPLEMENTATION
 // #include "ws2812b_simple.h"
 #include "ch32v003_GPIO_branchless.h"
+#define CH32V003_I2C_IMPLEMENTATION
 #include "ch32v003_i2c.h"
 #include <stdio.h>
 
@@ -12,13 +13,9 @@ int main(void) {
     SystemInit();
     i2c_init();
     i2c_scan();
+    Delay_Ms(1000);
+    
     GPIO_ADCinit();
-    // Enable GPIOD.
-	RCC->APB2PCENR |= RCC_APB2Periph_GPIOD;
-
-	// GPIO D0 Push-Pull, 10MHz Output
-	GPIOD->CFGLR &= ~(0xf<<(4*0));
-	GPIOD->CFGLR |= (GPIO_Speed_10MHz | GPIO_CNF_OUT_PP)<<(4*0);
 
     printf("ADC initialized\n");
     while(1){
