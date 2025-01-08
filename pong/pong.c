@@ -183,7 +183,7 @@ while(1){
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
             Inspire3D_Display_Update(display);
             printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
-            printf("Blue: %d %d %d\n", Blue[0], Blue[1],abcd_key);
+            printf("Blue: %d %d %d %d\n", Blue[0], Blue[1],abcd_key,abcd_adc);
             Delay_Ms(TICK/CHECKPERTICK);
         }
     }
