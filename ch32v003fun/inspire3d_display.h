@@ -42,6 +42,8 @@ void Inspire3D_Display_SetColor(Inspire3D_Display * display, uint8_t index, Insp
 
 void Inspire3D_Display_SetBGColor(Inspire3D_Display * display, Inspire3D_Color color);
 
+void Inspire3D_Display_SetBrightness(Inspire3D_Display * display, float brightness);
+
 void Inspire3D_Display_Update(Inspire3D_Display * display);
 
 void Inspire3D_Display_Reset(Inspire3D_Display * display); // reset data to 0
@@ -82,6 +84,12 @@ void Inspire3D_Display_SetBGColor(Inspire3D_Display * display, Inspire3D_Color c
     }
 }
 
+void Inspire3D_Display_SetBrightness(Inspire3D_Display * display, float brightness){
+    display->brightness = brightness;
+    for(int i = 0; i < 125; i++){
+        Inspire3D_Color_calculateBrightness((Inspire3D_Color *)display->data[i], brightness);
+    }
+}
 
 void Inspire3D_Display_Update(Inspire3D_Display * display){
     WS2812BSimpleSend(display->port, display->pin, (uint8_t *)display->data, 125 * 3);
