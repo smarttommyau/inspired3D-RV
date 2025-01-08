@@ -44,7 +44,9 @@ void Inspire3D_Display_SetBGColor(Inspire3D_Display * display, Inspire3D_Color c
 
 void Inspire3D_Display_Update(Inspire3D_Display * display);
 
-void Inspire3D_Display_Clear(Inspire3D_Display * display);
+void Inspire3D_Display_Reset(Inspire3D_Display * display); // reset data to 0
+
+void Inspire3D_Display_Clear(Inspire3D_Display * display); // clear the screen
 
 
 void Inspire3D_Display_Init(Inspire3D_Display * display,GPIO_TypeDef * port, int pin){
@@ -83,6 +85,10 @@ void Inspire3D_Display_SetBGColor(Inspire3D_Display * display, Inspire3D_Color c
 
 void Inspire3D_Display_Update(Inspire3D_Display * display){
     WS2812BSimpleSend(display->port, display->pin, (uint8_t *)display->data, 125 * 3);
+}
+
+void Inspire3D_Display_Reset(Inspire3D_Display * display){
+    Inspire3D_Display_SetBGColor(display, Inspire3D_Color_setRGB(0,0,0));
 }
 
 void Inspire3D_Display_Clear(Inspire3D_Display * display){
