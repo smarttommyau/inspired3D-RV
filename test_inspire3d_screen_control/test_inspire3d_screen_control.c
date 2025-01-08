@@ -37,13 +37,15 @@ int main(void) {
     int seed = 0;
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
-
+    Inspire3D_Display_Clear(display);// reset data and update
     while(1){
         seed++;
-        Inspire3D_Display_Clear(display);
-        Inspire3D_Display_SetColor(display, Inspire3D_Display_Coords2Index(0,4,0), Inspire3D_Color_Red);
+        JOY_setseed(seed);
+        Inspire3D_Display_Reset(display); // reset data to 0
+        uint8_t index = Inspire3D_Display_Coords2Index(JOY_random()%4,JOY_random()%4,JOY_random()%4);
+        Inspire3D_Display_SetColor(display,index, Inspire3D_Color_Red);
         Inspire3D_Display_Update(display);
-        printf("updated LED\n");
+        printf("updated LED %d\n", index);
         Delay_Ms(1000);
     }
 }
