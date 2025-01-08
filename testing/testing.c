@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "ch32v003_GPIO_branchless.h"
 
-// #define LED_PINS GPIOA, 2
 
 
 //NOTE:
