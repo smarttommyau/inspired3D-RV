@@ -42,8 +42,8 @@ void draw_ball(Inspire3D_Display *display, int x, int y, int z, Inspire3D_Color 
 uint8_t Red[2] = {1,1}; 
 //coordinates of blue pad (3x3 space) (z=4)
 uint8_t Blue[2] = {1,1}; 
-uint8_t Ball[3] = {2,2,2}; //coordinates of ball (5x5x5 space)
-uint8_t VBall[3] = {0,0,0}; //velocity of ball (5x5x5 space)
+int8_t Ball[3] = {2,2,2}; //coordinates of ball (5x5x5 space)
+int8_t VBall[3] = {0,0,0}; //velocity of ball (5x5x5 space)
 
 bool interate_ball(){
     // true for win, false for continue
