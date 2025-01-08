@@ -181,12 +181,12 @@ while(1){
             ABCD_KEY abcd_key = abcd_key_down(abcd_adc);
             moveRedPad(arrow_key);
             moveBluePad(abcd_key);
-            draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_Green);
+            draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
             draw_pad(display, Red[0], Red[1], 0, Inspire3D_Color_Red);
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
             Inspire3D_Display_Update(display);
-            printf("Red: %d %d\n", Red[0], Red[1]);
-            printf("Blue: %d %d\n", Blue[0], Blue[1]);
+            printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
+            printf("Blue: %d %d %dd\n", Blue[0], Blue[1],abcd_key);
             Delay_Ms(TICK/CHECKPERTICK);
         }
     }
