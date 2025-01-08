@@ -38,6 +38,7 @@ int main(void) {
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
     Inspire3D_Display_Clear(display);// reset data and update
+    display->brightness = 0.1;  
     while(1){
         seed++;
         JOY_setseed(seed);
