@@ -2,10 +2,9 @@
 #define INSPIRE3D_DISPLAY
 
 #include <stdint.h>
-#include <stdlib.h>
 #define WS2812BSIMPLE_IMPLEMENTATION
 #include "ws2812b_simple.h"
-#include "ch32v003_i2c.h"
+
 
 
 typedef struct Inspire3D_Color{
@@ -33,7 +32,7 @@ typedef struct Inspire3D_Display {
 } Inspire3D_Display;
 
 
-Inspire3D_Display * Inspire3D_Display_Init(GPIO_TypeDef * port, int pin);
+void Inspire3D_Display_Init(Inspire3D_Display * display,GPIO_TypeDef * port, int pin);
 
 uint8_t Inspire3D_Display_Coords2Index(uint8_t x, uint8_t y, uint8_t z);
 
@@ -48,12 +47,10 @@ void Inspire3D_Display_Update(Inspire3D_Display * display);
 void Inspire3D_Display_Clear(Inspire3D_Display * display);
 
 
-Inspire3D_Display * Inspire3D_Display_Init(GPIO_TypeDef * port, int pin){
-    Inspire3D_Display * display = (Inspire3D_Display *)malloc(sizeof(Inspire3D_Display));
+void Inspire3D_Display_Init(Inspire3D_Display * display,GPIO_TypeDef * port, int pin){
     display->port = port;
     display->pin = pin;
     display->brightness = 1.0;
-    return display;
 }
 
 uint8_t Inspire3D_Display_Coords2Index(uint8_t x, uint8_t y, uint8_t z){
