@@ -85,10 +85,18 @@ void Inspire3D_Display_SetBGColor(Inspire3D_Display * display, Inspire3D_Color c
 }
 
 void Inspire3D_Display_SetBrightness(Inspire3D_Display * display, float brightness){
-    display->brightness = brightness;
+    float change = brightness / display->brightness;
+    Inspire3D_Color color;
     for(int i = 0; i < 125; i++){
-        Inspire3D_Color_calculateBrightness((Inspire3D_Color *)display->data[i], brightness);
+        color.g = display->data[i][0];
+        color.r = display->data[i][1];
+        color.b = display->data[i][2];
+        Inspire3D_Color_calculateBrightness(&color, change);
+        display->data[i][0] = color.g;
+        display->data[i][1] = color.r;
+        display->data[i][2] = color.b;
     }
+    display->brightness = brightness;
 }
 
 void Inspire3D_Display_Update(Inspire3D_Display * display){
