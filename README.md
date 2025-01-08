@@ -8,6 +8,7 @@ inspired3d-RISC-V codes
 - [ ] Button click detection
 - [x] Basic LED control
 - [ ] emulator of inspired3d
+- [ ] eeprome read/write
 - [ ] Intresting games and animations
 - [ ] Add more features
 
