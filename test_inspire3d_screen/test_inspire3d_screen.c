@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "driver.h"
 #include "ch32v003_i2c.h"
+#include "ws2812b_simple.h"
 
 #define NUM_LEDS 5*5*5
 
