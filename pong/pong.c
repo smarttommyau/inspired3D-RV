@@ -90,9 +90,9 @@ bool interate_ball(){
 }
 
 void moveRedPad(ARROW_KEY key){
-    if(key == ARROW_UP && Red[1] > 0){
+    if(key == ARROW_UP && Red[1] < PAD_REGION_SIZE - 1){
         Red[1]++;
-    }else if(key == ARROW_DOWN && Red[1] < PAD_REGION_SIZE - 1){
+    }else if(key == ARROW_DOWN && Red[1] > 0){
         Red[1]--;
     }else if(key == ARROW_LEFT && Red[0] > 0){
         Red[0]--;
@@ -101,9 +101,9 @@ void moveRedPad(ARROW_KEY key){
     }
 }
 void moveBluePad(ABCD_KEY key){
-    if(key == ABCD_A && Blue[1] > 0){
-        Blue[1]++
-    }else if(key == ABCD_B && Blue[1] < PAD_REGION_SIZE - 1){
+    if(key == ABCD_A && Blue[1] < PAD_REGION_SIZE - 1){
+        Blue[1]++;
+    }else if(key == ABCD_B && Blue[1] > 0){
         Blue[1]--;
     }else if(key == ABCD_C && Blue[0] > 0){
         Blue[0]--;
@@ -185,6 +185,8 @@ while(1){
             draw_pad(display, Red[0], Red[1], 0, Inspire3D_Color_Red);
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
             Inspire3D_Display_Update(display);
+            printf("Red: %d %d\n", Red[0], Red[1]);
+            printf("Blue: %d %d\n", Blue[0], Blue[1]);
             Delay_Ms(TICK/CHECKPERTICK);
         }
     }
