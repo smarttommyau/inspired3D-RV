@@ -88,6 +88,11 @@ void Inspire3D_Display_Update(Inspire3D_Display * display){
     WS2812BSimpleSend(display->port, display->pin, (uint8_t *)display->data, 125 * 3);
 }
 
+void Inspire3D_Display_Clear(Inspire3D_Display * display){
+    Inspire3D_Display_SetBGColor(display, Inspire3D_Color_setRGB(0,0,0));
+    Inspire3D_Display_Update(display);
+}
+
 Inspire3D_Color Inspire3D_Color_setRGB(uint8_t r, uint8_t g, uint8_t b){
     Inspire3D_Color color = {r, g, b};
     return color;
