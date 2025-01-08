@@ -23,7 +23,7 @@
 #define ARROW_DOWN_L    100
 #define ARROW_DOWN_U    200 
 #define ARROW_RIGHT_L   300 
-#define ARROW_RIGHT_U   330
+#define ARROW_RIGHT_U   335
 #define ARROW_UP_L      470
 #define ARROW_UP_U      510
 #define ARROW_LEFT_L    660
@@ -46,7 +46,7 @@
 #define ABCD_D_U    100 
 #define ABCD_D_L    200
 #define ABCD_C_L    300 
-#define ABCD_C_U    326
+#define ABCD_C_U    335
 #define ABCD_B_L    470
 #define ABCD_B_U    510
 #define ABCD_A_L    660
