@@ -51,15 +51,12 @@ bool interate_ball(){
         Ball[i] += VBall[i];
     }
     for(int i = 0; i < 2; i++){
-        if(Ball[i] < 0){
-            Ball[i] = 1;
-            VBall[i] *= -1;
-        }else if(Ball[i] > 4){
-            Ball[i] = 3;
+        if(Ball[i] < 0 || Ball[i] > 4){
+            Ball[i] -= VBall[i]*2;
             VBall[i] *= -1;
         }
     }
-    if(Ball[2] == 0){
+    if(Ball[2] < 0){
         // check touch red pad (z=0)
         if(
             Ball[0] >= Red[0] && Ball[0] < Red[0] + PAD_SIZE 
@@ -72,7 +69,7 @@ bool interate_ball(){
             VBall[2] = 1;
             return true;
         }
-    }else if(Ball[2] == 4){
+    }else if(Ball[2] > 4){
         // check touch blue pad (z=4)
         if(
             Ball[0] >= Blue[0] && Ball[0] < Blue[0] + PAD_SIZE 
@@ -186,7 +183,7 @@ while(1){
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
             Inspire3D_Display_Update(display);
             printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
-            printf("Blue: %d %d %dd\n", Blue[0], Blue[1],abcd_key);
+            printf("Blue: %d %d %d\n", Blue[0], Blue[1],abcd_key);
             Delay_Ms(TICK/CHECKPERTICK);
         }
     }
