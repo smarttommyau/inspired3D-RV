@@ -1,4 +1,4 @@
 # test_inspire3d_screen
 
 ## Description
-Test detection of buttons
+Test direct i2c control of the inspire3d screen.
