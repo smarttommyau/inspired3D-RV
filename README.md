@@ -5,7 +5,9 @@ inspired3d-RISC-V codes
 
 # TODO
 - [x] Basic Button key detection 
+- [ ] Button click detection
 - [x] Basic LED control
+- [ ] emulator of inspired3d
 - [ ] Intresting games and animations
 - [ ] Add more features
 
