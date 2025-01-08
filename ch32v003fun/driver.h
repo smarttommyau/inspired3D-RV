@@ -3,6 +3,7 @@
 #include "ch32v003fun.h"
 #include "buttons.h"
 #include "ch32v003_GPIO_branchless.h"
+#include <stdbool.h>
 #if FUNCONF_SYSTICK_USE_HCLK != 1
 #error WS2812B Driver Requires FUNCONF_SYSTICK_USE_HCLK
 #endif
@@ -36,6 +37,10 @@ ARROW_KEY arrow_key_down(uint16_t adc_reading){
     return ARROW_NOT_FOUND;
 }
 
+bool arrow_key_pressed(uint16_t adc_reading, ARROW_KEY detect_key){
+    return (arrow_key_down(adc_reading) == detect_key);
+}
+
 
 // Layout of ABCD button:
 //      A
@@ -64,6 +69,10 @@ ABCD_KEY abcd_key_down(uint16_t adc_reading){
         return ABCD_A;
     }
     return ABCD_NOT_FOUND;
+}
+
+bool abcd_key_pressed(uint16_t adc_reading, ABCD_KEY detect_key) {
+    return (abcd_key_down(adc_reading) == detect_key);
 }
 
 uint16_t rnval;
