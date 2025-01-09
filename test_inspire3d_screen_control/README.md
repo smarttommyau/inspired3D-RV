@@ -1,4 +1,4 @@
 # test_inspire3d_screen_control
 
 ## Description
-Test detection of buttons
+Inspire3D control, current program lights random coordinates.
