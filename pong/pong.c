@@ -200,7 +200,7 @@ while(1){
         if((Ball[2] == 0 || Ball[2] == 4) && current_tick > ENDTICK){
             // add random speed
             printf("Speed up\n");
-            current_tick -= JOY_random() % 10;
+            current_tick -= JOY_random() % 50;
             //check if speed is too high
             if(current_tick < ENDTICK){
                 current_tick = ENDTICK;
