@@ -12,7 +12,7 @@
 
 #define STARTTICK 2000
 #define ENDTICK 800 // highest speed
-#define CHECKPERTICK 3
+#define CHECKPERTICK (800/3)
 
 
 char display_buffer[sizeof(Inspire3D_Display)]; // memory for display
@@ -49,6 +49,7 @@ int8_t VBall[3] = {0,0,0}; //velocity of ball (5x5x5 space)
 
 bool interate_ball(){
     // true for win, false for continue
+    Ball[2] += VBall[2];
     if(Ball[2] < 0){
         // check touch red pad (z=0)
         if(
@@ -82,7 +83,7 @@ bool interate_ball(){
             return true;
         }
     }
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 2; i++){
         Ball[i] += VBall[i];
     }
     for(int i = 0; i < 2; i++){
@@ -210,7 +211,8 @@ while(1){
         // ABCD_KEY abcd_key;
         uint8_t abcd_adc;
         // uint8_t abcd_adc_d3;
-        for(int i=0;i<CHECKPERTICK;i++){
+        printf("%d %d %d\n",current_tick/CHECKPERTICK, current_tick, CHECKPERTICK);
+        for(int i=0;i<current_tick/CHECKPERTICK;i++){
             Inspire3D_Display_Reset(display);
             abcd_adc   = abcd_key_read_ADC();
             // abcd_adc_d3 = abcd_key_read_ADC_D3();
@@ -226,8 +228,8 @@ while(1){
             printf("Blue: %d %d %d\n", Blue[0], Blue[1],abcd_adc);
             printf("Ball: %d %d %d\n", Ball[0], Ball[1], Ball[2]);
             Inspire3D_Display_Update(display);
-            Delay_Ms(current_tick/CHECKPERTICK);
-            printf("%d %d\n",current_tick,current_tick/CHECKPERTICK);
+            Delay_Ms(CHECKPERTICK);
+            printf("%d\n",current_tick);
             // Delay_Ms(200);
         }
     }
