@@ -66,7 +66,7 @@
 #define IDC_ABCD_HVKEY_L_COM    280 // Have keys or not, use combine value
 #define IDC_ABCD_B_L_D2         230 // B use D2
 #define IDC_ABCD_B_U_D2         280 // B use D2
-#define IDC_ABCD_C_L_D2         68  // C use D2
+#define IDC_ABCD_C_L_D2         58  // C use D2
 #define IDC_ABCD_C_U_D2         78  // C use D2
 #define IDC_ABCD_A_L_D2         150 // A use D2, combine value
 #define IDC_ABCD_A_U_D2         200 // A use D2, combine value
