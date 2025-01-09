@@ -47,6 +47,8 @@ int8_t Ball[3] = {2,2,2}; //coordinates of ball (5x5x5 space)
 int8_t VBall[3] = {0,0,0}; //velocity of ball (5x5x5 space)
 
 bool interate_ball(){
+    // NOTE: pad bounce has issue, as it is design for 2x2
+    // but the buggyness makes the game more dynamic 
     // true for win, false for continue
     Ball[2] += VBall[2];
     if(Ball[2] < 0){
