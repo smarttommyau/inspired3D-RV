@@ -10,7 +10,7 @@
 #define PAD_SIZE 3
 #define PAD_REGION_SIZE 6 - PAD_SIZE
 
-#define TICK 1000
+#define TICK 2000
 #define CHECKPERTICK 3
 
 
@@ -127,7 +127,7 @@ while(1){
     draw_pad(display, 1, 1, 0, Inspire3D_Color_Red);
     draw_pad(display, 1, 1, 4, Inspire3D_Color_Blue);
     Inspire3D_Display_Update(display);
-    uint16_t arrow_adc   = arrow_key_read_ADC();
+    uint16_t arrow_adc  = arrow_key_read_ADC();    
     //set brightness before start
     while(!arrow_key_pressed(arrow_adc, ARROW_DOWN)){
         if(arrow_key_pressed(arrow_adc, ARROW_LEFT) && display->brightness > 0.1){
@@ -140,6 +140,7 @@ while(1){
         seed++;
         Delay_Ms(200);
         printf("Brightness: %f\n", display->brightness);
+        // printf("ADC: %d %d %d\n", arrow_adc, abcd_adc, GPIO_analogRead(GPIO_Ain4_D3));
     }
     printf("Brightness set\n");
     // start game
@@ -170,21 +171,27 @@ while(1){
             break;
         }
         // check 3 input in one tick
+        ARROW_KEY arrow_key;
+        ABCD_KEY abcd_key;
+        uint8_t abcd_adc;
+        uint8_t abcd_adc_d3;
         for(int i=0;i<CHECKPERTICK;i++){
             Inspire3D_Display_Reset(display);
+            abcd_adc   = abcd_key_read_ADC();
+            abcd_adc_d3 = abcd_key_read_ADC_D3();
             arrow_adc   = arrow_key_read_ADC();
-            uint8_t abcd_adc   = abcd_key_read_ADC();
-            ARROW_KEY arrow_key = arrow_key_down(arrow_adc);
-            ABCD_KEY abcd_key = abcd_key_down(abcd_adc);
+            arrow_key = arrow_key_down(arrow_adc);
+            abcd_key = abcd_key_down_I2CMODE(abcd_adc, abcd_adc_d3);
             moveRedPad(arrow_key);
             moveBluePad(abcd_key);
             draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
             draw_pad(display, Red[0], Red[1], 0, Inspire3D_Color_Red);
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
-            Inspire3D_Display_Update(display);
             printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
-            printf("Blue: %d %d %d %d\n", Blue[0], Blue[1],abcd_key,abcd_adc);
+            printf("Blue: %d %d %d %d %d\n", Blue[0], Blue[1],abcd_key,abcd_adc,abcd_adc_d3);
+            Inspire3D_Display_Update(display);
             Delay_Ms(TICK/CHECKPERTICK);
+            // Delay_Ms(200);
         }
     }
     printf("Game over\n");
