@@ -161,9 +161,18 @@ while(1){
     Ball[0] = 2;Ball[1] = 2;Ball[2] = 2;
     Red[0]  = 0;Red[1]  = 2;
     Blue[0] = 0;Blue[1] = 2;
+    // white -> red-> yellow -> green
     draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
     Inspire3D_Display_Update(display);
-    Delay_Ms(3000);
+    Delay_Ms(1000);
+    draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_Red);
+    Inspire3D_Display_Update(display);
+    Delay_Ms(1000);
+    draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_Yellow);
+    Inspire3D_Display_Update(display);
+    Delay_Ms(1000);
+    draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_Green);
+    Inspire3D_Display_Update(display);
     //set random seed
     JOY_setseed(seed);
     // random set VBall
