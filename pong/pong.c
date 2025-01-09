@@ -57,6 +57,9 @@ bool interate_ball(){
         ){
             Ball[2] = 1;
             VBall[2] = 1;
+            // add velocity due position on pad
+            VBall[0] = (Ball[0] - Red[0] - 1);
+            VBall[1] = (Ball[1] - Red[1] - 1);
         }else{
             Ball[2] = 1;
             VBall[2] = 1;
@@ -70,6 +73,8 @@ bool interate_ball(){
         ){
             Ball[2] = 3;
             VBall[2] = -1;
+            VBall[0] = (Ball[0] - Red[0] - 1);
+            VBall[1] = (Ball[1] - Red[1] - 1);
         }else{
             Ball[2] = 3;
             VBall[2] = -1;
