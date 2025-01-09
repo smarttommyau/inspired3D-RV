@@ -55,11 +55,11 @@ bool interate_ball(){
             Ball[0] >= Red[0] && Ball[0] < Red[0] + PAD_SIZE 
         &&  Ball[1] >= Red[1] && Ball[1] < Red[1] + PAD_SIZE
         ){
+            // add velocity due position on pad
             Ball[2] = 1;
             VBall[2] = 1;
-            // add velocity due position on pad
-            VBall[0] = (Red[0] - Ball[0] - 1);
-            VBall[1] = (Red[1] - Ball[1] - 1);
+            VBall[0] = (Ball[0] - Red[0] - 1);
+            VBall[1] = (Ball[1] - Red[1] - 1);
         }else{
             Ball[2] = 1;
             VBall[2] = 1;
@@ -73,8 +73,8 @@ bool interate_ball(){
         ){
             Ball[2] = 3;
             VBall[2] = -1;
-            VBall[0] = (Blue[0] - Ball[0] - 1);
-            VBall[1] = (Blue[1] - Ball[1] - 1);
+            VBall[0] = (Ball[0] - Blue[0] - 1);
+            VBall[1] = (Ball[1] - Blue[1] - 1);
         }else{
             Ball[2] = 3;
             VBall[2] = -1;
@@ -218,6 +218,7 @@ while(1){
             printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
             printf("Blue: %d %d %d\n", Blue[0], Blue[1],abcd_adc);
             printf("Ball: %d %d %d\n", Ball[0], Ball[1], Ball[2]);
+            printf("VBall: %d %d %d\n", VBall[0], VBall[1], VBall[2]);
             Inspire3D_Display_Update(display);
             Delay_Ms(CHECKPERTICK);
             printf("%d\n",current_tick);
