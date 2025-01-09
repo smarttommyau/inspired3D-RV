@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-#define PAD_SIZE 3
+#define PAD_SIZE 2
 #define PAD_REGION_SIZE 6 - PAD_SIZE
 
 #define STARTTICK 2000
@@ -20,8 +20,8 @@ char display_buffer[sizeof(Inspire3D_Display)]; // memory for display
 void draw_pad(Inspire3D_Display *display, int x, int y, int z, Inspire3D_Color color) {
     // z should be 0 or 4
     // 3x3 pad
-    for(uint8_t i = 0; i < 3; i++) {
-        for(uint8_t j = 0; j < 3; j++) {
+    for(uint8_t i = 0; i < PAD_SIZE; i++) {
+        for(uint8_t j = 0; j < PAD_SIZE; j++) {
             Inspire3D_Display_SetColor(
                 display, 
                 Inspire3D_Display_Coords2Index(x + i, y + j, z), 
