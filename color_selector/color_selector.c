@@ -64,16 +64,19 @@ int main(void) {
                 y = (y + 1) % 5;
             } else if(arrow == ARROW_DOWN){
                 y = (y - 1) % 5;
+                y = y < 0 ? 4 : y;
             } else if(arrow == ARROW_RIGHT){
                 x = (x + 1) % 5;
             } else if(arrow == ARROW_LEFT){
                 x = (x - 1) % 5;
+                x = x < 0 ? 4 : x;
             }
             // read arrow key
             if(abcd == ABCD_A){
                 z = (z + 1) % 5;
             } else if(abcd == ABCD_B){
                 z = (z - 1) % 5;
+                z = z < 0 ? 4 : z;
             }
         }
         // select with CD keys
@@ -82,6 +85,7 @@ int main(void) {
                 mode = 1;
                 Inspire3D_Display_SetBGColor(display, Inspire3D_Color_setRGB(y*50,x*50,z*50));
                 Inspire3D_Display_Update(display);
+                Delay_Ms(200);
             } else {
                 mode = 0;
                 show_color_pallete(display);
