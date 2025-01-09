@@ -199,11 +199,13 @@ while(1){
         Inspire3D_Display_Update(display);
         if((Ball[2] == 0 || Ball[2] == 4) && current_tick > ENDTICK){
             // add random speed
-            printf("Speed up\n");
-            current_tick -= JOY_random() % 50;
-            //check if speed is too high
-            if(current_tick < ENDTICK){
-                current_tick = ENDTICK;
+            if(JOY_random() % 2 == 0){
+                printf("Speed up\n");
+                current_tick -= 300;
+                //check if speed is too high
+                if(current_tick < ENDTICK){
+                    current_tick = ENDTICK;
+                }
             }
         }
         // check 3 input in one tick
