@@ -66,6 +66,8 @@ bool interate_ball(){
         ){
             Ball[2] = 1;
             VBall[2] = 1;
+            //add random y velocity
+            VBall[1] = JOY_random() % 5 - 2;
         }else{
             Ball[2] = 1;
             VBall[2] = 1;
@@ -80,6 +82,8 @@ bool interate_ball(){
         ){
             Ball[2] = 3;
             VBall[2] = -1;
+            // add random y velocity
+            VBall[1] = JOY_random() % 5 - 2;
         }else{
             Ball[2] = 3;
             VBall[2] = -1;
@@ -180,6 +184,8 @@ while(1){
             Delay_Ms(1000);
             break;
         }
+        draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
+        Inspire3D_Display_Update(display);
         // check 3 input in one tick
         ARROW_KEY arrow_key;
         // ABCD_KEY abcd_key;
