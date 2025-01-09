@@ -99,9 +99,9 @@ void moveRedPad(ARROW_KEY key){
     }else if(key == ARROW_DOWN && Red[1] > 0){
         Red[1]--;
     }else if(key == ARROW_LEFT && Red[0] > 0){
-        Red[0]--;
-    }else if(key == ARROW_RIGHT && Red[0] < PAD_REGION_SIZE - 1){
         Red[0]++;
+    }else if(key == ARROW_RIGHT && Red[0] < PAD_REGION_SIZE - 1){
+        Red[0]--;
     }
 }
 void moveBluePad(ABCD_KEY key){
@@ -110,9 +110,9 @@ void moveBluePad(ABCD_KEY key){
     }else if(key == ABCD_B && Blue[1] > 0){
         Blue[1]--;
     }else if(key == ABCD_C && Blue[0] > 0){
-        Blue[0]--;
-    }else if(key == ABCD_D && Blue[0] < PAD_REGION_SIZE - 1){
         Blue[0]++;
+    }else if(key == ABCD_D && Blue[0] < PAD_REGION_SIZE - 1){
+        Blue[0]--;
     }
 }
 
