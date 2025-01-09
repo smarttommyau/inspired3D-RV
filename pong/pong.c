@@ -221,9 +221,9 @@ while(1){
             // abcd_key = abcd_key_down_I2CMODE(abcd_adc, abcd_adc_d3);
             moveRedPad(arrow_key);
             moveBluePad(abcd_adc);
-            draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
             draw_pad(display, Red[0], Red[1], 0, Inspire3D_Color_Red);
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
+            draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
             printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
             printf("Blue: %d %d %d\n", Blue[0], Blue[1],abcd_adc);
             printf("Ball: %d %d %d\n", Ball[0], Ball[1], Ball[2]);
