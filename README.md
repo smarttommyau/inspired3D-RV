@@ -16,3 +16,4 @@ inspired3d-RISC-V codes
 If you want to develop upon this, you may reference those test codes.
 - `test_inspire3d_screen_control` for controlling inspired3d screen
 - `test_inspire3d_button_detection` for button key detection
+- `pong` for seeing the limitiation with abcd keys detection when controlling led display
