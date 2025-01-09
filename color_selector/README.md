@@ -1,4 +1,4 @@
 # color_selector
 
 ## Description
-Test detection of buttons
+Select a color from 3d color space.
