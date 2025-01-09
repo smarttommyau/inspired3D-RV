@@ -10,7 +10,8 @@
 // #define PAD_SIZE 3
 // #define PAD_REGION_SIZE 6 - PAD_SIZE
 
-#define TICK 1000
+#define STARTTICK 2000
+#define ENDTICK 800 // highest speed
 #define CHECKPERTICK 3
 
 
@@ -182,7 +183,7 @@ while(1){
     VBall[1] = JOY_random() % 3 - 1;
     VBall[2] = JOY_random() % 2 * 2 - 1; 
     // VBall[2] = 0; // for debug 
-    
+    int current_tick = STARTTICK;
 
     printf("Start game\n");
     while(1){
@@ -195,6 +196,15 @@ while(1){
         }
         draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
         Inspire3D_Display_Update(display);
+        if((Ball[2] == 0 || Ball[2] == 4) && current_tick > ENDTICK){
+            // add random speed
+            printf("Speed up\n");
+            current_tick -= JOY_random() % 10;
+            //check if speed is too high
+            if(current_tick < ENDTICK){
+                current_tick = ENDTICK;
+            }
+        }
         // check 3 input in one tick
         ARROW_KEY arrow_key;
         // ABCD_KEY abcd_key;
@@ -214,8 +224,10 @@ while(1){
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
             printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
             printf("Blue: %d %d %d\n", Blue[0], Blue[1],abcd_adc);
+            printf("Ball: %d %d %d\n", Ball[0], Ball[1], Ball[2]);
             Inspire3D_Display_Update(display);
-            Delay_Ms(TICK/CHECKPERTICK);
+            Delay_Ms(current_tick/CHECKPERTICK);
+            printf("%d %d\n",current_tick,current_tick/CHECKPERTICK);
             // Delay_Ms(200);
         }
     }
