@@ -49,15 +49,6 @@ int8_t VBall[3] = {0,0,0}; //velocity of ball (5x5x5 space)
 
 bool interate_ball(){
     // true for win, false for continue
-    for(int i = 0; i < 3; i++){
-        Ball[i] += VBall[i];
-    }
-    for(int i = 0; i < 2; i++){
-        if(Ball[i] < 0 || Ball[i] > 4){
-            Ball[i] -= VBall[i]*2;
-            VBall[i] *= -1;
-        }
-    }
     if(Ball[2] < 0){
         // check touch red pad (z=0)
         if(
@@ -89,6 +80,15 @@ bool interate_ball(){
             Ball[2] = 3;
             VBall[2] = -1;
             return true;
+        }
+    }
+    for(int i = 0; i < 3; i++){
+        Ball[i] += VBall[i];
+    }
+    for(int i = 0; i < 2; i++){
+        if(Ball[i] < 0 || Ball[i] > 4){
+            Ball[i] -= VBall[i]*2;
+            VBall[i] *= -1;
         }
     }
     return false;
