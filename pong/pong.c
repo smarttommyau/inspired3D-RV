@@ -7,10 +7,10 @@
 
 #include <stdio.h>
 
-#define PAD_SIZE 3
-#define PAD_REGION_SIZE 6 - PAD_SIZE
+// #define PAD_SIZE 3
+// #define PAD_REGION_SIZE 6 - PAD_SIZE
 
-#define TICK 2000
+#define TICK 1000
 #define CHECKPERTICK 3
 
 
@@ -18,15 +18,16 @@ char display_buffer[sizeof(Inspire3D_Display)]; // memory for display
 
 void draw_pad(Inspire3D_Display *display, int x, int y, int z, Inspire3D_Color color) {
     // z should be 0 or 4
-    // 3x3 pad
-    for(uint8_t i = 0; i < 3; i++) {
-        for(uint8_t j = 0; j < 3; j++) {
+    // 1x5 pad
+    // 
+    for(uint8_t i = 0; i < 5; i++) {
+        // for(uint8_t j = 0; j < 3; j++) {
             Inspire3D_Display_SetColor(
                 display, 
-                Inspire3D_Display_Coords2Index(x + i, y + j, z), 
+                Inspire3D_Display_Coords2Index(x + i, y, z), 
                 color
             );
-        }
+        // }
     }
 }
 void draw_ball(Inspire3D_Display *display, int x, int y, int z, Inspire3D_Color color) {
@@ -59,8 +60,9 @@ bool interate_ball(){
     if(Ball[2] < 0){
         // check touch red pad (z=0)
         if(
-            Ball[0] >= Red[0] && Ball[0] < Red[0] + PAD_SIZE 
-        &&  Ball[1] >= Red[1] && Ball[1] < Red[1] + PAD_SIZE
+        //     Ball[0] >= Red[0] && Ball[0] < Red[0] + PAD_SIZE 
+        // &&  Ball[1] >= Red[1] && Ball[1] < Red[1] + PAD_SIZE
+            Ball[1] == Red[1]
         ){
             Ball[2] = 1;
             VBall[2] = 1;
@@ -72,8 +74,9 @@ bool interate_ball(){
     }else if(Ball[2] > 4){
         // check touch blue pad (z=4)
         if(
-            Ball[0] >= Blue[0] && Ball[0] < Blue[0] + PAD_SIZE 
-        &&  Ball[1] >= Blue[1] && Ball[1] < Blue[1] + PAD_SIZE
+        //     Ball[0] >= Blue[0] && Ball[0] < Blue[0] + PAD_SIZE 
+        // &&  Ball[1] >= Blue[1] && Ball[1] < Blue[1] + PAD_SIZE
+            Ball[1] == Blue[1]
         ){
             Ball[2] = 3;
             VBall[2] = -1;
@@ -87,26 +90,33 @@ bool interate_ball(){
 }
 
 void moveRedPad(ARROW_KEY key){
-    if(key == ARROW_UP && Red[1] < PAD_REGION_SIZE - 1){
+    // if(key == ARROW_UP && Red[1] < PAD_REGION_SIZE - 1){
+    if(key == ARROW_UP && Red[1] < 4){
         Red[1]++;
     }else if(key == ARROW_DOWN && Red[1] > 0){
         Red[1]--;
-    }else if(key == ARROW_LEFT && Red[0] > 0){
-        Red[0]--;
-    }else if(key == ARROW_RIGHT && Red[0] < PAD_REGION_SIZE - 1){
-        Red[0]++;
     }
+    // }else if(key == ARROW_LEFT && Red[0] > 0){
+    //     Red[0]--;
+    // }else if(key == ARROW_RIGHT && Red[0] < PAD_REGION_SIZE - 1){
+    //     Red[0]++;
+    // }
 }
-void moveBluePad(ABCD_KEY key){
-    if(key == ABCD_A && Blue[1] < PAD_REGION_SIZE - 1){
+// void moveBluePad(ABCD_KEY key){
+void moveBluePad(uint16_t adc_value){
+    // if(key == ABCD_A && Blue[1] < PAD_REGION_SIZE - 1){
+    if(adc_value >= IDC_ABCD_A_L_D2 && adc_value <= IDC_ABCD_A_U_D2
+    && Blue[1] < 4){ // A or D
         Blue[1]++;
-    }else if(key == ABCD_B && Blue[1] > 0){
+    }else if(adc_value >= IDC_ABCD_B_L_D2 && adc_value <= IDC_ABCD_B_U_D2 
+    && Blue[1] > 0){ // B
         Blue[1]--;
-    }else if(key == ABCD_C && Blue[0] > 0){
-        Blue[0]--;
-    }else if(key == ABCD_D && Blue[0] < PAD_REGION_SIZE - 1){
-        Blue[0]++;
     }
+    // }else if(key == ABCD_C && Blue[0] > 0){
+    //     Blue[0]--;
+    // }else if(key == ABCD_D && Blue[0] < PAD_REGION_SIZE - 1){
+    //     Blue[0]++;
+    // }
 }
 
 
@@ -124,8 +134,8 @@ int main(void) {
     Inspire3D_Display_Init(display,GPIOA,PA2);
     // coords of pad 3x3 plane
 while(1){
-    draw_pad(display, 1, 1, 0, Inspire3D_Color_Red);
-    draw_pad(display, 1, 1, 4, Inspire3D_Color_Blue);
+    draw_pad(display, 0, 2, 0, Inspire3D_Color_Red);
+    draw_pad(display, 0, 2, 4, Inspire3D_Color_Blue);
     Inspire3D_Display_Update(display);
     uint16_t arrow_adc  = arrow_key_read_ADC();    
     //set brightness before start
@@ -145,8 +155,8 @@ while(1){
     printf("Brightness set\n");
     // start game
     Ball[0] = 2;Ball[1] = 2;Ball[2] = 2;
-    Red[0]  = 1;Red[1]  = 1;
-    Blue[0] = 1;Blue[1] = 1;
+    Red[0]  = 0;Red[1]  = 2;
+    Blue[0] = 0;Blue[1] = 2;
     draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
     Inspire3D_Display_Update(display);
     Delay_Ms(3000);
@@ -157,8 +167,8 @@ while(1){
     // for z value, only 1 or -1
     VBall[0] = JOY_random() % 3 - 1;
     VBall[1] = JOY_random() % 3 - 1;
-    // VBall[2] = JOY_random() % 2 * 2 - 1; 
-    VBall[2] = 0; 
+    VBall[2] = JOY_random() % 2 * 2 - 1; 
+    // VBall[2] = 0; // for debug 
     
 
     printf("Start game\n");
@@ -172,23 +182,23 @@ while(1){
         }
         // check 3 input in one tick
         ARROW_KEY arrow_key;
-        ABCD_KEY abcd_key;
+        // ABCD_KEY abcd_key;
         uint8_t abcd_adc;
-        uint8_t abcd_adc_d3;
+        // uint8_t abcd_adc_d3;
         for(int i=0;i<CHECKPERTICK;i++){
             Inspire3D_Display_Reset(display);
             abcd_adc   = abcd_key_read_ADC();
-            abcd_adc_d3 = abcd_key_read_ADC_D3();
+            // abcd_adc_d3 = abcd_key_read_ADC_D3();
             arrow_adc   = arrow_key_read_ADC();
             arrow_key = arrow_key_down(arrow_adc);
-            abcd_key = abcd_key_down_I2CMODE(abcd_adc, abcd_adc_d3);
+            // abcd_key = abcd_key_down_I2CMODE(abcd_adc, abcd_adc_d3);
             moveRedPad(arrow_key);
-            moveBluePad(abcd_key);
+            moveBluePad(abcd_adc);
             draw_ball(display, Ball[0], Ball[1], Ball[2], Inspire3D_Color_White);
             draw_pad(display, Red[0], Red[1], 0, Inspire3D_Color_Red);
             draw_pad(display, Blue[0], Blue[1], 4, Inspire3D_Color_Blue);
             printf("Red: %d %d %d\n", Red[0], Red[1],arrow_key);
-            printf("Blue: %d %d %d %d %d\n", Blue[0], Blue[1],abcd_key,abcd_adc,abcd_adc_d3);
+            printf("Blue: %d %d %d\n", Blue[0], Blue[1],abcd_adc);
             Inspire3D_Display_Update(display);
             Delay_Ms(TICK/CHECKPERTICK);
             // Delay_Ms(200);
