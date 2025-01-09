@@ -173,7 +173,7 @@ while(1){
     // for z value, only 1 or -1
     VBall[0] = JOY_random() % 3 - 1;
     VBall[1] = JOY_random() % 3 - 1;
-    // VBall[2] = JOY_random() % 2 * 2 - 1; 
+    VBall[2] = JOY_random() % 2 * 2 - 1; 
     // VBall[2] = 0; // for debug 
     int current_tick = STARTTICK;
 
