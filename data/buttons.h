@@ -62,6 +62,7 @@
 // 70  235->330 305-400 : C
 // 163 197->254 360-417 : D
 // 42  140-158  182-200 : No key pressed
+// Note: This does not seems work well either
 
 #define IDC_ABCD_HVKEY_L_COM    280 // Have keys or not, use combine value
 #define IDC_ABCD_B_L_D2         230 // B use D2
