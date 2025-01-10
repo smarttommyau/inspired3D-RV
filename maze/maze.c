@@ -9,7 +9,7 @@
 #include "inspire3d_display.h"
 
 //maze edges
-uint8_t edges[125*3][3];
+uint8_t edges[300][3]; // it has 300 edges
 
 // 0: path, 1: wall, 2: start, 3: end
 // 3D maze
@@ -24,8 +24,10 @@ static uint8_t findSet3D(uint8_t v) {
 }
 
 static void unionSet3D(uint8_t a, uint8_t b) {
-    // a = findSet3D(a);
-    // b = findSet3D(b);
+    a = findSet3D(a);
+    b = findSet3D(b);
+    if (a == b) return;
+
     if (ufRankUF[a] < ufRankUF[b]) {
         uint8_t tmp = a; a = b; b = tmp;
     }
@@ -34,13 +36,15 @@ static void unionSet3D(uint8_t a, uint8_t b) {
         ufRankUF[a]++;
     }
 }
+
+static uint8_t coordtoId(uint8_t x, uint8_t y, uint8_t z){
+    return (z * 25) + (y * 5) + x;
+}
+
 void generateMaze(){
     //set all cells to wall
     for(uint8_t i=0; i<125; i++){
         maze[i] = 1;
-    }
-    // Initialize union-find
-    for(uint8_t i=0; i<125; i++){
         ufParent[i] = i;
         ufRankUF[i] = 0;
     }
@@ -106,14 +110,17 @@ void generateMaze(){
         uint8_t x2 = edges[i][1] & 0x0F;
         uint8_t y2 = (edges[i][2] >> 4) & 0x0F;
         uint8_t z2 = edges[i][2] & 0x0F;
-
-        uint8_t id1 = Inspire3D_Display_Coords2Index(x1,y1,z1);
-        uint8_t id2 = Inspire3D_Display_Coords2Index(x2,y2,z2);
-        
+        printf("x1: %d, y1: %d, z1: %d, x2: %d, y2: %d, z2: %d\n", x1, y1, z1, x2, y2, z2);
+        printf("checkpoint 1\n");
+        uint8_t id1 = coordtoId(x1,y1,z1);
+        uint8_t id2 = coordtoId(x2,y2,z2);
+        printf("checkpoint 2 %d %d\n", id1, id2);
         uint8_t a = findSet3D(id1);
         uint8_t b = findSet3D(id2);
+        printf("checkpoint 3\n");
         if(a != b){
-            unionSet3D(a, b);
+            unionSet3D(id2, id1);
+            printf("checkpoint 3\n");
             // Remove wall => set these cells to 0 (path)
             maze[id1] = 0;
             maze[id2] = 0;
