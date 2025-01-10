@@ -42,8 +42,16 @@
 
 			let camera, controls, scene, renderer;
 
+			let display = [];
 			init();
-			//render(); // remove when using animation loop
+			const ws = new WebSocket('ws://localhost:8000');
+			ws.onmessage = function (event) {
+				const data = JSON.parse(event.data);
+				for (let i = 0; i < 125; i++) {
+					display[i].material.color.setHex(data[i]);
+				}
+			};
+
 
 			function init() {
 
@@ -84,7 +92,6 @@
 				// black color
 				const stripMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 				// 5 * 5 * 5 display
-				let display = [];
 				for (let x = 0; x < 5; x++) {
   				for (let z = 0; z < 5; z++) {
   					for (let y = 0; y < 5; y++) {
