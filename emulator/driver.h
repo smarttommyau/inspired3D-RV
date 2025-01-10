@@ -4,6 +4,49 @@
 #include "ws2812b_simple.h"
 #include <stdbool.h>
 #include <stdlib.h>
+// Detect arrow key press
+typedef enum {
+    ARROW_UP    = 1,
+    ARROW_RIGHT = 2,
+    ARROW_DOWN  = 3,
+    ARROW_LEFT  = 4,
+    ARROW_NOT_FOUND = -1
+} ARROW_KEY;
+
+
+ARROW_KEY arrow_key_down(uint16_t adc_reading){
+    if(adc_reading >= ARROW_DOWN_L && adc_reading <= ARROW_DOWN_U){
+        return ARROW_DOWN;
+    } else if(adc_reading >= ARROW_RIGHT_L && adc_reading <= ARROW_RIGHT_U){
+        return ARROW_RIGHT;
+    } else if(adc_reading >= ARROW_UP_L && adc_reading <= ARROW_UP_U){
+        return ARROW_UP;
+    } else if(adc_reading >= ARROW_LEFT_L && adc_reading <= ARROW_LEFT_U){
+        return ARROW_LEFT;
+    }
+    return ARROW_NOT_FOUND;
+}
+
+typedef enum {
+    ABCD_A = 1,
+    ABCD_B = 2,
+    ABCD_C = 3,
+    ABCD_D = 4,
+    ABCD_NOT_FOUND = -1
+} ABCD_KEY;
+
+ABCD_KEY abcd_key_down(uint16_t adc_reading){
+    if(adc_reading >= ABCD_D_U && adc_reading <= ABCD_D_L){
+        return ABCD_D;
+    } else if(adc_reading >= ABCD_C_L && adc_reading <= ABCD_C_U){
+        return ABCD_C;
+    } else if(adc_reading >= ABCD_B_L && adc_reading <= ABCD_B_U){
+        return ABCD_B;
+    } else if(adc_reading >= ABCD_A_L && adc_reading <= ABCD_A_U){
+        return ABCD_A;
+    }
+    return ABCD_NOT_FOUND;
+}
 
 #ifdef _WIN32
 #define NOMINMAX 1          // Prevent Windows.h from defining min and max macros
