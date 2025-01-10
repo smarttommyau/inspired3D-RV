@@ -206,6 +206,7 @@ int main(void) {
     int x,y,z = 0;// selector coords
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
+while(1){ //program loop
     Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Green);
     Inspire3D_Display_SetBrightness(display, 0.05);
     Inspire3D_Display_Update(display);
@@ -286,12 +287,22 @@ int main(void) {
     }
     // show end animaton
     while(1){
-            Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Yellow);
-            Inspire3D_Display_Update(display);
-            Delay_Ms(100);
-            Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Black);
-            Inspire3D_Display_Update(display);
-            Delay_Ms(100);
+        // get key values
+        uint16_t abcd_reading   = abcd_key_read_ADC();
+        uint16_t arrow_reading  = arrow_key_read_ADC();
+        ARROW_KEY arrow         = arrow_key_down(arrow_reading);
+        ABCD_KEY abcd           = abcd_key_down(abcd_reading);
+        Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Yellow);
+        Inspire3D_Display_Update(display);
+        Delay_Ms(100);
+        Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Black);
+        Inspire3D_Display_Update(display);
+        Delay_Ms(100);
+        // check if any key is pressed
+        if(arrow != ARROW_NOT_FOUND || abcd != ABCD_NOT_FOUND){
+            break;
+        }
 
     }
+}
 }
