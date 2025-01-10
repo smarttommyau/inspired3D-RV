@@ -286,6 +286,7 @@ while(1){ //program loop
         blink_point(display, Inspire3D_Display_Coords2Index(x,y,z));
     }
     // show end animaton
+    delay(1000);
     while(1){
         // get key values
         uint16_t abcd_reading   = abcd_key_read_ADC();
