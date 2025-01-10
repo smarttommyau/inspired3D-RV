@@ -24,16 +24,14 @@ static uint8_t findSet3D(uint8_t v) {
 }
 
 static void unionSet3D(uint8_t a, uint8_t b) {
-    a = findSet3D(a);
-    b = findSet3D(b);
-    if (a != b) {
-        if (ufRankUF[a] < ufRankUF[b]) {
-            uint8_t tmp = a; a = b; b = tmp;
-        }
-        ufParent[b] = a;
-        if (ufRankUF[a] == ufRankUF[b]) {
-            ufRankUF[a]++;
-        }
+    // a = findSet3D(a);
+    // b = findSet3D(b);
+    if (ufRankUF[a] < ufRankUF[b]) {
+        uint8_t tmp = a; a = b; b = tmp;
+    }
+    ufParent[b] = a;
+    if (ufRankUF[a] == ufRankUF[b]) {
+        ufRankUF[a]++;
     }
 }
 void generateMaze(){
@@ -97,10 +95,12 @@ void generateMaze(){
             edges[r][j] = tmp;
         }
     }
-
+    printf("Shuffle done\n");
+    printf("Calculate maze\n");
     // Kruskal's algorithm
     for(uint16_t i=0; i<edgeCount; i++){
-      uint8_t x1 = (edges[i][0] >> 4) & 0x0F;
+        printf("i: %d/%d\n", i,edgeCount);
+        uint8_t x1 = (edges[i][0] >> 4) & 0x0F;
         uint8_t y1 = edges[i][0] & 0x0F;
         uint8_t z1 = (edges[i][1] >> 4) & 0x0F;
         uint8_t x2 = edges[i][1] & 0x0F;
@@ -109,9 +109,11 @@ void generateMaze(){
 
         uint8_t id1 = Inspire3D_Display_Coords2Index(x1,y1,z1);
         uint8_t id2 = Inspire3D_Display_Coords2Index(x2,y2,z2);
-
-        if(findSet3D(id1) != findSet3D(id2)){
-            unionSet3D(id1, id2);
+        
+        uint8_t a = findSet3D(id1);
+        uint8_t b = findSet3D(id2);
+        if(a != b){
+            unionSet3D(a, b);
             // Remove wall => set these cells to 0 (path)
             maze[id1] = 0;
             maze[id2] = 0;
