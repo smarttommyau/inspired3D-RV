@@ -94,7 +94,7 @@ void generateMaze(){
     // Shuffle edges
     for(uint8_t i=0; i<edgeCount; i++){
         uint8_t r = JOY_random() % edgeCount;
-        for(uint8_t j=0; j<6; j++){
+        for(uint8_t j=0; j<3; j++){
             uint8_t tmp = edges[i][j];
             edges[i][j] = edges[r][j];
             edges[r][j] = tmp;
@@ -129,10 +129,13 @@ void generateMaze(){
     while(maze[end] != 0){
         end = JOY_random() % 125;
     }
+    maze[start] = 2;
+    maze[end] = 3;
 }
 
 void show_maze(Inspire3D_Display * display){
     for(uint8_t i=0; i<125; i++){
+        printf("%d ", maze[i]);
         if(maze[i] == 1){
             Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Black);
         } else if(maze[i] == 0){
@@ -167,14 +170,13 @@ int main(void) {
     Inspire3D_Display_Clear(display);// reset data and update
     Inspire3D_Display_SetBrightness(display, 0.05);
     uint8_t mode = 0; //0: select; 1: selected
-
     //wait and increment seed until any button is pressed
     while(1){
         uint16_t abcd_reading = abcd_key_read_ADC();
         ABCD_KEY abcd = abcd_key_down(abcd_reading);
         uint16_t arrow_reading = arrow_key_read_ADC();
         ARROW_KEY arrow = arrow_key_down(arrow_reading);
-        if(abcd != ABCD_NOT_FOUND &&  arrow != ARROW_NOT_FOUND){
+        if(abcd != ABCD_NOT_FOUND ||  arrow != ARROW_NOT_FOUND){
             break;
         }
         seed++;
