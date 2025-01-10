@@ -208,6 +208,7 @@ int main(void) {
     Inspire3D_Display_Init(display,GPIOA, PA2);
     Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Green);
     Inspire3D_Display_SetBrightness(display, 0.05);
+    Inspire3D_Display_Update(display);
     //wait and increment seed until any button is pressed
     while(1){
         uint16_t abcd_reading = abcd_key_read_ADC();
