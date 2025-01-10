@@ -2,8 +2,6 @@
 #define INSPIRE3D_DISPLAY
 
 #include <stdint.h>
-#define WS2812BSIMPLE_IMPLEMENTATION
-#include "ws2812b_simple.h"
 
 
 
@@ -100,7 +98,6 @@ void Inspire3D_Display_SetBrightness(Inspire3D_Display * display, float brightne
 }
 
 void Inspire3D_Display_Update(Inspire3D_Display * display){
-    WS2812BSimpleSend(display->port, display->pin, (uint8_t *)display->data, 125 * 3);
 }
 
 void Inspire3D_Display_Reset(Inspire3D_Display * display){
