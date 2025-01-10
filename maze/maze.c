@@ -52,7 +52,7 @@ void generateMaze(){
     // Lack of memory, use edges[125*3][3] to store edges
     // instead of [125*3][6]
     // 4 bytes for each edge
-    uint8_t edgeCount=0;
+    uint16_t edgeCount=0;
     for(uint8_t x=0; x<5; x++){
         for(uint8_t y=0; y<5; y++){
             for(uint8_t z=0; z<5; z++){
@@ -86,10 +86,11 @@ void generateMaze(){
             }
         }
     }
-
+    printf("Edge count: %d\n", edgeCount);
     // Shuffle edges
-    for(uint8_t i=0; i<edgeCount; i++){
-        uint8_t r = JOY_random() % edgeCount;
+    for(uint16_t i=0; i<edgeCount; i++){
+        uint16_t r = JOY_random() % edgeCount;
+        printf("r: %d\n", r);
         for(uint8_t j=0; j<3; j++){
             uint8_t tmp = edges[i][j];
             edges[i][j] = edges[r][j];
@@ -98,7 +99,7 @@ void generateMaze(){
     }
 
     // Kruskal's algorithm
-    for(uint8_t i=0; i<edgeCount; i++){
+    for(uint16_t i=0; i<edgeCount; i++){
       uint8_t x1 = (edges[i][0] >> 4) & 0x0F;
         uint8_t y1 = edges[i][0] & 0x0F;
         uint8_t z1 = (edges[i][1] >> 4) & 0x0F;
