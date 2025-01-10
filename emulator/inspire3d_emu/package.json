@@ -1,0 +1,15 @@
+{
+  "name": "inspire3d-emu",
+  "version": "1.0.0",
+  "description": "Inspire3D Emulator",
+  "main": "index.js",
+  "scripts":{
+    "start": "npx vite"
+  },
+  "dependencies": {
+    "three": "^0.172.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.7"
+  }
+}
