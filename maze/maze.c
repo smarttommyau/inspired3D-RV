@@ -258,14 +258,14 @@ while(1){ //program loop
             if(ty >= 0 && maze[Inspire3D_Display_Coords2Index(x,ty,z)] != 1){
             y = ty;
             }
-        } else if(arrow == ARROW_RIGHT){
-            int8_t tx = x + 1;
-            if(tx < 5 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
-            x = tx;
-            }
         } else if(arrow == ARROW_LEFT){
             int8_t tx = x - 1;
             if(tx >= 0 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
+            x = tx;
+            }
+        } else if(arrow == ARROW_RIGHT){
+            int8_t tx = x + 1;
+            if(tx < 5 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
             x = tx;
             }
         } else if(abcd == ABCD_A){
@@ -286,7 +286,7 @@ while(1){ //program loop
         blink_point(display, Inspire3D_Display_Coords2Index(x,y,z));
     }
     // show end animaton
-    delay(1000);
+    Delay_Ms(1000);
     while(1){
         // get key values
         uint16_t abcd_reading   = abcd_key_read_ADC();
