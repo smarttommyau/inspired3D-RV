@@ -78,35 +78,11 @@ ABCD_KEY abcd_key_down(uint16_t adc_reading){
     }
     return ABCD_NOT_FOUND;
 }
-ABCD_KEY abcd_key_down_I2CMODE(uint16_t d2_reading, uint16_t d3_reading){
-    uint16_t combine_reading = d2_reading + d3_reading;
-    if(combine_reading <= IDC_ABCD_HVKEY_L_COM) return ABCD_NOT_FOUND;
-
-    if(d2_reading >= IDC_ABCD_B_L_D2 && d2_reading <= IDC_ABCD_B_U_D2){
-        return ABCD_B;
-    } else if(d2_reading >= IDC_ABCD_C_L_D2 && d2_reading <= IDC_ABCD_C_U_D2){
-        return ABCD_C;
-    } else if(
-            d2_reading >= IDC_ABCD_A_L_D2 && d2_reading <= IDC_ABCD_A_U_D2
-            && combine_reading >= IDC_ABCD_A_L_COM && combine_reading <= IDC_ABCD_A_U_COM
-    ){
-        return ABCD_A;
-    } else if(
-            d2_reading >= IDC_ABCD_D_L_D2 && d2_reading <= IDC_ABCD_D_U_D2
-            && combine_reading >= IDC_ABCD_D_L_COM && combine_reading <= IDC_ABCD_D_U_COM
-    ){
-        return ABCD_D;
-    }
-    return ABCD_NOT_FOUND;
-}
 
 bool abcd_key_pressed(uint16_t adc_reading, ABCD_KEY detect_key) {
     return (abcd_key_down(adc_reading) == detect_key);
 }
 
-bool abcd_key_pressed_I2CMODE(uint16_t d2_reading, uint16_t d3_reading, ABCD_KEY detect_key){
-    return (abcd_key_down_I2CMODE(d2_reading, d3_reading) == detect_key);
-}
 uint16_t rnval;
 uint16_t JOY_random(void) {
   rnval = (rnval >> 0x01) ^ (-(rnval & 0x01) & 0xB400);
