@@ -45,6 +45,10 @@ static uint8_t posToId3D(uint8_t x, uint8_t y, uint8_t z) {
     return x + 5*(y + 5*z);
 }
 void generateMaze(){
+    //set all cells to wall
+    for(uint8_t i=0; i<125; i++){
+        maze[i] = 1;
+    }
     // Initialize union-find
     for(uint8_t i=0; i<125; i++){
         ufParent[i] = i;
@@ -137,13 +141,13 @@ void show_maze(Inspire3D_Display * display){
     for(uint8_t i=0; i<125; i++){
         printf("%d ", maze[i]);
         if(maze[i] == 1){
-            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Black);
+            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Red);
         } else if(maze[i] == 0){
-            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_setRGB(255,255,255));
+            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Black);
         } else if(maze[i] == 2){
-            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_setRGB(255,0,0));
+            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Green);
         } else if(maze[i] == 3){
-            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_setRGB(0,255,0));
+            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Yellow);
         }
     }
     Inspire3D_Display_Update(display);
