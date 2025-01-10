@@ -9,7 +9,7 @@
 #include "inspire3d_display.h"
 
 //maze edges
-uint8_t edges[300][3]; // it has 300 edges
+uint8_t edges[300][3];
 
 // 0: path, 1: wall, 2: start, 3: end
 // 3D maze
@@ -17,10 +17,24 @@ uint8_t maze[125]; // 125 bytes
 uint8_t ufParent[125]; // 125 bytes
 uint8_t ufRankUF[125]; // 125 bytes
 
+void show_maze(Inspire3D_Display * display);
+
 static uint8_t findSet3D(uint8_t v) {
-    if (ufParent[v] == v) return v;
-    ufParent[v] = findSet3D(ufParent[v]);
-    return ufParent[v];
+    uint8_t root = v;
+    printf("Checkpoint set3d %d\n", v); 
+    while (root != ufParent[root]) {
+        root = ufParent[root];
+        printf("Checkpoint set3d 2 %d\n", root); 
+    }
+    printf("Checkpoint set3d3\n"); 
+    // Path compression
+    while (v != root) {
+        uint8_t p = ufParent[v];
+        ufParent[v] = root;
+        v = p;
+    }
+    printf("Checkpoint set3d4\n"); 
+    return root;
 }
 
 static void unionSet3D(uint8_t a, uint8_t b) {
@@ -41,10 +55,13 @@ static uint8_t coordtoId(uint8_t x, uint8_t y, uint8_t z){
     return (z * 25) + (y * 5) + x;
 }
 
-void generateMaze(){
+void generateMaze(Inspire3D_Display * display){
     //set all cells to wall
     for(uint8_t i=0; i<125; i++){
         maze[i] = 1;
+    }
+    // Initialize union-find
+    for(uint8_t i=0; i<125; i++){
         ufParent[i] = i;
         ufRankUF[i] = 0;
     }
@@ -122,20 +139,21 @@ void generateMaze(){
             unionSet3D(id2, id1);
             printf("checkpoint 3\n");
             // Remove wall => set these cells to 0 (path)
-            maze[id1] = 0;
+            // maze[id1] = 0;
             maze[id2] = 0;
+            show_maze(display);
         }
     }
     // random select path cells as start and end
-    uint8_t start, end;
-    do {
+    uint8_t start = JOY_random() % 125;
+    uint8_t end = JOY_random() % 125;
+    while(maze[start] != 0){
         start = JOY_random() % 125;
-    } while(maze[start] != 0);
+    }
     maze[start] = 2;
-
-    do {
+    while(maze[end] != 0){
         end = JOY_random() % 125;
-    } while(maze[end] != 0 || end == start);
+    }
     maze[end] = 3;
 }
 
@@ -156,6 +174,25 @@ void show_maze(Inspire3D_Display * display){
     Inspire3D_Display_Update(display);
     
 }
+
+void blink_point(Inspire3D_Display * display,int index){
+    // blink color with the maze
+    Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
+    Inspire3D_Display_Update(display);
+    Delay_Ms(100);
+    if(maze[index] == 0){
+        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
+    } else if(maze[index] == 1){
+        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Red);
+    } else if(maze[index] == 2){
+        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Green);
+    } else if(maze[index] == 3){
+        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Yellow);
+    }
+    Inspire3D_Display_Update(display);
+
+}
+
 
 uint8_t seed = 0;
 
@@ -192,9 +229,21 @@ int main(void) {
         Delay_Ms(10);
     }
     JOY_setseed(seed);
-    generateMaze();
+    generateMaze(display);
     show_maze(display);
-
+    // set x,y,z to start
+    // find start
+    for(uint8_t i=0; i<125; i++){
+        if(maze[i] == 2){
+            uint8_t tx,ty,tz;
+            Inspire3D_Display_Index2Coords(i, &tx, &ty, &tz);
+            x = tx;
+            y = ty;
+            z = tz;
+            break;
+        }
+    }
+    
     while(1){
         // read ABCD key
         uint16_t abcd_reading   = abcd_key_read_ADC();
@@ -203,33 +252,46 @@ int main(void) {
         ABCD_KEY abcd           = abcd_key_down(abcd_reading);
         if(mode == 0){
             if(arrow == ARROW_UP){
-                y = (y + 1) % 5;
+                if(maze[coordtoId(x,y,z)] == 0){
+                    y = (y + 1) % 5;
+                }
             } else if(arrow == ARROW_DOWN){
-                y = (y - 1) % 5;
-                y = y < 0 ? 4 : y;
+                if(maze[coordtoId(x,y,z)] == 0){
+                    y = (y - 1) % 5;
+                    y = y < 0 ? 4 : y;
+                }
             } else if(arrow == ARROW_RIGHT){
-                x = (x + 1) % 5;
+                if(maze[coordtoId(x,y,z)] == 0){
+                    x = (x + 1) % 5;
+                }
             } else if(arrow == ARROW_LEFT){
-                x = (x - 1) % 5;
-                x = x < 0 ? 4 : x;
+                if(maze[coordtoId(x,y,z)] == 0){
+                    x = (x - 1) % 5;
+                    x = x < 0 ? 4 : x;
+                }
             }
             // read arrow key
-            if(abcd == ABCD_A){
-                z = (z + 1) % 5;
+            else if(abcd == ABCD_A){
+                if(maze[coordtoId(x,y,z)] == 0){
+                    z = (z + 1) % 5;
+                }
             } else if(abcd == ABCD_B){
-                z = (z - 1) % 5;
-                z = z < 0 ? 4 : z;
+                if(maze[coordtoId(x,y,z)] == 0){
+                    z = (z - 1) % 5;
+                    z = z < 0 ? 4 : z;
+                }
             }
         }
-        // blink color
-        // uint8_t index = Inspire3D_Display_Coords2Index(x,y,z);
-        // // Inspire3D_Display_SetColor(display, index, Inspire3D_Color_setRGB(y*50,x*50,z*50));
-        // printf("x: %d, y: %d, z: %d adc: %d\n", x, y, z, abcd_reading);
-        // Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
-        // Inspire3D_Display_Update(display);
-        // Delay_Ms(100);
-        // Inspire3D_Display_SetColor(display, index, Inspire3D_Color_setRGB(y*50,x*50,z*50));
-        // Inspire3D_Display_Update(display);
-        // Delay_Ms(100);
+        if(maze[coordtoId(x,y,z)] == 3){
+            // end
+            break;
+        }
+        blink_point(display, coordtoId(x,y,z));
+    }
+    // show end
+    for(uint8_t i=0; i<125; i++){
+        if(maze[i] == 3){
+            Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Green);
+        }
     }
 }
