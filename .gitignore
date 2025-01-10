@@ -54,3 +54,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 /.vscode
+
+# Inspire3d emulator 
+**/node_modules
