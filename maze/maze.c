@@ -135,8 +135,8 @@ void generateMaze(Inspire3D_Display * display){
             unionSet3D(id2, id1);
             printf("checkpoint 3\n");
             // Remove wall => set these cells to 0 (path)
-            // maze[id1] = 0;
-            maze[id2] = 0;
+            maze[id1] = 0;
+            // maze[id2] = 0;
             show_maze(display);
         }
     }
