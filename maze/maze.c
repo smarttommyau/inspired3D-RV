@@ -9,13 +9,10 @@
 #include "inspire3d_display.h"
 
 //maze edges
-static uint8_t edges[125*3][3];
-// share memory to below variables
+uint8_t edges[125*3][3];
 
 // 0: path, 1: wall, 2: start, 3: end
 // 3D maze
-// 3x3 for 1,3,5 so actually 3x3x3
-// 2,4 layers are filled with walls
 uint8_t maze[125]; // 125 bytes
 uint8_t ufParent[125]; // 125 bytes
 uint8_t ufRankUF[125]; // 125 bytes
@@ -38,11 +35,6 @@ static void unionSet3D(uint8_t a, uint8_t b) {
             ufRankUF[a]++;
         }
     }
-}
-
-// Convert (x,y,z) in [0..4,0..4,0..4] to index 0..124 in maze[]
-static uint8_t posToId3D(uint8_t x, uint8_t y, uint8_t z) {
-    return x + 5*(y + 5*z);
 }
 void generateMaze(){
     //set all cells to wall
@@ -114,8 +106,8 @@ void generateMaze(){
         uint8_t y2 = (edges[i][2] >> 4) & 0x0F;
         uint8_t z2 = edges[i][2] & 0x0F;
 
-        uint8_t id1 = posToId3D(x1,y1,z1);
-        uint8_t id2 = posToId3D(x2,y2,z2);
+        uint8_t id1 = Inspire3D_Display_Coords2Index(x1,y1,z1);
+        uint8_t id2 = Inspire3D_Display_Coords2Index(x2,y2,z2);
 
         if(findSet3D(id1) != findSet3D(id2)){
             unionSet3D(id1, id2);
@@ -130,10 +122,10 @@ void generateMaze(){
     while(maze[start] != 0){
         start = JOY_random() % 125;
     }
+    maze[start] = 2;
     while(maze[end] != 0){
         end = JOY_random() % 125;
     }
-    maze[start] = 2;
     maze[end] = 3;
 }
 
@@ -150,14 +142,14 @@ void show_maze(Inspire3D_Display * display){
             Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Yellow);
         }
     }
+    printf("\nShow maze\n");
     Inspire3D_Display_Update(display);
     
 }
 
 uint8_t seed = 0;
 
-// use edges memory to store display buffer, as lack of memory
-char * display_buffer = (char *)&edges; //[sizeof(Inspire3D_Display)]
+char display_buffer[sizeof(Inspire3D_Display)];
 
 
 int main(void) {
@@ -171,7 +163,7 @@ int main(void) {
     int x,y,z = 0;// selector coords
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
-    Inspire3D_Display_Clear(display);// reset data and update
+    Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Green);
     Inspire3D_Display_SetBrightness(display, 0.05);
     uint8_t mode = 0; //0: select; 1: selected
     //wait and increment seed until any button is pressed
@@ -219,26 +211,15 @@ int main(void) {
                 z = z < 0 ? 4 : z;
             }
         }
-        // select with CD keys
-        if(abcd == ABCD_C||abcd == ABCD_D){
-            if(mode == 0){
-                mode = 1;
-                Inspire3D_Display_SetBGColor(display, Inspire3D_Color_setRGB(y*50,x*50,z*50));
-                Inspire3D_Display_Update(display);
-                Delay_Ms(200);
-            } else {
-                mode = 0;
-            }
-        }
         // blink color
-        uint8_t index = Inspire3D_Display_Coords2Index(x,y,z);
+        // uint8_t index = Inspire3D_Display_Coords2Index(x,y,z);
+        // // Inspire3D_Display_SetColor(display, index, Inspire3D_Color_setRGB(y*50,x*50,z*50));
+        // printf("x: %d, y: %d, z: %d adc: %d\n", x, y, z, abcd_reading);
+        // Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
+        // Inspire3D_Display_Update(display);
+        // Delay_Ms(100);
         // Inspire3D_Display_SetColor(display, index, Inspire3D_Color_setRGB(y*50,x*50,z*50));
-        printf("x: %d, y: %d, z: %d adc: %d\n", x, y, z, abcd_reading);
-        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
-        Inspire3D_Display_Update(display);
-        Delay_Ms(100);
-        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_setRGB(y*50,x*50,z*50));
-        Inspire3D_Display_Update(display);
-        Delay_Ms(100);
+        // Inspire3D_Display_Update(display);
+        // Delay_Ms(100);
     }
 }
