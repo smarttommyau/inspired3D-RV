@@ -51,10 +51,6 @@ static void unionSet3D(uint8_t a, uint8_t b) {
     }
 }
 
-static uint8_t coordtoId(uint8_t x, uint8_t y, uint8_t z){
-    return (z * 25) + (y * 5) + x;
-}
-
 void generateMaze(Inspire3D_Display * display){
     //set all cells to wall
     for(uint8_t i=0; i<125; i++){
@@ -129,8 +125,8 @@ void generateMaze(Inspire3D_Display * display){
         uint8_t z2 = edges[i][2] & 0x0F;
         printf("x1: %d, y1: %d, z1: %d, x2: %d, y2: %d, z2: %d\n", x1, y1, z1, x2, y2, z2);
         printf("checkpoint 1\n");
-        uint8_t id1 = coordtoId(x1,y1,z1);
-        uint8_t id2 = coordtoId(x2,y2,z2);
+        uint8_t id1 = Inspire3D_Display_Coords2Index(x1,y1,z1);
+        uint8_t id2 = Inspire3D_Display_Coords2Index(x2,y2,z2);
         printf("checkpoint 2 %d %d\n", id1, id2);
         uint8_t a = findSet3D(id1);
         uint8_t b = findSet3D(id2);
@@ -177,7 +173,7 @@ void show_maze(Inspire3D_Display * display){
 
 void blink_point(Inspire3D_Display * display,int index){
     // blink color with the maze
-    Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
+    Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Purple);
     Inspire3D_Display_Update(display);
     Delay_Ms(100);
     if(maze[index] == 0){
@@ -252,41 +248,41 @@ int main(void) {
         ABCD_KEY abcd           = abcd_key_down(abcd_reading);
         if(mode == 0){
             if(arrow == ARROW_UP){
-                if(maze[coordtoId(x,y,z)] == 0){
+                if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 0){
                     y = (y + 1) % 5;
                 }
             } else if(arrow == ARROW_DOWN){
-                if(maze[coordtoId(x,y,z)] == 0){
+                if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 0){
                     y = (y - 1) % 5;
                     y = y < 0 ? 4 : y;
                 }
             } else if(arrow == ARROW_RIGHT){
-                if(maze[coordtoId(x,y,z)] == 0){
+                if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 0){
                     x = (x + 1) % 5;
                 }
             } else if(arrow == ARROW_LEFT){
-                if(maze[coordtoId(x,y,z)] == 0){
+                if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 0){
                     x = (x - 1) % 5;
                     x = x < 0 ? 4 : x;
                 }
             }
             // read arrow key
             else if(abcd == ABCD_A){
-                if(maze[coordtoId(x,y,z)] == 0){
+                if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 0){
                     z = (z + 1) % 5;
                 }
             } else if(abcd == ABCD_B){
-                if(maze[coordtoId(x,y,z)] == 0){
+                if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 0){
                     z = (z - 1) % 5;
                     z = z < 0 ? 4 : z;
                 }
             }
         }
-        if(maze[coordtoId(x,y,z)] == 3){
+        if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 3){
             // end
             break;
         }
-        blink_point(display, coordtoId(x,y,z));
+        blink_point(display, Inspire3D_Display_Coords2Index(x,y,z));
     }
     // show end
     for(uint8_t i=0; i<125; i++){
