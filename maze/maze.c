@@ -247,37 +247,34 @@ int main(void) {
         ABCD_KEY abcd           = abcd_key_down(abcd_reading);
         printf("%d %d %d %d\n",arrow_reading, arrow_reading, arrow, abcd);
         if(arrow == ARROW_UP){
-            int8_t ty = (y + 1) % 5; 
-            if(maze[Inspire3D_Display_Coords2Index(x,ty,z)] != 1){
-                y = ty;
+            int8_t ty = y + 1; 
+            if(ty < 5 && maze[Inspire3D_Display_Coords2Index(x,ty,z)] != 1){
+            y = ty;
             }
         } else if(arrow == ARROW_DOWN){
-            int8_t ty = (y - 1) % 5;
-            ty = ty < 0 ? 4 : ty;
-            if(maze[Inspire3D_Display_Coords2Index(x,ty,z)] != 1){
-                y = ty;
+            int8_t ty = y - 1;
+            if(ty >= 0 && maze[Inspire3D_Display_Coords2Index(x,ty,z)] != 1){
+            y = ty;
             }
         } else if(arrow == ARROW_RIGHT){
-            int8_t tx = (x + 1) % 5;
-            if(maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
-                x = tx;
+            int8_t tx = x + 1;
+            if(tx < 5 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
+            x = tx;
             }
         } else if(arrow == ARROW_LEFT){
-            int8_t tx = (x - 1) % 5;
-            tx = tx < 0 ? 4 : tx;
-            if(maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
-                x = tx;
+            int8_t tx = x - 1;
+            if(tx >= 0 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
+            x = tx;
             }
         } else if(abcd == ABCD_A){
-            int8_t tz = (z + 1) % 5;
-            if(maze[Inspire3D_Display_Coords2Index(x,y,tz)] != 1){
-                z = tz;
+            int8_t tz = z + 1;
+            if(tz < 5 && maze[Inspire3D_Display_Coords2Index(x,y,tz)] != 1){
+            z = tz;
             }
         } else if(abcd == ABCD_B){
-            int8_t tz = (z - 1) % 5;
-            tz = tz < 0 ? 4 : tz;
-            if(maze[Inspire3D_Display_Coords2Index(x,y,tz)] != 1){
-                z = tz;
+            int8_t tz = z - 1;
+            if(tz >= 0 && maze[Inspire3D_Display_Coords2Index(x,y,tz)] != 1){
+            z = tz;
             }
         }
         if(maze[Inspire3D_Display_Coords2Index(x,y,z)] == 3){
