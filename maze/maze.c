@@ -127,15 +127,15 @@ void generateMaze(){
         }
     }
     // random select path cells as start and end
-    uint8_t start = JOY_random() % 125;
-    uint8_t end = JOY_random() % 125;
-    while(maze[start] != 0){
+    uint8_t start, end;
+    do {
         start = JOY_random() % 125;
-    }
+    } while(maze[start] != 0);
     maze[start] = 2;
-    while(maze[end] != 0){
+
+    do {
         end = JOY_random() % 125;
-    }
+    } while(maze[end] != 0 || end == start);
     maze[end] = 3;
 }
 
