@@ -5,6 +5,10 @@
 // websocket server to connect to inspire3d_display emulator
 #include "ws.h"
 #include <stdio.h>
+#include <string.h>
+#define WebServerPort 8000
+#define indexHTMLPath "../emulator/inspire3d_emu/index.html"
+
 
 #define BORDER_X 2
 //dumy
@@ -59,7 +63,6 @@ void onclose(ws_cli_conn_t client)
 #endif
 }
 
-#define WebServerPort 8000
 void WS_init() {
 	ws_socket(&(struct ws_server){
 		.host = "127.0.0.1",
@@ -70,6 +73,36 @@ void WS_init() {
 		.evs.onclose   = &onclose,
 		.evs.onmessage = &onmessage
 	});
+    openHTML();
+}
+
+
+void openHTML(){
+    //for windows
+#ifdef _WIN32
+    char * command = "start ";
+    char * path = indexHTMLPath;
+    char * fullCommand = malloc(strlen(command) + strlen(path) + 1);
+    strcpy(fullCommand, command);
+    strcat(fullCommand, path);
+#endif
+    // for linux
+#ifdef __linux__
+    char * command = "xdg-open ";
+    char * path = indexHTMLPath;
+    char * fullCommand = malloc(strlen(command) + strlen(path) + 1);
+    strcpy(fullCommand, command);
+    strcat(fullCommand, path);
+#endif
+#ifdef __APPLE__
+    char * fullCommand = "open ";
+    char * path = indexHTMLPath;
+    char * fullCommand = malloc(strlen(command) + strlen(path) + 1);
+    strcpy(fullCommand, command);
+    strcat(fullCommand, path);
+#endif
+    system(fullCommand);
+
 }
 
 
