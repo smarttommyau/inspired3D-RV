@@ -4,6 +4,9 @@
 #include "ws2812b_simple.h"
 #include <stdbool.h>
 #include <stdlib.h>
+
+
+
 // Detect arrow key press
 typedef enum {
     ARROW_UP    = 1,
@@ -46,6 +49,10 @@ ABCD_KEY abcd_key_down(uint16_t adc_reading){
         return ABCD_A;
     }
     return ABCD_NOT_FOUND;
+}
+
+void init_WS(){
+
 }
 
 #ifdef _WIN32

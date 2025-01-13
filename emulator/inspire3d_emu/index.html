@@ -45,10 +45,16 @@
 			let display = [];
 			init();
 			const ws = new WebSocket('ws://localhost:8000');
+			ws.binaryType = 'arraybuffer';
 			ws.onmessage = function (event) {
-				const data = JSON.parse(event.data);
+				const arrayBuffer = event.data;
+				const data = new Uint8Array(arrayBuffer);
 				for (let i = 0; i < 125; i++) {
-					display[i].material.color.setHex(data[i]);
+					const r = data[i * 3];
+					const g = data[i * 3 + 1];
+					const b = data[i * 3 + 2];
+					const hexColor = (r << 16) | (g << 8) | b;
+					display[i].material.color.setHex(hexColor);
 				}
 			};
 
