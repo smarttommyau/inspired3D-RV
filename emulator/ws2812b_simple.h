@@ -64,7 +64,7 @@ void WS_init() {
 	ws_socket(&(struct ws_server){
 		.host = "127.0.0.1",
 		.port = WebServerPort,
-		.thread_loop   = 0,
+		.thread_loop   = 1,
 		.timeout_ms    = 1000,
 		.evs.onopen    = &onopen,
 		.evs.onclose   = &onclose,
