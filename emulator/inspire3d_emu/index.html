@@ -41,7 +41,7 @@
 
 			let camera, controls, scene, renderer;
 
-			let display = [];
+			let display = new Array(125);
 			init();
 			const ws = new WebSocket('ws://localhost:8000');
 			ws.binaryType = 'arraybuffer';
@@ -52,8 +52,8 @@
 					const r = data[i * 3];
 					const g = data[i * 3 + 1];
 					const b = data[i * 3 + 2];
-					const hexColor = (r << 16) | (g << 8) | b;
-					display[i].material.color.setHex(hexColor);
+					display[i].material.color.setRGB(r / 255, g / 255, b / 255);
+					console.log(r, g, b);
 				}
 			};
 
@@ -88,23 +88,28 @@
 				controls.maxDistance = 500;
 
 				controls.maxPolarAngle = Math.PI / 2;
-
-				const LedGeometry = new THREE.CylinderGeometry(2, 2, 1, 30);
-				const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x0095dd });
+				const LedBackGeometry = new THREE.BoxGeometry(3, 3, 1);
+				const LedBackBasicMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+				const LedGeometry = new THREE.CylinderGeometry(1, 1, 1, 30);
 
 				// verical stripss behind 5 leds
 				const stripGeometry = new THREE.BoxGeometry(4, 13 * 5 + 20, 1);
 				// black color
 				const stripMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 				// 5 * 5 * 5 display
+	
 				for (let x = 0; x < 5; x++) {
   				for (let z = 0; z < 5; z++) {
   					for (let y = 0; y < 5; y++) {
-      				const cube = new THREE.Mesh(LedGeometry, basicMaterial);
-      				cube.position.set(x * 20, y * 13 + 40, z * 20);
-      				cube.rotation.x = Math.PI / 2;
-      				display.push(cube);
-      				scene.add(cube);
+						const box = new THREE.Mesh(LedBackGeometry, LedBackBasicMaterial);
+						box.position.set(x * 20, y * 13 + 40, z * 20);
+						scene.add(box);
+						const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x0095dd });
+						const cube = new THREE.Mesh(LedGeometry, basicMaterial);
+						cube.position.set(x * 20, y * 13 + 40, z * 20 - 1);
+						cube.rotation.x = Math.PI / 2;
+						display[x*5 + (4-y) + z * 25] = cube; // refers to inspire3d_display.h
+						scene.add(cube);
     				}
   						const strip = new THREE.Mesh(stripGeometry, stripMaterial);
   						strip.position.set(x * 20, 4 * 13 + 10, z * 20 +1);
