@@ -84,8 +84,8 @@ static inline bool is_key_pressed(char capitalkey) {
 #define arrow_right_pressed() is_key_pressed('D')
 
 #define abcd_a_pressed() is_key_pressed('I')
-#define abcd_b_pressed() is_key_pressed('J')
-#define abcd_c_pressed() is_key_pressed('K')
+#define abcd_b_pressed() is_key_pressed('K')
+#define abcd_c_pressed() is_key_pressed('J')
 #define abcd_d_pressed() is_key_pressed('L')
 
 #elif defined(__APPLE__)
@@ -103,8 +103,8 @@ static inline bool is_key_pressed(char capitalkey) {
 #define arrow_right_pressed() is_key_pressed(D_key)
 
 #define abcd_a_pressed() is_key_pressed(I_key)
-#define abcd_b_pressed() is_key_pressed(J_key)
-#define abcd_c_pressed() is_key_pressed(K_key)
+#define abcd_b_pressed() is_key_pressed(K_key)
+#define abcd_c_pressed() is_key_pressed(J_key)
 #define abcd_d_pressed() is_key_pressed(L_key)
 
 #endif

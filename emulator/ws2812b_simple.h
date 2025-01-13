@@ -65,9 +65,9 @@ void onmessage(ws_cli_conn_t client,
 
 		if (msg[0] == 'I') {
 			set_adc_abcd(ABCD_A_L);
-		} else if (msg[0] == 'J') {
-			set_adc_abcd(ABCD_B_L);
 		} else if (msg[0] == 'K') {
+			set_adc_abcd(ABCD_B_L);
+		} else if (msg[0] == 'J') {
 			set_adc_abcd(ABCD_C_L);
 		} else if (msg[0] == 'L') {
 			set_adc_abcd(ABCD_D_L);
