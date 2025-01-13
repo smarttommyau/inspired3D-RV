@@ -11,13 +11,25 @@
 #define D_Key 2
 #define E_Key 14
 #define F_Key 3
+#define G_Key 5
+#define H_Key 4
 #define I_Key 34
 #define J_Key 38
 #define K_Key 40
 #define L_Key 37
-#define U_Key 32
+#define M_Key 46
+#define N_Key 45
 #define O_Key 31
 #define P_Key 35
+#define Q_Key 12
+#define R_Key 15
+#define S_Key 1
+#define T_Key 17
+#define U_Key 32
+#define W_Key 13
+#define X_Key 7
+#define Y_Key 16
+#define Z_Key 6
 #define _0_Key 29
 #define _1_Key 18
 #define _2_Key 19
@@ -28,6 +40,10 @@
 #define _7_Key 26
 #define _8_Key 28
 #define _9_Key 25
+#define _Arrow_Up_Key 126
+#define _Arrow_Down_Key 125
+#define _Arrow_Left_Key 123
+#define _Arrow_Right_Key 124
 
 pthread_t thread;
 
