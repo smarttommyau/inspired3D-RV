@@ -175,7 +175,9 @@ void ADC_init(void) {
     // Do nothing
 }
 
-
+void GPIO_ADCinit(){
+    // Do nothing
+}
 
 uint16_t rnval;
 uint16_t JOY_random(void) {

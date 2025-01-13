@@ -1,19 +1,6 @@
 #pragma once
 #include <stdint.h>
-typedef struct
-{
-// 	__IO uint32_t CFGLR;
-// 	__IO uint32_t CFGHR;
-// 	__I  uint32_t INDR;
-// 	__IO uint32_t OUTDR;
-// 	__IO uint32_t BSHR;
-// 	__IO uint32_t BCR;
-// 	__IO uint32_t LCKR;
-// #ifdef CH32X03x
-// 	__IO uint32_t CFGXR;
-// 	__IO uint32_t BSXR;
-// #endif
-} GPIO_TypeDef;
+
 #define GPIOA ((GPIO_TypeDef *)0)
 #define GPIOC ((GPIO_TypeDef *)0)
 #define GPIOD ((GPIO_TypeDef *)0)
