@@ -122,10 +122,28 @@
 
 				window.addEventListener( 'resize', onWindowResize );
 
-
 				const gui = new GUI();
 				gui.add( controls, 'zoomToCursor' );
 				gui.add( controls, 'screenSpacePanning' );
+
+				// set keydown event listener
+				document.addEventListener('keydown', function (event) {
+					// only takes wasd and ijkl
+					// send key to server
+					const key = event.key;
+					if (key === 'w' || key === 'a' || key === 's' || key === 'd' || key === 'i' || key === 'j' || key === 'k' || key === 'l') {
+						ws.send(key+"D");
+					}
+				});
+				// set keyup event listener
+				document.addEventListener('keyup', function (event) {
+					// only takes wasd and ijkl
+					// send key to server
+					const key = event.key;
+					if (key === 'w' || key === 'a' || key === 's' || key === 'd' || key === 'i' || key === 'j' || key === 'k' || key === 'l') {
+						ws.send(key+"U");
+					}
+				});
 
 			}
 

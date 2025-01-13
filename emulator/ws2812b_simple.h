@@ -16,6 +16,22 @@
 #define horizontalButtons 0
 #define verticalButtons 0
 
+// For driver to invoke keys
+static uint16_t adc_arrow = 0;
+
+void set_adc_arrow(uint16_t adc){
+    adc_arrow = adc;
+}
+
+
+static uint16_t adc_abcd = 0;
+
+void set_adc_abcd(uint16_t adc){
+    adc_abcd = adc;
+}
+
+
+
 void onopen(ws_cli_conn_t client)
 {
 	char *cli, *port;
@@ -35,23 +51,46 @@ void onmessage(ws_cli_conn_t client,
 	printf("I receive a message: %s (size: %" PRId64 ", type: %d), from: %s\n",
 		msg, size, type, cli);
 #endif
+	//set buttons values
+	if (size == 2 && msg[1] == 'D') {
+		if (msg[0] == 'W') {
+			set_adc_arrow(ARROW_UP_L);
+		} else if (msg[0] == 'S') {
+			set_adc_arrow(ARROW_DOWN_L);
+		} else if (msg[0] == 'A') {
+			set_adc_arrow(ARROW_LEFT_L);
+		} else if (msg[0] == 'D') {
+			set_adc_arrow(ARROW_RIGHT_L);
+		} 
 
-	/**
-	 * Mimicks the same frame type received and re-send it again
-	 *
-	 * Please note that we could just use a ws_sendframe_txt()
-	 * or ws_sendframe_bin() here, but we're just being safe
-	 * and re-sending the very same frame type and content
-	 * again.
-	 *
-	 * Alternative functions:
-	 *   ws_sendframe()
-	 *   ws_sendframe_txt()
-	 *   ws_sendframe_txt_bcast()
-	 *   ws_sendframe_bin()
-	 *   ws_sendframe_bin_bcast()
-	 */
-	ws_sendframe_bcast(8080, (char *)msg, size, type);
+		if (msg[0] == 'I') {
+			set_adc_abcd(ABCD_A_L);
+		} else if (msg[0] == 'J') {
+			set_adc_abcd(ABCD_B_L);
+		} else if (msg[0] == 'K') {
+			set_adc_abcd(ABCD_C_L);
+		} else if (msg[0] == 'L') {
+			set_adc_abcd(ABCD_D_L);
+		}
+	}else if(size == 1 && msg[0] == 'U'){
+		if(
+			msg[0] == 'W' ||
+			msg[0] == 'S' ||
+			msg[0] == 'A' ||
+			msg[0] == 'D' 
+		){
+			set_adc_arrow(0);
+		}
+		if(
+			msg[0] == 'I' ||
+			msg[0] == 'J' ||
+			msg[0] == 'K' ||
+			msg[0] == 'L' 
+		){
+			set_adc_abcd(0);
+		}
+	}
+	
 }
 
 void onclose(ws_cli_conn_t client)

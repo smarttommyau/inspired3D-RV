@@ -78,7 +78,7 @@ static inline bool is_key_pressed(char capitalkey) {
     return (result & 0x8000) != 0;
 }
 
-#define arrow_up_pressed() is_key_pressed('W')
+#define arrow_up_pressed() is_key_pressed('W')  
 #define arrow_down_pressed() is_key_pressed('S')
 #define arrow_left_pressed() is_key_pressed('A')
 #define arrow_right_pressed() is_key_pressed('D')
@@ -109,7 +109,11 @@ static inline bool is_key_pressed(char capitalkey) {
 
 #endif
 
+
 uint16_t arrow_key_read_ADC(void){
+    if(adc_arrow > 0){
+        return adc_arrow;
+    }
     if(arrow_up_pressed()){
         return ARROW_UP_L;
     }
@@ -129,6 +133,9 @@ uint16_t arrow_key_read_ADC(void){
 //      A
 //  C   B   D
 uint16_t abcd_key_read_ADC(void){
+    if(adc_abcd > 0){
+        return adc_abcd;
+    }
     if(abcd_a_pressed()){
         return ABCD_A_L;
     }
