@@ -4,12 +4,6 @@ inspired3d-RISC-V codes
 # installation
 - Build essentials for building c
   - e.g. use mounriver build tool
-- nodejs
-```
-cd emulator/inspire3d_emu
-npm install
-```
-
 # build
 - Run `make` in individual directory or build all in root
 - Run `make emulator` to build emulator for each program

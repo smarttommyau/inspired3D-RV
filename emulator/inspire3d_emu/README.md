@@ -1,12 +1,6 @@
 # Inspire3d emulator
 based on three.js
 
-# Installation
-Get nodejs installed.
-```
-npm install
-```
-
 
 # TODO
 - [ ] Light source for led light
