@@ -49,8 +49,9 @@
 				const arrayBuffer = event.data;
 				const data = new Uint8Array(arrayBuffer);
 				for (let i = 0; i < 125; i++) {
-					const r = data[i * 3];
-					const g = data[i * 3 + 1];
+					// color g r b according to inspire3d_display.h
+					const g = data[i * 3];
+					const r = data[i * 3 + 1];
 					const b = data[i * 3 + 2];
 					display[i].material.color.setRGB(r / 255, g / 255, b / 255);
 					console.log(r, g, b);
