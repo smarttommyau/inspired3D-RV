@@ -161,16 +161,12 @@ uint16_t abcd_key_read_ADC(void){
 
 #endif
 
-// #define JOY_pad_pressed()                                                                \
-//     (JOY_up_pressed() || JOY_down_pressed() || JOY_left_pressed() || JOY_right_pressed()|| \
-//         JOY_top_left_pressed() || JOY_top_right_pressed() || JOY_bottom_left_pressed() ||   \
-//         JOY_bottom_right_pressed())
-// #define JOY_pad_released()                                                               \
-//     (!JOY_up_pressed() && !JOY_down_pressed() && !JOY_left_pressed() &&                  \
-//         !JOY_right_pressed() && !JOY_top_left_pressed() && !JOY_top_right_pressed() &&   \
-//         !JOY_bottom_left_pressed() && !JOY_bottom_right_pressed())
-// #define JOY_all_released() (JOY_act_released() && !JOY_pad_releasePad())
-
+bool arrow_key_pressed(uint16_t adc_reading, ARROW_KEY detect_key){
+    return (arrow_key_down(adc_reading) == detect_key);
+}   
+bool abcd_key_pressed(uint16_t adc_reading, ABCD_KEY detect_key) {
+    return (abcd_key_down(adc_reading) == detect_key);
+}
 void ADC_init(void) {
     // Do nothing
 }
