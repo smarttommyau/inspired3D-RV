@@ -36,7 +36,8 @@ $(TARGET): $(OBJS)
 
 # Clean up
 clean:
-	$(RM) *.hex *.bin *.map *.elf *.exe
+	$(RM) *.hex *.bin *.map *.elf *.o *.lst
+	$(RM)  ..\emulator\*.o*.exe
 
 # Phony targets
 .PHONY: all clean
