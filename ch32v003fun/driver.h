@@ -3,11 +3,17 @@
 #include "ch32v003fun.h"
 #include "buttons.h"
 #include "ch32v003_GPIO_branchless.h"
+#include "ch32v003_i2c.h"
 #include <stdbool.h>
 #if FUNCONF_SYSTICK_USE_HCLK != 1
 #error WS2812B Driver Requires FUNCONF_SYSTICK_USE_HCLK
 #endif
 
+
+void MY_I2C_init(){
+    i2c_init();
+    i2c_scan();
+}
 
 // Detect arrow key press
 typedef enum {
