@@ -54,9 +54,6 @@ ABCD_KEY abcd_key_down(uint16_t adc_reading){
     return ABCD_NOT_FOUND;
 }
 
-void init_WS(){
-
-}
 
 #ifdef _WIN32
 #define NOMINMAX 1          // Prevent Windows.h from defining min and max macros
