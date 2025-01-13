@@ -98,6 +98,8 @@ void Inspire3D_Display_SetBrightness(Inspire3D_Display * display, float brightne
 }
 
 void Inspire3D_Display_Update(Inspire3D_Display * display){
+    // send data to inspire3d_display emulator
+    WS2812BSimpleSend(display->port, display->pin, (uint8_t *)display->data, 125*3);
 }
 
 void Inspire3D_Display_Reset(Inspire3D_Display * display){
