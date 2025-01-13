@@ -6,6 +6,9 @@
 #include <stdlib.h>
 
 
+void MY_I2C_init(){
+    WS_init();
+}
 
 // Detect arrow key press
 typedef enum {

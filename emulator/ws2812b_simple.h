@@ -3,8 +3,7 @@
 #include "ch32v003fun.h"
 
 // websocket server to connect to inspire3d_display emulator
-#include "mongoose.h"
-
+#include "ws.h"
 #include <stdio.h>
 
 #define BORDER_X 2
@@ -13,28 +12,69 @@
 #define horizontalButtons 0
 #define verticalButtons 0
 
-
-static const char *s_listen_on = "ws://localhost:8000";
-struct mg_mgr mgr;
-struct mg_connection *CurrentClient;
-mg_event_handler_t  * ws_ev_handler(
-    struct mg_connection *c, int ev, void *ev_data
-){
-    printf("ws_ev_handler\n");
-    if (ev != MG_EV_CLOSE) {
-        printf("Client::\n");
-        CurrentClient = c;
-    }
+void onopen(ws_cli_conn_t client)
+{
+	char *cli, *port;
+	cli  = ws_getaddress(client);
+	port = ws_getport(client);
+#ifndef DISABLE_VERBOSE
+	printf("Connection opened, addr: %s, port: %s\n", cli, port);
+#endif
 }
 
+void onmessage(ws_cli_conn_t client,
+	const unsigned char *msg, uint64_t size, int type)
+{
+	char *cli;
+	cli = ws_getaddress(client);
+#ifndef DISABLE_VERBOSE
+	printf("I receive a message: %s (size: %" PRId64 ", type: %d), from: %s\n",
+		msg, size, type, cli);
+#endif
+
+	/**
+	 * Mimicks the same frame type received and re-send it again
+	 *
+	 * Please note that we could just use a ws_sendframe_txt()
+	 * or ws_sendframe_bin() here, but we're just being safe
+	 * and re-sending the very same frame type and content
+	 * again.
+	 *
+	 * Alternative functions:
+	 *   ws_sendframe()
+	 *   ws_sendframe_txt()
+	 *   ws_sendframe_txt_bcast()
+	 *   ws_sendframe_bin()
+	 *   ws_sendframe_bin_bcast()
+	 */
+	ws_sendframe_bcast(8080, (char *)msg, size, type);
+}
+
+void onclose(ws_cli_conn_t client)
+{
+	char *cli;
+	cli = ws_getaddress(client);
+#ifndef DISABLE_VERBOSE
+	printf("Connection closed, addr: %s\n", cli);
+#endif
+}
+
+#define WebServerPort 8000
 void WS_init() {
-    mg_mgr_init(&mgr);
-    mg_listen(&mgr, s_listen_on, ws_ev_handler, NULL);    
+	ws_socket(&(struct ws_server){
+		.host = "127.0.0.1",
+		.port = WebServerPort,
+		.thread_loop   = 0,
+		.timeout_ms    = 1000,
+		.evs.onopen    = &onopen,
+		.evs.onclose   = &onclose,
+		.evs.onmessage = &onmessage
+	});
 }
 
 
 void WS2812BSimpleSend(GPIO_TypeDef * port, int pin, uint8_t * data, int len_in_bytes) {
     //send data to inspire3d_display emulator
     // using websocket
-    mg_send_websocket_frame(CurrentClient, WEBSOCKET_OP_BINARY, data, len_in_bytes);
+    ws_sendframe_bin_bcast(WebServerPort, (char *)data, len_in_bytes);
 }

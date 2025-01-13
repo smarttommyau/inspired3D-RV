@@ -218,7 +218,7 @@ while(1){ //program loop
             break;
         }
         seed++;
-        if(seed > 65535){
+        if(seed >= 65530){
             seed = 0;
         }
         Delay_Ms(10);
