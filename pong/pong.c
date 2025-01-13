@@ -1,6 +1,5 @@
 #define CH32V003_I2C_IMPLEMENTATION // using i2c
 #include "ch32v003fun.h"
-#include "ch32v003_i2c.h"
 #include "driver.h"
 #define INSPIRE3D_DISPLAY_COMMON_COLOR // using common colors
 #include "inspire3d_display.h"
@@ -125,8 +124,7 @@ int main(void) {
     // initialize everthing
     SystemInit();
     GPIO_ADCinit();
-    i2c_init();
-    i2c_scan();
+    MY_I2C_init();
     printf("I2C scan done\n");
     // initialize display
     Inspire3D_Display *display = (Inspire3D_Display*)display_buffer;

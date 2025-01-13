@@ -3,7 +3,6 @@
 #include "ch32v003fun.h"
 #include <stdio.h>
 #include "driver.h"
-#include "ch32v003_i2c.h"
 #include "ws2812b_simple.h"
 
 #define NUM_LEDS 5*5*5
@@ -29,8 +28,9 @@
 int main(void) {
     SystemInit();
     // GPIO_ADCinit();
-    i2c_init();
-    i2c_scan();
+    MY_I2C_init();
+    // i2c_init();
+    // i2c_scan();
 
     printf("I2C initialized\n");
     // int seed = 0;
