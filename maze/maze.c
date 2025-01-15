@@ -31,9 +31,9 @@ bool checkIfConnect(uint8_t depth, uint8_t index){
     return (x+1<5)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x+1,y,z)):false ||
            (x-1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x-1,y,z)):false ||
            (y+1<5)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y+1,z)):false ||
-           (y+1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y-1,z)):false ||
+           (y-1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y-1,z)):false ||
            (z+1<5)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y,z+1)):false ||
-           (z+1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y,z-1)):false;
+           (z-1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y,z-1)):false;
 
 }
 
