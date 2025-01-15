@@ -189,12 +189,12 @@ while(1){ //program loop
             }
         } else if(arrow == ARROW_LEFT){
             int8_t tx = x + 1;
-            if(tx >= 0 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
+            if(tx < 5 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
             x = tx;
             }
         } else if(arrow == ARROW_RIGHT){
             int8_t tx = x - 1;
-            if(tx < 5 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
+            if(tx >= 0 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
             x = tx;
             }
         } else if(abcd == ABCD_A){
