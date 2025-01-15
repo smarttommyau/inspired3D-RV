@@ -8,11 +8,23 @@ inspired3d-RISC-V codes
 - Run `make` in individual directory or build all in root
 - Run `make emulator` to build emulator for each program
 
+# Program the RISC-V
+## Pins required for programming
+![Porgram](./images/program_pins.png)
+> swio to swio
+> 5v to 5v
+> gnd to gnd 
+## Pins for Serial communication(uart)
+![Uart](./images/uart_pins.png)
+> RX to UTX
+> TX to URX
+
+
 # TODO
 - [x] Basic Button key detection 
 - [ ] Button click detection
 - [x] Basic LED control
-- [ ] emulator of inspired3d
+- [x] emulator of inspired3d
 - [ ] eeprome read/write
 - [ ] Intresting games and animations
 - [ ] Add more features
