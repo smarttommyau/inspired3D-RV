@@ -18,7 +18,7 @@
 // 2,4 layers are filled with walls
 uint8_t maze[125]; 
 
-#define MAX_ITERATION 100
+#define MAX_ITERATION 20
 void show_maze(Inspire3D_Display * display);
 
 bool checkIfConnect(uint8_t depth, uint8_t index){
@@ -51,6 +51,8 @@ void generateMaze(Inspire3D_Display * display){
     }
     maze[end] = 3;
     printf("Start: %d End: %d\n", start,end);
+    show_maze(display);
+
     while(!checkIfConnect(0, start)){
         // restore 4 to 0
         for(uint8_t i=0; i<125; i++){
@@ -64,6 +66,7 @@ void generateMaze(Inspire3D_Display * display){
             index = JOY_random()%125;
         }
         maze[index] = 0;
+        maze[start] = 2;
         show_maze(display);
     }
     maze[start] = 2;
@@ -185,12 +188,12 @@ while(1){ //program loop
             y = ty;
             }
         } else if(arrow == ARROW_LEFT){
-            int8_t tx = x - 1;
+            int8_t tx = x + 1;
             if(tx >= 0 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
             x = tx;
             }
         } else if(arrow == ARROW_RIGHT){
-            int8_t tx = x + 1;
+            int8_t tx = x - 1;
             if(tx < 5 && maze[Inspire3D_Display_Coords2Index(tx,y,z)] != 1){
             x = tx;
             }
