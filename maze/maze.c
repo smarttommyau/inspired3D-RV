@@ -99,7 +99,7 @@ void blink_point(Inspire3D_Display * display,int index){
     // blink color with the maze
     Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Purple);
     Inspire3D_Display_Update(display);
-    Delay_Ms(300);
+    Delay_Ms(500);
     if(maze[index] == 0){
         Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
     } else if(maze[index] == 1){
