@@ -87,7 +87,6 @@ void show_maze(Inspire3D_Display * display){
         } else if(maze[i] == 0){
             Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Black);
         } else if(maze[i] == 2){
-            printf("Green");
             Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Green);
         } else if(maze[i] == 3){
             Inspire3D_Display_SetColor(display, i, Inspire3D_Color_Yellow);
