@@ -16,6 +16,8 @@
 #define horizontalButtons 0
 #define verticalButtons 0
 
+
+void openHTML();
 // For driver to invoke keys
 static uint16_t adc_arrow = 0;
 
@@ -121,7 +123,7 @@ void openHTML(){
 #ifdef _WIN32
     char * command = "start ";
     char * path = indexHTMLPath;
-    char * fullCommand = malloc(strlen(command) + strlen(path) + 1);
+    char fullCommand[strlen(command) + strlen(path) + 1];
     strcpy(fullCommand, command);
     strcat(fullCommand, path);
 #endif
