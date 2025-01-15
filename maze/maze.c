@@ -87,7 +87,7 @@ void generateMaze(Inspire3D_Display * display){
         maze[index] = 0;
         maze[start] = 2;
         show_maze(display);
-        Delay_Ms(500);
+        Delay_Ms(100);
     }
     maze[start] = 2;
     for(uint8_t i=0; i<125; i++){
