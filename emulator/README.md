@@ -8,6 +8,9 @@
 * Type `make emulator` for compiling the emulator version on Windows/MacOs
 * Run the executable
 
+### Note
+> If you run the executable on other directory, you will have to open the emulator/inspire3d_emu/index.html in your browser manually
+
 ## Controls
 
 press keyboard to control the matrix emulator, listing out the keys
