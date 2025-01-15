@@ -40,7 +40,8 @@ bool checkIfConnect(uint8_t depth, uint8_t index){
 
 void generateMaze(Inspire3D_Display * display){
     for(uint8_t i=0; i<125; i++){
-        maze[i] = abs(JOY_random() % 3-1);// add chance for wall
+        maze[i] = abs(JOY_random() % 3);// add chance for wall
+        maze[i] = maze[i] == 2 ? 1 : maze[i];
     }
     // set start and end
     uint8_t start = JOY_random()%125;
@@ -68,6 +69,7 @@ void generateMaze(Inspire3D_Display * display){
         maze[index] = 0;
         maze[start] = 2;
         show_maze(display);
+        Delay_Ms(500);
     }
     maze[start] = 2;
     for(uint8_t i=0; i<125; i++){
@@ -168,7 +170,7 @@ while(1){ //program loop
             break;
         }
     }
-    
+    uint8_t refresh_count = 6;// prevent purple dots not disappearing due to random issue
     while(1){
         // read ABCD key
         uint16_t abcd_reading   = abcd_key_read_ADC();
@@ -212,6 +214,11 @@ while(1){ //program loop
             break;
         }
         blink_point(display, Inspire3D_Display_Coords2Index(x,y,z));
+        refresh_count--;
+        if(refresh_count == 0){
+            show_maze(display);
+            refresh_count = 6;
+        }
     }
     // show end animaton
     Delay_Ms(1000);
