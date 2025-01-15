@@ -64,7 +64,7 @@ uint8_t Inspire3D_Display_Coords2Index(uint8_t x, uint8_t y, uint8_t z){
 void Inspire3D_Display_Index2Coords(uint8_t index, uint8_t * x, uint8_t * y, uint8_t * z){
     *y = index % 5;
     *y = 4 - *y;
-    *x = (index / 5) % 5;
+    *x = (index % 25) / 5;
     *z = index / 25;
 }
 
