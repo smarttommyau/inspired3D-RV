@@ -4,4 +4,4 @@
 Find your way through the maze.
 
 ## Learn:
-Use Kruskal's Algorithm to generate a 3d maze.
+Learn to generate a 3d maze using dfs.
