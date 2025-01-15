@@ -18,10 +18,11 @@
 // 2,4 layers are filled with walls
 uint8_t maze[125]; 
 
+#define MAX_ITERATION 100
 void show_maze(Inspire3D_Display * display);
 
 bool checkIfConnect(uint8_t depth, uint8_t index){
-    if (depth>8) return false;
+    if (depth>MAX_ITERATION) return false;
     if(maze[index] == 1||maze[index]==4){return false;}
     if(maze[index] == 3){return true;}
     uint8_t x,y,z;
