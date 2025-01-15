@@ -18,23 +18,41 @@
 // 2,4 layers are filled with walls
 uint8_t maze[125]; 
 
-#define MAX_ITERATION 20
+#define MAX_ITERATION 30
 void show_maze(Inspire3D_Display * display);
 
 bool checkIfConnect(uint8_t depth, uint8_t index){
-    if (depth>MAX_ITERATION) return false;
-    if(maze[index] == 1||maze[index]==4){return false;}
-    if(maze[index] == 3){return true;}
-    uint8_t x,y,z;
+    printf("Depth: %d Index: %d\n", depth, index);
+    if (depth>MAX_ITERATION) {printf("A");return false;}
+    if(maze[index] == 1||maze[index]==4){printf("B");return false;}
+    if(maze[index] == 3){printf("C");return true;}
+    uint8_t x=0,y=0,z=0;
     maze[index] = 4;
     Inspire3D_Display_Index2Coords(index, &x, &y, &z);
-    return (x+1<5)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x+1,y,z)):false ||
-           (x-1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x-1,y,z)):false ||
-           (y+1<5)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y+1,z)):false ||
-           (y-1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y-1,z)):false ||
-           (z+1<5)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y,z+1)):false ||
-           (z-1>0)?checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y,z-1)):false;
-
+    // We are force to do smth like below
+    // Cuz it seems that compiler wrongfully optimize the code
+    // return checkIfConnect(...)||checkIfConnect(...)
+    // Only runs the first one, so we have to do it like this
+    // to force it to run all of them
+    if(x+1<5 && checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x+1,y,z))){
+        return true;
+    }
+    if(x>0 && checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x-1,y,z))){
+        return true;
+    }
+    if(y+1<5 && checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y+1,z))){
+        return true;
+    }
+    if(y>0 && checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y-1,z))){
+        return true;
+    }
+    if(z+1<5 && checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y,z+1))){
+        return true;
+    }
+    if(z>0 && checkIfConnect(depth+1, Inspire3D_Display_Coords2Index(x,y,z-1))){
+        return true;
+    }
+    return false;
 }
 
 
