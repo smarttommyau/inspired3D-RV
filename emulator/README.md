@@ -24,13 +24,12 @@ press keyboard to control the matrix emulator, listing out the keys
 * J -> C
 * L -> D
 
-Layout of ABCD button:\
-&emsp;&nbsp;&nbsp;&emsp;A\
-&emsp;C&emsp;B&emsp;D
+### Layout of buttons
+![buttons_layout](https://github.com/user-attachments/assets/2855c0de-9625-47f0-9548-8b75798563e1)
+
 
 ## Notes for emulator
 
 * Highly recommended to use dark theme terminal for best user experience
-* _OLED_refresh_display() is needed for emulators to print out the monitor compare to the RISC-V version
 * For Windows, Disable "Device default effects" before using the `JOY_sound()` function.
 * For MacOS version, go to settings -> Privacy & Security -> Accessibility and allow terminal/your IDE to control your computer to enable keyboard control (will pop up during first run, need to restart the program after enable)
