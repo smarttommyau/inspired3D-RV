@@ -10,12 +10,12 @@ inspired3d-RISC-V codes
 - Modify [ch32v003fun\ch32v003fun.mk](.\ch32v003fun\ch32v003fun.mk) change to prefix to your toolchain
 # Program the RISC-V
 ## Pins required for programming
-![Porgram](./images/program_pins.png)
+![Porgram](./program_pins.jpg)
 > swio to swio
 > 5v to 5v
 > gnd to gnd 
 ## Pins for Serial communication(uart)
-![Uart](./images/uart_pins.png)
+![Uart](./uart_pins.jpg)
 > RX to UTX
 > TX to URX
 
