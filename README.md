@@ -21,11 +21,11 @@ inspired3d-RISC-V codes
 
 
 # TODO
-- [x] Basic Button key detection 
-- [ ] Button click detection
+- [x] Basic Button key detection(down or up) 
 - [x] Basic LED control
 - [x] emulator of inspired3d
 - [ ] eeprome read/write
+- [ ] Button click detection
 - [ ] Intresting games and animations
 - [ ] Add more features
 
