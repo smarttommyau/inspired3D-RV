@@ -105,28 +105,28 @@
 				const LedGeometry = new THREE.CylinderGeometry(1, 1, 1, 30);
 
 				// verical stripss behind 5 leds
-				const stripGeometry = new THREE.BoxGeometry(4, 13 * 5 + 20, 1);
+				const stripGeometry = new THREE.BoxGeometry(4, 20 * 4 + 10, 1);
 				// black color
 				const stripMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 				// 5 * 5 * 5 display
 	
-				for (let x = 0; x < 5; x++) {
-  				for (let z = 0; z < 5; z++) {
-  					for (let y = 0; y < 5; y++) {
-						const box = new THREE.Mesh(LedBackGeometry, LedBackBasicMaterial);
-						box.position.set(x * 20, y * 13 + 40, z * 20);
-						scene.add(box);
-						const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x0095dd });
-						const cube = new THREE.Mesh(LedGeometry, basicMaterial);
-						cube.position.set(x * 20, y * 13 + 40, z * 20 - 1);
-						cube.rotation.x = Math.PI / 2;
-						display[x*5 + (4-y) + z * 25] = cube; // refers to inspire3d_display.h
-						scene.add(cube);
-    				}
+				for (let z = 0; z < 5; z++) {
+					for (let x = 0; x < 5; x++) {
+						for (let y = 0; y < 5; y++) {
+							const box = new THREE.Mesh(LedBackGeometry, LedBackBasicMaterial);
+							box.position.set(x * 20, y * 20 + 40, z * 20);
+							scene.add(box);
+							const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x0095dd });
+							const cube = new THREE.Mesh(LedGeometry, basicMaterial);
+							cube.position.set(x * 20, y * 20 + 40, z * 20 - 1);
+							cube.rotation.x = Math.PI / 2;
+							display[x*5 + (4-y) + z * 25] = cube; // refers to inspire3d_display.h
+							scene.add(cube);
+						}
   						const strip = new THREE.Mesh(stripGeometry, stripMaterial);
-  						strip.position.set(x * 20, 4 * 13 + 10, z * 20 +1);
+  						strip.position.set(x * 20, 4 * 20 , z * 20 +1);
   						scene.add(strip);
-  				}
+  					}
 
 				}
 				//
