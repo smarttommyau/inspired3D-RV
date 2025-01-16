@@ -7,7 +7,7 @@ inspired3d-RISC-V codes
 # build
 - Run `make` in individual directory or build all in root
 - Run `make emulator` to build emulator for each program
-- Modify [ch32v003fun\ch32v003fun.mk](.\ch32v003fun\ch32v003fun.mk) change to prefix to your toolchain
+- Modify [ch32v003fun/ch32v003fun.mk](./ch32v003fun/ch32v003fun.mk) change to prefix to your toolchain
 # Program the RISC-V
 ## Pins required for programming
 ![Porgram](./program_pins.jpg)
