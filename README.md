@@ -23,7 +23,7 @@ inspired3d-RISC-V codes
 If you want to develop upon this, you may reference these codes. Mostly **template**
 - [**`template`**](./template) for all the basic setup required for developing a new program, using similar structure as arduino  
 - [`test_inspire3d_screen_control`](./test_inspire3d_screen_control) for controlling inspired3d screen
-- [`test_inspire3d_button_detection`](./test_inspire3d_button_detection) for button key detection
+- [`test_buttons_detection`](./test_buttons_detection) for button key detection
 
 ### Games
 - [`pong`](./pong) a pong game
