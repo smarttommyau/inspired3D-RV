@@ -10,22 +10,19 @@
 				color: #000;
 				margin: 0 0 0 0;
 			}
+			.blur {
+				background-color: rgba(204, 204, 204, 0.5);backdrop-filter: blur(5px);
+			}
 		</style>
 	</head>
 
 	<body>
-		<div style="position: absolute;z-index:2000;background-color: rgba(204, 204, 204, 0.5);backdrop-filter: blur(5px);">
-			<h1>Inspire3D-RISC-V  emulator</h1>
-			<span>
-				Key emulation:
-				W: Up
-				A: Left
-				S: Down
-				D: Right
-				I: A
-				J: B
-				K: C
-				L: D
+		<div style="position: absolute;z-index:2000;">
+			<h1 class="blur">Inspire3D-RISC-V  emulator</h1>
+			<span class="blur">
+				Key emulation:<br>
+				W: Up A: Left S: Down D: Right<br>
+				I: A  J: B    K: C    L: D
 			</span>
 		</div>
 
@@ -99,7 +96,7 @@
 				controls.maxPolarAngle = Math.PI / 2;
 				const LedBackGeometry = new THREE.BoxGeometry(3, 3, 1);
 				const LedBackBasicMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-				const LedGeometry = new THREE.CylinderGeometry(1, 1, 1, 30);
+				const LedGeometry = new THREE.CylinderGeometry(1, 1, 0.6, 30);
 
 				// verical stripss behind 5 leds
 				const stripGeometry = new THREE.BoxGeometry(2, 20 * 4 + 10, 1);
@@ -115,7 +112,7 @@
 							scene.add(box);
 							const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x0095dd });
 							const cube = new THREE.Mesh(LedGeometry, basicMaterial);
-							cube.position.set(x * 20, y * 20 + 40, z * 20 - 1);
+							cube.position.set(x * 20, y * 20 + 40, z * 20 - 0.8);
 							cube.rotation.x = Math.PI / 2;
 							display[x*5 + (4-y) + z * 25] = cube; // refers to inspire3d_display.h
 							scene.add(cube);
