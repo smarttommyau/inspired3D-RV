@@ -11,6 +11,17 @@
 
 
 ///////////////////////
+//      Float        //
+///////////////////////
+// round float to int
+// only work for positive number
+int round(float x)
+{
+    return (int)(x + 0.5);
+}
+
+
+///////////////////////
 // Inspire3D Display //
 ///////////////////////
 char display_buffer[sizeof(Inspire3D_Display)];
