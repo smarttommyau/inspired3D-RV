@@ -32,6 +32,11 @@ void setup(){
     Inspire3D_Display_Clear(display);
     // uncomment below to set brightness
     // Inspire3D_Display_SetBrightness(display, 1);
+    ///// Float printing
+    // there are significant precision loss when printing float
+    // There are no float printing in printf
+    printf("Brightness:  %d.%d\n", (int)display->brightness, (int)((display->brightness - (int)display->brightness)*100));
+
 
     ///// set seed for random
     // note: you may get a seed number by repeatly add 1 to seed

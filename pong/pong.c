@@ -146,8 +146,8 @@ while(1){
         arrow_adc   = arrow_key_read_ADC();
         seed++;
         Delay_Ms(200);
-        printf("Brightness: %f\n", display->brightness);
-        // printf("ADC: %d %d %d\n", arrow_adc, abcd_adc, GPIO_analogRead(GPIO_Ain4_D3));
+        printf("Brightness:  %d.%d\n", (int)display->brightness, (int)((display->brightness - (int)display->brightness)*100));
+        // printf("ADC: %d %d %d\n", arrow_adc, abcd_adc, GPIO_analogRead(GPIO_Ain4_D3));display->brightness
     }
     printf("Brightness set\n");
     // start game
