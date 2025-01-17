@@ -15,7 +15,7 @@
 ///////////////////////
 // round float to int
 // only work for positive number
-int round(float x)
+int my_round(float x)
 {
     return (int)(x + 0.5);
 }
