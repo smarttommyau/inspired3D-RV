@@ -3,7 +3,8 @@
 #include "driver.h"
 #define INSPIRE3D_DISPLAY_COMMON_COLOR // using common colors
 #include "inspire3d_display.h"
-
+#include "funconfig.h"
+#include "stl_data.h"
 #include <stdio.h>
 
 char display_buffer[sizeof(Inspire3D_Display)]; // memory for display
@@ -25,8 +26,10 @@ struct coords{
     Inspire3D_Color color;
 };
 
+#ifndef USE_STL_FILE
 #define NUM_NODES 25
 struct coords image[NUM_NODES];
+#endif
 struct coords image_rotated[NUM_NODES];
 
 void generate_random_image(){
@@ -122,6 +125,8 @@ int main(void) {
     Inspire3D_Display_Init(display, GPIOA, PA2);
     Inspire3D_Display_Clear(display);
 
+    // only generate random image if not using stl file
+    #ifndef USE_STL_FILE
     // set seed for random
     uint16_t seed = 0;
     while (1)
@@ -142,6 +147,7 @@ int main(void) {
     JOY_setseed(seed);
     // randomize image
     generate_random_image();
+    #endif
     imageCopyToRotated();
     show_image(image_rotated);
     Delay_Ms(1000);
@@ -149,9 +155,10 @@ int main(void) {
         ABCD_KEY abcd = abcd_key_down(abcd_key_read_ADC());
         ARROW_KEY arrow = arrow_key_down(arrow_key_read_ADC());
         if(abcd == ABCD_A){
+            #ifndef USE_STL_FILE
             generate_random_image();
             imageCopyToRotated();
-
+            #endif
         }else if(abcd == ABCD_B){
             imageCopyToRotated();
         }
