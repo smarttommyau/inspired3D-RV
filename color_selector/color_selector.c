@@ -5,7 +5,6 @@
 #include "ch32v003fun.h"
 #include <stdio.h>
 #include "driver.h"
-#include "ch32v003_i2c.h"
 #include "inspire3d_display.h"
 
 /// coords to led index
@@ -41,8 +40,7 @@ char display_buffer[sizeof(Inspire3D_Display)];
 int main(void) {
     SystemInit();
     GPIO_ADCinit();
-    i2c_init();
-    i2c_scan();
+    MY_I2C_init();
 
     printf("I2C initialized\n");
     // int seed = 0;
