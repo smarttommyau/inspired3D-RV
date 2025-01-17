@@ -1,6 +1,6 @@
 CC = gcc
 INCLUDES = -I../emulator -I../data -I.
-CFLAGS = -g -Wall -Wextra -Wshadow -lprintfloat $(INCLUDES)
+CFLAGS = -g -Wall -Wextra -Wshadow $(INCLUDES)
 LDFLAGS = 
 
 ifeq ($(OS),Windows_NT)

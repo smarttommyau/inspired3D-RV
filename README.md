@@ -25,8 +25,6 @@ If you want to develop upon this, you may reference these codes. Mostly **templa
 - [`test_inspire3d_screen_control`](./test_inspire3d_screen_control) for controlling inspired3d screen
 - [`test_buttons_detection`](./test_buttons_detection) for button key detection
 
-### Float printf problem
-> Add `-lprintfloat` to Makefile-emulator in the  `CFLAGS
 
 ### Games
 - [`pong`](./pong) a pong game
