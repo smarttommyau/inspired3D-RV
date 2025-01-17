@@ -11,6 +11,17 @@
 
 
 ///////////////////////
+//      Float        //
+///////////////////////
+// round float to int
+// only work for positive number
+int my_round(float x)
+{
+    return (int)(x + 0.5);
+}
+
+
+///////////////////////
 // Inspire3D Display //
 ///////////////////////
 char display_buffer[sizeof(Inspire3D_Display)];
@@ -32,6 +43,11 @@ void setup(){
     Inspire3D_Display_Clear(display);
     // uncomment below to set brightness
     // Inspire3D_Display_SetBrightness(display, 1);
+    ///// Float printing
+    // there are significant precision loss when printing float
+    // There are no float printing in printf
+    printf("Brightness:  %d.%d\n", (int)display->brightness, (int)((display->brightness - (int)display->brightness)*100));
+
 
     ///// set seed for random
     // note: you may get a seed number by repeatly add 1 to seed

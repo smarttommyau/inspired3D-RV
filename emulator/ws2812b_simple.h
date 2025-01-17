@@ -55,39 +55,39 @@ void onmessage(ws_cli_conn_t client,
 #endif
 	//set buttons values
 	if (size == 2 && msg[1] == 'D') {
-		if (msg[0] == 'W') {
+		if (msg[0] == 'w') {
 			set_adc_arrow(ARROW_UP_L);
-		} else if (msg[0] == 'S') {
+		} else if (msg[0] == 's') {
 			set_adc_arrow(ARROW_DOWN_L);
-		} else if (msg[0] == 'A') {
+		} else if (msg[0] == 'a') {
 			set_adc_arrow(ARROW_LEFT_L);
-		} else if (msg[0] == 'D') {
+		} else if (msg[0] == 'd') {
 			set_adc_arrow(ARROW_RIGHT_L);
 		} 
 
-		if (msg[0] == 'I') {
+		if (msg[0] == 'i') {
 			set_adc_abcd(ABCD_A_L);
-		} else if (msg[0] == 'K') {
+		} else if (msg[0] == 'k') {
 			set_adc_abcd(ABCD_B_L);
-		} else if (msg[0] == 'J') {
+		} else if (msg[0] == 'j') {
 			set_adc_abcd(ABCD_C_L);
-		} else if (msg[0] == 'L') {
+		} else if (msg[0] == 'l') {
 			set_adc_abcd(ABCD_D_L);
 		}
-	}else if(size == 1 && msg[0] == 'U'){
+	}else if(size == 2 && msg[1] == 'U'){
 		if(
-			msg[0] == 'W' ||
-			msg[0] == 'S' ||
-			msg[0] == 'A' ||
-			msg[0] == 'D' 
+			msg[0] == 'w' ||
+			msg[0] == 's' ||
+			msg[0] == 'a' ||
+			msg[0] == 'd' 
 		){
 			set_adc_arrow(0);
 		}
 		if(
-			msg[0] == 'I' ||
-			msg[0] == 'J' ||
-			msg[0] == 'K' ||
-			msg[0] == 'L' 
+			msg[0] == 'i' ||
+			msg[0] == 'j' ||
+			msg[0] == 'k' ||
+			msg[0] == 'l' 
 		){
 			set_adc_abcd(0);
 		}
