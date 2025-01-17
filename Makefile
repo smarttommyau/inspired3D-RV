@@ -7,6 +7,8 @@ all:
 	$(MAKE) -C test_inspire3d_screen
 	$(MAKE) -C test_inspire3d_screen_control
 	$(MAKE) -C testing
+	$(MAKE) -C maze
+	$(MAKE) -C color_selector
 
 clean:
 	$(MAKE) -C pong clean
@@ -14,3 +16,5 @@ clean:
 	$(MAKE) -C test_inspire3d_screen clean
 	$(MAKE) -C test_inspire3d_screen_control clean
 	$(MAKE) -C testing clean
+	$(MAKE) -C maze clean
+	$(MAKE) -C color_selector clean
