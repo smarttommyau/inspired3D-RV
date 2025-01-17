@@ -27,6 +27,9 @@ press keyboard to control the matrix emulator, listing out the keys
 ### Layout of buttons
 ![buttons_layout](https://github.com/user-attachments/assets/2855c0de-9625-47f0-9548-8b75798563e1)
 
+## Known limitation
+> For blinking stuff, it is not emulating it well
+
 
 ## Notes for emulator
 
