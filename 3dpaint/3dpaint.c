@@ -189,7 +189,7 @@ int main(void) {
 
     printf("I2C initialized\n");
     // int seed = 0;
-    int x,y,z = 0;// selector coords
+    int x = 0,y = 0,z = 0;// selector coords
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
     Inspire3D_Display_Clear(display);// reset data and update
@@ -294,7 +294,7 @@ int main(void) {
                 pushCanvas(display, canvas);
             }
         }
-        
+        printf("x: %d, y: %d, z: %d\n",x,y,z);
         blink_point(display, Inspire3D_Display_Coords2Index(x,y,z), canvas[Inspire3D_Display_Coords2Index(x,y,z)]);
         Delay_Ms(200);
     }

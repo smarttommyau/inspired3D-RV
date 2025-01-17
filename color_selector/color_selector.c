@@ -44,7 +44,7 @@ int main(void) {
 
     printf("I2C initialized\n");
     // int seed = 0;
-    int x,y,z = 0;// selector coords
+    int x = 0,y = 0,z = 0;// selector coords
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
     Inspire3D_Display_Clear(display);// reset data and update
