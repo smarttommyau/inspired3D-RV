@@ -23,6 +23,20 @@
 
 Inspire3D_Color canvas[125];
 
+// https://stackoverflow.com/a/29019938
+#define MINDIFF 2.25e-308                   // use for convergence check
+
+double sqroot(double square)
+{
+    double root=square/3, last, diff=1;
+    if (square <= 0) return 0;
+    do {
+        last = root;
+        root = (root + square / root) / 2;
+        diff = root - last;
+    } while (diff > MINDIFF || diff < -MINDIFF);
+    return root;
+}
 
 void pushCanvas(Inspire3D_Display * display, Inspire3D_Color buffer[125]){
     for(int i = 0; i < 125; i++){
@@ -189,6 +203,7 @@ typedef enum {
     CANVAS_POINT,
     CANVAS_LINE,
     CANVAS_CIRCLE,
+    CANVAS_FILL,
     END_OF_CANVAS_MODE
 } CANVAS_MODE;
 
@@ -208,6 +223,10 @@ void show_canvas_mode(Inspire3D_Display * display, CANVAS_MODE mode){
         case CANVAS_CIRCLE:
             drawCircle((Inspire3D_Color*)&temp,1,1,4,3,3,4,Inspire3D_Color_Green);
             break;
+        case CANVAS_FILL:
+            Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Yellow);
+            Delay_Ms(1000);
+            return;
             break;
         default:
             break;
@@ -343,6 +362,9 @@ int main(void) {
                             break;
                         case CANVAS_CIRCLE:
                             drawCircle((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
+                            break;
+                        case CANVAS_FILL:
+                            Inspire3D_Display_SetBGColor(display, selected_color);
                             break;
                         case CANVAS_POINT:
                         default:
