@@ -225,6 +225,7 @@ void show_canvas_mode(Inspire3D_Display * display, CANVAS_MODE mode){
             break;
         case CANVAS_FILL:
             Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Yellow);
+            Inspire3D_Display_Update(display);
             Delay_Ms(1000);
             return;
             break;
@@ -364,7 +365,10 @@ int main(void) {
                             drawCircle((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
                             break;
                         case CANVAS_FILL:
-                            Inspire3D_Display_SetBGColor(display, selected_color);
+                            // fill
+                            for(int i = 0; i < 125; i++){
+                                canvas[i] = selected_color;
+                            }
                             break;
                         case CANVAS_POINT:
                         default:
