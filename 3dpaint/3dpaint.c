@@ -198,11 +198,31 @@ void drawCircle(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uin
     }
 }
 
+void drawBox(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_t x2, uint8_t y2, uint8_t z2, Inspire3D_Color color){
+    // only draw outline
+    int x = x1>x2?x2:x1;
+    int ex = x1>x2?x1:x2;
+    int ey = y1>y2?y1:y2;
+    int ez = z1>z2?z1:z2;
+    for(; x <= ex; x++){
+        int y = y1>y2?y2:y1;
+        for(; y <= ey; y++){
+            int z = z1>z2?z2:z1;
+            for(; z <= ez; z++){
+                if(((x == x1)+(x == x2)+(y == y1)+(y == y2)+(z == z1)+(z == z2))>1){
+                    buffer[Inspire3D_Display_Coords2Index(x,y,z)] = color;
+                }
+            }
+        }
+    }
+}
+
 
 typedef enum {
     CANVAS_POINT,
     CANVAS_LINE,
     CANVAS_CIRCLE,
+    CANVAS_BOX,
     CANVAS_FILL,
     END_OF_CANVAS_MODE
 } CANVAS_MODE;
@@ -222,6 +242,9 @@ void show_canvas_mode(Inspire3D_Display * display, CANVAS_MODE mode){
             break;
         case CANVAS_CIRCLE:
             drawCircle((Inspire3D_Color*)&temp,1,1,4,3,3,4,Inspire3D_Color_Green);
+            break;
+        case CANVAS_BOX:
+            drawBox((Inspire3D_Color*)&temp,0,0,0,4,4,4,Inspire3D_Color_Blue);
             break;
         case CANVAS_FILL:
             Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Yellow);
@@ -363,6 +386,9 @@ int main(void) {
                             break;
                         case CANVAS_CIRCLE:
                             drawCircle((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
+                            break;
+                        case CANVAS_BOX:
+                            drawBox((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
                             break;
                         case CANVAS_FILL:
                             // fill
