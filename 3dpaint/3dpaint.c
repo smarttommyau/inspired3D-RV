@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include "driver.h"
 #include "inspire3d_display.h"
-
 /// coords to led index
 // Back layer
 // 0,5,10,15,20
@@ -123,66 +122,73 @@ void drawLine(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8
 
 // 2 point as diameter
 // only works when z1 == z2
-void drawCircle(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_t x2, uint8_t y2, uint8_t z2, Inspire3D_Color color){
-    // if(z1 != z2){
-    //     return;
-    // }
-    // int r = abs(x2 - x1) / 2;
-    // int x = r;
-    // int y = 0;
-    // int err = 0;
-    // while(x >= y){
-    //     uint8_t index = Inspire3D_Display_Coords2Index(x1+x,y1+y,z1);
-    //     buffer[index] = color;
-    //     index = Inspire3D_Display_Coords2Index(x1+y,y1+x,z1);
-    //     buffer[index] = color;
-    //     index = Inspire3D_Display_Coords2Index(x1-x,y1+y,z1);
-    //     buffer[index] = color;
-    //     index = Inspire3D_Display_Coords2Index(x1-y,y1+x,z1);
-    //     buffer[index] = color;
-    //     index = Inspire3D_Display_Coords2Index(x1-x,y1-y,z1);
-    //     buffer[index] = color;
-    //     index = Inspire3D_Display_Coords2Index(x1-y,y1-x,z1);
-    //     buffer[index] = color;
-    //     index = Inspire3D_Display_Coords2Index(x1+x,y1-y,z1);
-    //     buffer[index] = color;
-    //     index = Inspire3D_Display_Coords2Index(x1+y,y1-x,z1);
-    //     buffer[index] = color;
-    //     if(err <= 0){
-    //         y += 1;
-    //         err += 2*y + 1;
-    //     }
-    //     if(err > 0){
-    //         x -= 1;
-    //         err -= 2*x + 1;
-    //     }
-    // }
+// reference https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
+// and https://en.wikipedia.org/wiki/Midpoint_circle_algorithm#Jesko's_Method
+void _plotCirclePoints(Inspire3D_Color * buffer, int xc, int yc, int x, int y, uint8_t z, Inspire3D_Color color) {
+    if (xc + x >= 0 && xc + x < 5 && yc + y >= 0 && yc + y < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc + x, yc + y, z)] = color;
+    }
+    if (xc - x >= 0 && xc - x < 5 && yc + y >= 0 && yc + y < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc - x, yc + y, z)] = color;
+    }
+    if (xc + x >= 0 && xc + x < 5 && yc - y >= 0 && yc - y < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc + x, yc - y, z)] = color;
+    }
+    if (xc - x >= 0 && xc - x < 5 && yc - y >= 0 && yc - y < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc - x, yc - y, z)] = color;
+    }
+    if (xc + y >= 0 && xc + y < 5 && yc + x >= 0 && yc + x < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc + y, yc + x, z)] = color;
+    }
+    if (xc - y >= 0 && xc - y < 5 && yc + x >= 0 && yc + x < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc - y, yc + x, z)] = color;
+    }
+    if (xc + y >= 0 && xc + y < 5 && yc - x >= 0 && yc - x < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc + y, yc - x, z)] = color;
+    }
+    if (xc - y >= 0 && xc - y < 5 && yc - x >= 0 && yc - x < 5) {
+        buffer[Inspire3D_Display_Coords2Index(xc - y, yc - x, z)] = color;
+    }
 }
 
-// Also 2 point as diameter
-void drawSphere(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_t x2, uint8_t y2, uint8_t z2, Inspire3D_Color color){
-    // int r = abs(x2 - x1) / 2;
-    // int r2 = r * r;
-    // int cx = (x1 + x2) / 2;
-    // int cy = (y1 + y2) / 2;
-    // int cz = (z1 + z2) / 2;
-    // for(int x = -r; x <= r; x++){
-    //     for(int y = -r; y <= r; y++){
-    //         for(int z = -r; z <= r; z++){
-    //             if(x*x + y*y + z*z <= r2){
-    //                 uint8_t index = Inspire3D_Display_Coords2Index(cx + x, cy + y, cz + z);
-    //                 buffer[index] = color;
-    //             }
-    //         }
-    //     }
-    // }
+void drawCircle(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_t x2, uint8_t y2, uint8_t z2, Inspire3D_Color color){
+    if(z1 != z2){
+        return;
+    }
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+    int r = sqroot((double)(dx*dx+dy*dy));
+    int x = 0, y = r;
+    int xc = (x1 + x2) / 2;
+    int yc = (y1 + y2) / 2;
+    int d = 3 - 2 * r;
+    _plotCirclePoints(buffer,xc, yc, x, y, z1,color);
+    while (y >= x){
+      
+        // check for decision parameter
+        // and correspondingly 
+        // update d, y
+        if (d > 0) {
+            y--; 
+            d = d + 4 * (x - y) + 10;
+        }
+        else
+            d = d + 4 * x + 6;
+
+        // Increment x after updating decision parameter
+        x++;
+        
+        // Draw the circle using the new coordinates
+        _plotCirclePoints(buffer,xc, yc, x, y, z1,color);
+
+    }
 }
+
 
 typedef enum {
     CANVAS_POINT,
     CANVAS_LINE,
     CANVAS_CIRCLE,
-    CANVAS_SPHERE,
     END_OF_CANVAS_MODE
 } CANVAS_MODE;
 
@@ -200,10 +206,8 @@ void show_canvas_mode(Inspire3D_Display * display, CANVAS_MODE mode){
             drawLine((Inspire3D_Color*)&temp,0,0,0,4,4,4,Inspire3D_Color_Red);
             break;
         case CANVAS_CIRCLE:
-            drawCircle((Inspire3D_Color*)&temp,0,0,0,4,4,0,Inspire3D_Color_Green);
+            drawCircle((Inspire3D_Color*)&temp,1,1,4,3,3,4,Inspire3D_Color_Green);
             break;
-        case CANVAS_SPHERE:
-            drawSphere((Inspire3D_Color*)&temp,0,0,0,4,4,4,Inspire3D_Color_Blue);
             break;
         default:
             break;
@@ -224,7 +228,7 @@ void blink_point(Inspire3D_Display * display, int index, Inspire3D_Color color, 
         Inspire3D_Display_SetColor(display, index, selected_color);
     }
     Inspire3D_Display_Update(display);
-    Delay_Ms(500);
+    Delay_Ms(200);
     Inspire3D_Display_SetColor(display, index, color);
     Inspire3D_Display_Update(display);
 
@@ -247,7 +251,7 @@ int main(void) {
     uint8_t mode = 0; //0: canvas; 1: color pallete
     CANVAS_MODE canvas_mode = CANVAS_POINT;
     Inspire3D_Color selected_color = Inspire3D_Color_White;
-    uint8_t points_buff[2] = { 0 };
+    int points_buff[2] = { -1, -1};
     uint8_t points_buff_index = 0;
     printf("Main Loop\n");
     while(1){
@@ -261,15 +265,15 @@ int main(void) {
             // search compound key 
             if(arrow == ARROW_DOWN && abcd == ABCD_C){
                 // clear buffer
-                points_buff[0] = 0;
-                points_buff[1] = 0;
+                points_buff[0] = -1;
+                points_buff[1] = -1;
                 points_buff_index = 0;
                 mode = 1;
                 show_color_pallete(display);
             }else if(arrow == ARROW_UP && abcd == ABCD_C){
                 // clear buffer
-                points_buff[0] = 0;
-                points_buff[1] = 0;
+                points_buff[0] = -1;
+                points_buff[1] = -1;
                 points_buff_index = 0;
                 // decrement paint mode
                 canvas_mode -= 1;
@@ -279,8 +283,8 @@ int main(void) {
                 pushCanvas(display, canvas);
             }else if(arrow == ARROW_UP && abcd == ABCD_D){
                 // clear buffer
-                points_buff[0] = 0;
-                points_buff[1] = 0;
+                points_buff[0] = -1;
+                points_buff[1] = -1;
                 points_buff_index = 0;
                 // increment paint mode
                 canvas_mode += 1;
@@ -289,8 +293,8 @@ int main(void) {
                 pushCanvas(display, canvas);
             }else if(arrow == ARROW_LEFT && abcd == ABCD_C){
                 // clear buffer
-                points_buff[0] = 0;
-                points_buff[1] = 0;
+                points_buff[0] = -1;
+                points_buff[1] = -1;
                 points_buff_index = 0;
                 // clear canvas
                 for(int i = 0; i < 125; i++){
@@ -329,7 +333,7 @@ int main(void) {
                 canvas[Inspire3D_Display_Coords2Index(x,y,z)] = selected_color;
                 points_buff[points_buff_index] = Inspire3D_Display_Coords2Index(x,y,z);
                 points_buff_index = (points_buff_index + 1) % 2;
-                if(points_buff_index == 1){
+                if(points_buff_index == 0){
                     uint8_t x1,y1,z1,x2,y2,z2;
                     Inspire3D_Display_Index2Coords(points_buff[0], &x1, &y1, &z1);
                     Inspire3D_Display_Index2Coords(points_buff[1], &x2, &y2, &z2);
@@ -339,9 +343,6 @@ int main(void) {
                             break;
                         case CANVAS_CIRCLE:
                             drawCircle((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
-                            break;
-                        case CANVAS_SPHERE:
-                            drawSphere((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
                             break;
                         case CANVAS_POINT:
                         default:
