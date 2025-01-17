@@ -27,17 +27,11 @@ print(f"max_x: {max_x}, min_x: {min_x}, max_y: {max_y}, min_y: {min_y}, max_z: {
 
 # map mesh coords to dimension x dimension x dimension grid
 def get_grid_coords_from_mesh_coords(x, y, z):
-    grid_x = int((x - min_x) * (dimension[0] - 1) / (max_x - min_x))
-    grid_y = int((y - min_y) * (dimension[1] - 1) / (max_y - min_y))
-    grid_z = int((z - min_z) * (dimension[2] - 1) / (max_z - min_z))
+    grid_x = (x - min_x) * (dimension[0] - 1) / (max_x - min_x)
+    grid_y = (y - min_y) * (dimension[1] - 1) / (max_y - min_y)
+    grid_z = (z - min_z) * (dimension[2] - 1) / (max_z - min_z)
     return grid_x, grid_y, grid_z
 
-
-# uint8_t Inspire3D_Display_Coords2Index(uint8_t x, uint8_t y, uint8_t z){
-#         return (4-y) + x*5 + z*25;
-# }
-def Inspire3D_Display_Coords2Index(x, y, z):
-    return (4-y) + x*5 + z*25
 
 # convert and truncate mesh into a 5x5x5 grid
 # and generate stl_data.h file
@@ -52,13 +46,23 @@ with open('stl_data_template.h', 'r') as file:
 # {.x = 0, .y = 0, .z = 0, .color = Inspire3D_Color_setRGB(0,0,0)},
 # and end with };
 # set NUM_NODES by replacing TO_BE_REPLACE_WITH_NUM_NODES to the number of nodes
+cache = {} # skip duplicate points
+nodes_count = 0
 for vector in mesh_data.vectors:
     # just write the 3 points in the triangle to the file
     for i in range(3):
         x, y, z = get_grid_coords_from_mesh_coords(vector[i][0], vector[i][1], vector[i][2])
-        data += f"{{.x = {x}, .y = {y}, .z = {z}, .color = Inspire3D_Color_setRGB(0,0,0)}},\n"
+        # 1dp
+        x = round(x, 1)
+        y = round(y, 1)
+        z = round(z, 1)
+        if(f"{x:.1f},{y:.1f},{z:.1f}" in cache):
+            continue
+        cache[f"{x:.1f},{y:.1f},{z:.1f}"] = True
+        nodes_count += 1
+        data += f"{{.x = {x:.1f}, .y = {y:.1f}, .z = {z:.1f}, .color = Inspire3D_Color_setRGB(100,100,100)}},\n"
 data += "};\n"
-data = data.replace("TO_BE_REPLACE_WITH_NUM_NODES", str(len(mesh_data.vectors) * 3))
-
+data = data.replace("TO_BE_REPLACE_WITH_NUM_NODES", str(nodes_count))
+print(f"Number of nodes: {nodes_count}")
 with open('stl_data.h', 'w') as file:
     file.write(data)
