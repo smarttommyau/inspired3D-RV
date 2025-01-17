@@ -12,7 +12,7 @@ Inspire3D_Display *display = (Inspire3D_Display*)display_buffer;
 
 // round float to int
 // only work for positive number
-int round(float x)
+int my_round(float x)
 {
     return (int)(x + 0.5);
 }
@@ -56,9 +56,10 @@ void imageCopyToRotated(){
 }
 
 void show_image(struct coords img[NUM_NODES]){
+    Inspire3D_Display_Clear(display);
     for(uint8_t i = 0; i < NUM_NODES; i++){
-        uint8_t index = Inspire3D_Display_Coords2Index(round(img[i].x), round(img[i].y), round(img[i].z));
-        printf("x: %d, y: %d, z: %d, index: %d\n", round(img[i].x), round(img[i].y), round(img[i].z), index);
+        uint8_t index = Inspire3D_Display_Coords2Index(my_round(img[i].x), my_round(img[i].y), my_round(img[i].z));
+        printf("x: %d, y: %d, z: %d, index: %d\n", my_round(img[i].x), my_round(img[i].y), my_round(img[i].z), index);
         Inspire3D_Display_SetColor(display, index, img[i].color);
     }
     Inspire3D_Display_Update(display);
@@ -77,8 +78,37 @@ void rotate(uint8_t dir){
     // each iterate by 30 degree
     // cos(30) = 0.86602540378
     // sin(30) = 0.5
-    
+    // center 2,2
+    for(uint8_t i=0;i<NUM_NODES;i++){
+        uint8_t newx,newy,newz;
+        switch(dir){
+            case 0:
+                newz = my_round((image_rotated[i].z- 2)*cos30 - (image_rotated[i].y - 2)*sin30) + 2;
+                newy = my_round((image_rotated[i].z- 2)*sin30 + (image_rotated[i].y - 2)*cos30) + 2;
+                image_rotated[i].y = newy;
+                image_rotated[i].z = newz;
+                break;
+            case 1:
+                newz = my_round((image_rotated[i].z- 2)*cos30 + (image_rotated[i].y - 2)*sin30) + 2;
+                newy = my_round(-(image_rotated[i].z- 2)*sin30 + (image_rotated[i].y - 2)*cos30) + 2;
+                image_rotated[i].y = newy;
+                image_rotated[i].z = newz;
+                break;
+            case 2:
+                newz = my_round((image_rotated[i].z- 2)*cos30 - (image_rotated[i].x - 2)*sin30) + 2;
+                newx = my_round((image_rotated[i].z- 2)*sin30 + (image_rotated[i].x - 2)*cos30) + 2;
+                image_rotated[i].x = newx;
+                image_rotated[i].z = newz;
+                break;
+            case 3:
+                newz = my_round((image_rotated[i].z- 2)*cos30 + (image_rotated[i].x - 2)*sin30) + 2;
+                newx = my_round(-(image_rotated[i].z- 2)*sin30 + (image_rotated[i].x - 2)*cos30) + 2;
+                image_rotated[i].x = newx;
+                image_rotated[i].z = newz;
+                break;
 
+        }
+    }
 }
 
 
@@ -113,6 +143,7 @@ int main(void) {
     // randomize image
     generate_random_image();
     imageCopyToRotated();
+    show_image(image_rotated);
     Delay_Ms(1000);
     while(1){
         ABCD_KEY abcd = abcd_key_down(abcd_key_read_ADC());
@@ -136,5 +167,6 @@ int main(void) {
         if(!(abcd == ABCD_NOT_FOUND && arrow == ARROW_NOT_FOUND)){
             show_image(image_rotated);
         }
+        Delay_Ms(500);
     }
 }
