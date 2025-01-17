@@ -44,6 +44,7 @@ void show_color_pallete(Inspire3D_Display * display){
         }
     }
     Inspire3D_Display_Update(display);
+    Delay_Ms(200);
 }
 
 
@@ -145,8 +146,7 @@ typedef enum {
 
 
 void show_canvas_mode(Inspire3D_Display * display, CANVAS_MODE mode){
-    Inspire3D_Display_Reset(display);
-    Inspire3D_Color temp[125];
+    Inspire3D_Color temp[125] = { 0 };
     switch(mode){
         case CANVAS_POINT:
             break;
@@ -162,16 +162,21 @@ void show_canvas_mode(Inspire3D_Display * display, CANVAS_MODE mode){
         default:
             break;
     }
+    printf("mode: %d\n",mode);
     pushCanvas(display, temp);
     Delay_Ms(1000);
 }
 
-void blink_point(Inspire3D_Display * display, int index, Inspire3D_Color color){
+void blink_point(Inspire3D_Display * display, int index, Inspire3D_Color color, Inspire3D_Color selected_color){
     // blink color with the maze
-    if(color.r == Inspire3D_Color_Black.r && color.g == Inspire3D_Color_Black.g && color.b == Inspire3D_Color_Black.b){
-        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_White);
+    if(color.r == selected_color.r && color.g == selected_color.g && color.b == selected_color.b){
+        if(color.r == 0 && color.g == 0 && color.b == 0){
+            Inspire3D_Display_SetColor(display, index, Inspire3D_Color_White);
+        }else{
+            Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
+        }
     }else{
-        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Black);
+        Inspire3D_Display_SetColor(display, index, selected_color);
     }
     Inspire3D_Display_Update(display);
     Delay_Ms(500);
@@ -195,7 +200,7 @@ int main(void) {
     Inspire3D_Display_Clear(display);// reset data and update
     uint8_t mode = 0; //0: canvas; 1: color pallete
     CANVAS_MODE canvas_mode = CANVAS_POINT;
-    Inspire3D_Color selected_color = Inspire3D_Color_Black;
+    Inspire3D_Color selected_color = Inspire3D_Color_White;
     uint8_t points_buff[2] = { 0 };
     uint8_t points_buff_index = 0;
     printf("Main Loop\n");
@@ -205,9 +210,11 @@ int main(void) {
         uint16_t arrow_reading  = arrow_key_read_ADC();
         ARROW_KEY arrow         = arrow_key_down(arrow_reading);
         ABCD_KEY abcd           = abcd_key_down(abcd_reading);
+        bool compound_detected = false;
         if(mode == 0){
             // search compound key 
             if(arrow == ARROW_DOWN && abcd == ABCD_C){
+                compound_detected = true;
                 // clear buffer
                 points_buff[0] = 0;
                 points_buff[1] = 0;
@@ -215,6 +222,7 @@ int main(void) {
                 mode = 1;
                 show_color_pallete(display);
             }else if(arrow == ARROW_UP && abcd == ABCD_C){
+                compound_detected = true;
                 // clear buffer
                 points_buff[0] = 0;
                 points_buff[1] = 0;
@@ -225,6 +233,7 @@ int main(void) {
                 canvas_mode = canvas_mode >= END_OF_CANVAS_MODE ? END_OF_CANVAS_MODE - 1 : canvas_mode;
                 show_canvas_mode(display,canvas_mode);
             }else if(arrow == ARROW_UP && abcd == ABCD_D){
+                compound_detected = true;
                 // clear buffer
                 points_buff[0] = 0;
                 points_buff[1] = 0;
@@ -234,6 +243,7 @@ int main(void) {
                 canvas_mode = canvas_mode % END_OF_CANVAS_MODE;
                 show_canvas_mode(display,canvas_mode);
             }else if(arrow == ARROW_LEFT && abcd == ABCD_C){
+                compound_detected = true;
                 // clear buffer
                 points_buff[0] = 0;
                 points_buff[1] = 0;
@@ -247,6 +257,7 @@ int main(void) {
             }
         }
         // normal moving logic
+        if(!compound_detected){
         if(arrow == ARROW_UP){
             y = (y + 1) % 5;
         } else if(arrow == ARROW_DOWN){
@@ -268,6 +279,7 @@ int main(void) {
         if(abcd == ABCD_D || abcd == ABCD_C){
             if(mode == 1){
                 selected_color = canvas[Inspire3D_Display_Coords2Index(x,y,z)];
+                mode = 0;
             }else if(mode == 0){
                 canvas[Inspire3D_Display_Coords2Index(x,y,z)] = selected_color;
                 points_buff[points_buff_index] = Inspire3D_Display_Coords2Index(x,y,z);
@@ -294,8 +306,12 @@ int main(void) {
                 pushCanvas(display, canvas);
             }
         }
+        }
         printf("x: %d, y: %d, z: %d\n",x,y,z);
-        blink_point(display, Inspire3D_Display_Coords2Index(x,y,z), canvas[Inspire3D_Display_Coords2Index(x,y,z)]);
+        if(mode == 0)
+            blink_point(display, Inspire3D_Display_Coords2Index(x,y,z), canvas[Inspire3D_Display_Coords2Index(x,y,z)],selected_color);
+        else
+            blink_point(display, Inspire3D_Display_Coords2Index(x,y,z), Inspire3D_Color_setRGB(y*50,x*50,z*50),Inspire3D_Color_Black);
         Delay_Ms(200);
     }
 }
