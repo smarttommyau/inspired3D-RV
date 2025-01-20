@@ -19,6 +19,10 @@ inspired3d-RISC-V codes
 > RX to UTX
 > TX to URX
 
+## Rotate Image
+Process stl file and display and allows you to rotate the image. 
+
+
 ### Note
 If you want to develop upon this, you may reference these codes. Mostly **template**
 - [**`template`**](./template) for all the basic setup required for developing a new program, using similar structure as arduino  
