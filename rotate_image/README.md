@@ -26,6 +26,7 @@ Then, flash the new hex to the Inspire3D-RV
 Sample:
 - basic_sphere.stl
 - basic_triagle.stl
+- basic_rectangle.stl
 ## Control
 ### When not using stl file(i.e. random image)
 ARROW_KEY: control rotation<br>
