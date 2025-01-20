@@ -148,13 +148,10 @@ for vector in mesh_data.vectors:
     a,b,c = vector
     a = get_grid_coords_from_mesh_coords(a[0], a[1], a[2])
     a = (a[0]*precision, a[1]*precision, a[2]*precision )
-    # a = (my_round(a[0]), my_round(a[1]), my_round(a[2]))
     b = get_grid_coords_from_mesh_coords(b[0], b[1], b[2])
     b = (b[0]*precision, b[1]*precision, b[2]*precision )
-    # b = (my_round(b[0]), my_round(b[1]), my_round(b[2]))
     c = get_grid_coords_from_mesh_coords(c[0], c[1], c[2])
     c = (c[0]*precision, c[1]*precision, c[2]*precision)
-    # c = (my_round(c[0]), my_round(c[1]), my_round(c[2]))
     coords = set(full_triangle(a, b, c))
     coords_count += len(coords)
     for x, y, z in coords:

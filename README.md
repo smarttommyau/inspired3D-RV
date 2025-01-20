@@ -38,7 +38,8 @@ If you want to develop upon this, you may reference these codes. Mostly **templa
 - [x] Basic Button key detection(down or up) 
 - [x] Basic LED control
 - [x] emulator of inspired3d
+- [ ] Fix: rotate image for pyramid
 - [ ] eeprome read/write
 - [ ] Button click detection
-- [ ] Intresting games and animations
+- [x] Intresting games and animations
 - [ ] Add more features
