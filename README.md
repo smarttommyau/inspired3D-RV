@@ -19,8 +19,9 @@ inspired3d-RISC-V codes
 > RX to UTX
 > TX to URX
 
-## Rotate Image
+# Rotate Image
 Process stl file and display and allows you to rotate the image. 
+> Play with tinkercad and export the stl file. Interact with the 3d model using the buttons.
 
 
 ### Note
@@ -38,7 +39,6 @@ If you want to develop upon this, you may reference these codes. Mostly **templa
 - [x] Basic Button key detection(down or up) 
 - [x] Basic LED control
 - [x] emulator of inspired3d
-- [ ] Fix: rotate image for pyramid
 - [ ] eeprome read/write
 - [ ] Button click detection
 - [x] Intresting games and animations

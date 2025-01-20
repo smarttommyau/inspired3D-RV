@@ -46,3 +46,7 @@ For dimension n(x) X m(y) X o(z), run
 ```
 python stl_generate_array.py nxmxo
 ```
+
+### TODO
+- [ ] Fix: rotate image for pyramid
+- [ ] Add: frontend UI for selecting stl file
