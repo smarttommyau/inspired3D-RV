@@ -26,6 +26,8 @@ Then, flash the new hex to the Inspire3D-RV
 ARROW_KEY: control rotation<br>
 A: regenerate image<br>
 B: reset image state
+> Note: remeber to comment `#define USE_STL_FILE`
 ### When using stl file
 ARROW_KEY: control rotation<br>
 B: reset image state
+> Note: remeber to uncomment `#define USE_STL_FILE`
