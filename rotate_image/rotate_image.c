@@ -1,10 +1,14 @@
+#define USE_STL_FILE // when using stl file
+
 #define CH32V003_I2C_IMPLEMENTATION // using i2c
 #include "ch32v003fun.h"
 #include "driver.h"
 #define INSPIRE3D_DISPLAY_COMMON_COLOR // using common colors
 #include "inspire3d_display.h"
 #include "funconfig.h"
+#ifdef USE_STL_FILE
 #include "stl_data.h"
+#endif
 #include <stdio.h>
 
 char display_buffer[sizeof(Inspire3D_Display)]; // memory for display

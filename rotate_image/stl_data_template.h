@@ -1,4 +1,3 @@
-#define USE_STL_FILE
 #include "funconfig.h"
 //no need color as stl does not always include color
 struct coords{
