@@ -16,6 +16,9 @@
 #define horizontalButtons 0
 #define verticalButtons 0
 
+#ifdef WAIT_WS_CONNECT
+bool WS_CONNECT = false;
+#endif
 
 void openHTML();
 // For driver to invoke keys
@@ -41,6 +44,9 @@ void onopen(ws_cli_conn_t client)
 	port = ws_getport(client);
 #ifndef DISABLE_VERBOSE
 	printf("Connection opened, addr: %s, port: %s\n", cli, port);
+#endif
+#ifdef WAIT_WS_CONNECT
+	WS_CONNECT = true;
 #endif
 }
 
@@ -115,6 +121,9 @@ void WS_init() {
 		.evs.onmessage = &onmessage
 	});
     openHTML();
+#ifdef WAIT_WS_CONNECT
+	while(!WS_CONNECT);
+#endif
 }
 
 

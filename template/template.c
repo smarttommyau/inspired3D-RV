@@ -4,6 +4,7 @@
 
 #include "ch32v003fun.h"
 #include <stdio.h>
+// #define WAIT_WS_CONNECT // wait for websocket connection before starting for emulator
 #include "driver.h"
 #include "inspire3d_display.h"
 
@@ -36,6 +37,8 @@ Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
 void setup(){
     SystemInit();//setup system
     GPIO_ADCinit();//setup ADC for Buttons
+// add this if needed #define WAIT_WS_CONNECT // wait for websocket connection before starting for emulator
+// use the above only when you find out the emulator is not updating the initial display
     MY_I2C_init();//setup I2C for 3d display
 
     ///// Setup Inspired3D Display
