@@ -17,22 +17,49 @@ def my_round(x:float)->int:
 # get first argument as filename
 if len(sys.argv) < 2:
     print("Please provide the filename of the stl file")
-    print("Usage: python stl_generate_array.py <filename> <dimension>")
+    print("Usage: python stl_generate_array.py <filename> <arguments>")
+    print("--help: for more information")
     sys.exit(1)
-filename = sys.argv[1]
-print(f"Filename: {filename}")
+if sys.argv[1] == "--help":
+    print("Usage: python stl_generate_array.py <filename> <arguments>")
+    print("--demension NxMxO")
+    print("N: x dimension")
+    print("M: y dimension")
+    print("O: z dimension")
+    print("default dimension is 5x5x5")
+    print("--scale x")
+    print("x: scale factor")
+    print("default scale factor is 1")
+    sys.exit(0)
 
-# get second argument as dimension if it exists NxMxO
-# otherwise use 5x5x5
-if len(sys.argv) > 2:
-    dimension = sys.argv[2].split('x')
-    if len(dimension) != 3:
-        print("Invalid dimension format")
-        sys.exit(1)
-    dimension = [int(x) for x in dimension]
-else:
-    dimension = [5, 5, 5]
+arg_mode = ""
+filename = ""
+dimension = [5, 5, 5]
+for arg in sys.argv:
+    if arg == "--dimension":
+        arg_mode = "dimension"
+        continue
+    if arg == "--scale":
+        arg_mode = "scale"
+        continue
+    if arg_mode == "dimension":
+        dimension = arg.split('x')
+        if len(dimension) != 3:
+            print("Invalid dimension format")
+            sys.exit(1)
+        dimension = [int(x) for x in dimension]
+        arg_mode = ""
+        continue
+    if arg_mode == "scale":
+        scale = float(arg)
+        arg_mode = ""
+        continue
+    if arg_mode == "":
+        # if not in any mode, then it is the filename
+        filename = arg
+print(f"Filename: {filename}")
 print(f"Dimension: {dimension}")
+print(f"Scale: {scale}")
 # filename = input("Enter the filename of the stl file: ")
 # filename = "basic_sphere.stl"
 mesh_data = mesh.Mesh.from_file(filename)

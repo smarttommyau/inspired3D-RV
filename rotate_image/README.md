@@ -14,8 +14,9 @@ pip install -r requirements.txt
 **CURRENT:**<br>
 Run:
 ```
-python stl_generate_array.py <filename> <optional dimension>
+python stl_generate_array.py <filename>
 ```
+Use `--help` for more information<br>
 Then, run below to generate new hex file
 ```
 make
@@ -24,7 +25,7 @@ Then, flash the new hex to the Inspire3D-RV
 ### Note
 Sample:
 - basic_sphere.stl
-
+- basic_triagle.stl
 ## Control
 ### When not using stl file(i.e. random image)
 ARROW_KEY: control rotation<br>
