@@ -14,9 +14,17 @@ import raster_geometry as rg
 def my_round(x:float)->int:
     return int(x+0.5)
 
-# get first argument as dimension if it exists NxMxO
+# get first argument as filename
+if len(sys.argv) < 2:
+    print("Please provide the filename of the stl file")
+    print("Usage: python stl_generate_array.py <filename> <dimension>")
+    sys.exit(1)
+filename = sys.argv[1]
+print(f"Filename: {filename}")
+
+# get second argument as dimension if it exists NxMxO
 # otherwise use 5x5x5
-if len(sys.argv) > 1:
+if len(sys.argv) > 2:
     dimension = sys.argv[1].split('x')
     if len(dimension) != 3:
         print("Invalid dimension format")
@@ -25,7 +33,7 @@ if len(sys.argv) > 1:
 else:
     dimension = [5, 5, 5]
 print(f"Dimension: {dimension}")
-filename = input("Enter the filename of the stl file: ")
+# filename = input("Enter the filename of the stl file: ")
 # filename = "basic_sphere.stl"
 mesh_data = mesh.Mesh.from_file(filename)
 max_x = np.max(mesh_data.x)

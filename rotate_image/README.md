@@ -14,9 +14,9 @@ pip install -r requirements.txt
 **CURRENT:**<br>
 Run:
 ```
-python stl_generate_array.py
+python stl_generate_array.py <filename> <optional dimension>
 ```
-Then, input the stl file name and run
+Then, run below to generate new hex file
 ```
 make
 ```
