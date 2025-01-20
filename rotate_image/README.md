@@ -10,6 +10,7 @@ pip install -r requirements.txt
 
 ## Use stl file
 > Should have a frontend UI in the future(WIP)
+
 **CURRENT:**<br>
 Run:
 ```
@@ -20,6 +21,9 @@ Then, input the stl file name and run
 make
 ```
 Then, flash the new hex to the Inspire3D-RV
+### Note
+Sample:
+- basic_sphere.stl
 
 ## Control
 ### When not using stl file(i.e. random image)
@@ -31,3 +35,10 @@ B: reset image state
 ARROW_KEY: control rotation<br>
 B: reset image state
 > Note: remeber to uncomment `#define USE_STL_FILE`
+
+## Dimension other than 5x5x5
+### When running stl_data generation
+For dimension n(x) X m(y) X o(z), run
+```
+python stl_generate_array.py nxmxo
+```

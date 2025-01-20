@@ -4,6 +4,7 @@ import sys
 
 
 # Align rounding function with the c program
+# From `rotate_image.c`:
 # int my_round(float x)
 # {
 #     return (int)(x + 0.5);
@@ -74,5 +75,11 @@ for vector in mesh_data.vectors:
 data += "};\n"
 data = data.replace("TO_BE_REPLACE_WITH_NUM_NODES", str(nodes_count))
 print(f"Number of nodes: {nodes_count}")
+# calculate Center x,y,z
+data = data.replace("TO_BE_REPLACE_WITH_CENTER_X",str((dimension[0] - 1)/2))
+data = data.replace("TO_BE_REPLACE_WITH_CENTER_Y",str((dimension[1] - 1)/2))
+data = data.replace("TO_BE_REPLACE_WITH_CENTER_Z",str((dimension[2] - 1)/2))
+
+
 with open('stl_data.h', 'w') as file:
     file.write(data)

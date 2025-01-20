@@ -25,6 +25,10 @@ int my_round(float x)
 
 
 #ifndef USE_STL_FILE
+// assume 5x5x5
+#define CENTER_X 2
+#define CENTER_Y 2
+#define CENTER_Z 2
 struct coords{
     float x;
     float y;
@@ -93,26 +97,26 @@ void rotate(uint8_t dir){
         float newx,newy,newz;
         switch(dir){
             case 0:
-                newz = (image_rotated[i].z- 2)*cos30 - (image_rotated[i].y - 2)*sin30 + 2;
-                newy = (image_rotated[i].z- 2)*sin30 + (image_rotated[i].y - 2)*cos30 + 2;
+                newz = (image_rotated[i].z - CENTER_Z)*cos30 - (image_rotated[i].y - CENTER_Y)*sin30 + CENTER_Z;
+                newy = (image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].y - CENTER_Y)*cos30 + CENTER_Y;
                 image_rotated[i].y = newy;
                 image_rotated[i].z = newz;
                 break;
             case 1:
-                newz = (image_rotated[i].z- 2)*cos30 + (image_rotated[i].y - 2)*sin30 + 2;
-                newy = -(image_rotated[i].z- 2)*sin30 + (image_rotated[i].y - 2)*cos30 + 2;
+                newz =  (image_rotated[i].z - CENTER_Z)*cos30 + (image_rotated[i].y - CENTER_Y)*sin30 + CENTER_Z;
+                newy = -(image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].y - CENTER_Y)*cos30 + CENTER_Y;
                 image_rotated[i].y = newy;
                 image_rotated[i].z = newz;
                 break;
             case 2:
-                newz = (image_rotated[i].z- 2)*cos30 - (image_rotated[i].x - 2)*sin30 + 2;
-                newx = (image_rotated[i].z- 2)*sin30 + (image_rotated[i].x - 2)*cos30 + 2;
+                newz = (image_rotated[i].z - CENTER_Z)*cos30 - (image_rotated[i].x - CENTER_X)*sin30 + CENTER_Z;
+                newx = (image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].x - CENTER_X)*cos30 + CENTER_X;
                 image_rotated[i].x = newx;
                 image_rotated[i].z = newz;
                 break;
             case 3:
-                newz = (image_rotated[i].z- 2)*cos30 + (image_rotated[i].x - 2)*sin30 + 2;
-                newx = -(image_rotated[i].z- 2)*sin30 + (image_rotated[i].x - 2)*cos30 + 2;
+                newz =  (image_rotated[i].z - CENTER_Z)*cos30 + (image_rotated[i].x - CENTER_X)*sin30 + CENTER_Z;
+                newx = -(image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].x - CENTER_X)*cos30 + CENTER_X;
                 image_rotated[i].x = newx;
                 image_rotated[i].z = newz;
                 break;
