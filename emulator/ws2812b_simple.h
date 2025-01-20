@@ -10,11 +10,6 @@
 #define indexHTMLPath "../emulator/inspire3d_emu/index.html"
 
 
-#define BORDER_X 2
-//dumy
-#define NUM_LEDS 0
-#define horizontalButtons 0
-#define verticalButtons 0
 
 #ifdef WAIT_WS_CONNECT
 bool WS_CONNECT = false;
