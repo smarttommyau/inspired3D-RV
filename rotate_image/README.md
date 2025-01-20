@@ -29,11 +29,13 @@ Sample:
 ### When not using stl file(i.e. random image)
 ARROW_KEY: control rotation<br>
 A: regenerate image<br>
-B: reset image state
+B: reset image state<br>
+CD: change brightness
 > Note: remeber to comment `#define USE_STL_FILE`
 ### When using stl file
 ARROW_KEY: control rotation<br>
-B: reset image state
+B: reset image state<br>
+CD: change brightness
 > Note: remeber to uncomment `#define USE_STL_FILE`
 
 ## Dimension other than 5x5x5

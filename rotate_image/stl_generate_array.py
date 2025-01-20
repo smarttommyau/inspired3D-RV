@@ -25,7 +25,7 @@ print(f"Filename: {filename}")
 # get second argument as dimension if it exists NxMxO
 # otherwise use 5x5x5
 if len(sys.argv) > 2:
-    dimension = sys.argv[1].split('x')
+    dimension = sys.argv[2].split('x')
     if len(dimension) != 3:
         print("Invalid dimension format")
         sys.exit(1)

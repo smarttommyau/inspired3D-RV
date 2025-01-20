@@ -172,6 +172,12 @@ int main(void) {
             #endif
         }else if(abcd == ABCD_B){
             imageCopyToRotated();
+        }else if(abcd == ABCD_C){
+            //decrease brightness
+            Inspire3D_Display_SetBrightness(display, display->brightness - 0.1);
+        }else if(abcd == ABCD_D){
+            //increase brightness
+            Inspire3D_Display_SetBrightness(display, display->brightness + 0.1);
         }
         if(arrow == ARROW_UP){
             rotate(0);
