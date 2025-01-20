@@ -1,8 +1,17 @@
 import numpy
 from stl import mesh
 import sys
-from mpl_toolkits import mplot3d
-from matplotlib import pyplot
+
+
+# Align rounding function with the c program
+# int my_round(float x)
+# {
+#     return (int)(x + 0.5);
+# }
+
+def my_round(x:float)->int:
+    return int(x+0.5)
+
 # get first argument as dimension if it exists NxMxO
 # otherwise use 5x5x5
 if len(sys.argv) > 1:
@@ -57,9 +66,9 @@ for vector in mesh_data.vectors:
         y = round(y, 1)
         z = round(z, 1)
         # use int(.) so that only one point is save for each render point
-        if(f"{int(x)},{int(y)},{int(z)}" in cache):
+        if(f"{my_round(x)},{my_round(y)},{my_round(z)}" in cache):
             continue
-        cache[f"{int(x)},{int(y)},{int(z)}"] = True
+        cache[f"{my_round(x)},{my_round(y)},{my_round(z)}"] = True
         nodes_count += 1
         data += f"{{.x = {x:.1f}, .y = {y:.1f}, .z = {z:.1f}}},\n"
 data += "};\n"
