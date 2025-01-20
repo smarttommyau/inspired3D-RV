@@ -10,7 +10,7 @@
 char display_buffer[sizeof(Inspire3D_Display)]; // memory for display
 Inspire3D_Display *display = (Inspire3D_Display*)display_buffer;
 
-
+// TODO: change color of the image. Allow color filling?
 // round float to int
 // only work for positive number
 int my_round(float x)
@@ -19,14 +19,13 @@ int my_round(float x)
 }
 
 
+
+#ifndef USE_STL_FILE
 struct coords{
     float x;
     float y;
     float z;
-    Inspire3D_Color color;
 };
-
-#ifndef USE_STL_FILE
 #define NUM_NODES 25
 struct coords image[NUM_NODES];
 #endif
@@ -36,9 +35,9 @@ void generate_random_image(){
     for (uint8_t i = 0; i < NUM_NODES; i++)
     {
         // randomize color
-        image[i].color.r = (uint8_t)(JOY_random()>>8) % 256;
-        image[i].color.g = (uint8_t)(JOY_random()>>8) % 256;
-        image[i].color.b = (uint8_t)(JOY_random()>>8) % 256;
+        // image[i].color.r = (uint8_t)(JOY_random()>>8) % 256;
+        // image[i].color.g = (uint8_t)(JOY_random()>>8) % 256;
+        // image[i].color.b = (uint8_t)(JOY_random()>>8) % 256;
 
         // randomize position
         image[i].x = (float)(JOY_random() % 500)/(float)100.0;
@@ -47,23 +46,26 @@ void generate_random_image(){
         printf("x: %d.%d\n", (int)image[i].x, (int)((image[i].x - (int)image[i].x)*100));
         printf("y: %d.%d\n", (int)image[i].y, (int)((image[i].y - (int)image[i].y)*100));
         printf("z: %d.%d\n", (int)image[i].z, (int)((image[i].z - (int)image[i].z)*100));
-        printf("r: %d, g: %d, b: %d\n", image[i].color.r, image[i].color.g, image[i].color.b);
+        // printf("r: %d, g: %d, b: %d\n", image[i].color.r, image[i].color.g, image[i].color.b);
     }
     Inspire3D_Display_Update(display);
 }
 
 void imageCopyToRotated(){
     for(uint8_t i = 0; i < NUM_NODES; i++){
-        image_rotated[i] = image[i];
+        image_rotated[i].x = image[i].x;
+        image_rotated[i].y = image[i].y;
+        image_rotated[i].z = image[i].z;
     }
 }
+
 
 void show_image(struct coords img[NUM_NODES]){
     Inspire3D_Display_Clear(display);
     for(uint8_t i = 0; i < NUM_NODES; i++){
         uint8_t index = Inspire3D_Display_Coords2Index(my_round(img[i].x), my_round(img[i].y), my_round(img[i].z));
         printf("x: %d, y: %d, z: %d, index: %d\n", my_round(img[i].x), my_round(img[i].y), my_round(img[i].z), index);
-        Inspire3D_Display_SetColor(display, index, img[i].color);
+        Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Blue);// color blue is temp random color
     }
     Inspire3D_Display_Update(display);
 }

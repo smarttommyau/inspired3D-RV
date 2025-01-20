@@ -43,7 +43,7 @@ with open('stl_data_template.h', 'r') as file:
 
 # By this format
 # each points
-# {.x = 0, .y = 0, .z = 0, .color = Inspire3D_Color_setRGB(0,0,0)},
+# {.x = 0, .y = 0, .z = 0},
 # and end with };
 # set NUM_NODES by replacing TO_BE_REPLACE_WITH_NUM_NODES to the number of nodes
 cache = {} # skip duplicate points
@@ -56,11 +56,12 @@ for vector in mesh_data.vectors:
         x = round(x, 1)
         y = round(y, 1)
         z = round(z, 1)
-        if(f"{x:.1f},{y:.1f},{z:.1f}" in cache):
+        # use int(.) so that only one point is save for each render point
+        if(f"{int(x)},{int(y)},{int(z)}" in cache):
             continue
-        cache[f"{x:.1f},{y:.1f},{z:.1f}"] = True
+        cache[f"{int(x)},{int(y)},{int(z)}"] = True
         nodes_count += 1
-        data += f"{{.x = {x:.1f}, .y = {y:.1f}, .z = {z:.1f}, .color = Inspire3D_Color_setRGB(100,100,100)}},\n"
+        data += f"{{.x = {x:.1f}, .y = {y:.1f}, .z = {z:.1f}}},\n"
 data += "};\n"
 data = data.replace("TO_BE_REPLACE_WITH_NUM_NODES", str(nodes_count))
 print(f"Number of nodes: {nodes_count}")
