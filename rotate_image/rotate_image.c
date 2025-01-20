@@ -3,6 +3,7 @@
 #define CH32V003_I2C_IMPLEMENTATION // using i2c
 #include "ch32v003fun.h"
 #define WAIT_WS_CONNECT // emulator wait for ws connection
+#define CLOSE_WS_ON_CLOSE // close emulator when connection is closed
 #include "driver.h"
 #define INSPIRE3D_DISPLAY_COMMON_COLOR // using common colors
 #include "inspire3d_display.h"

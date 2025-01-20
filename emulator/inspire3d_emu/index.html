@@ -67,6 +67,13 @@
 				window.close();
 			};
 
+			window.onbeforeunload = function () {
+				// pop up a confirm dialog
+				alert('Connection closed leaving');
+				ws.close();
+				return false;
+			};
+
 			function init() {
 
 				scene = new THREE.Scene();

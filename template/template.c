@@ -5,6 +5,7 @@
 #include "ch32v003fun.h"
 #include <stdio.h>
 // #define WAIT_WS_CONNECT // wait for websocket connection before starting for emulator
+// #defin CLOSE_WS_ON_CLOSE // close emulator when connection is closed
 #include "driver.h"
 #include "inspire3d_display.h"
 

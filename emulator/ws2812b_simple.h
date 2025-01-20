@@ -103,6 +103,9 @@ void onclose(ws_cli_conn_t client)
 #ifndef DISABLE_VERBOSE
 	printf("Connection closed, addr: %s\n", cli);
 #endif
+#ifdef CLOSE_WS_ON_CLOSE
+	exit(0);
+#endif
 }
 
 void WS_init() {
