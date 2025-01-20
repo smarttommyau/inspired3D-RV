@@ -1,3 +1,2 @@
-numpy<2
+numpy
 numpy-stl
-raster_geometry

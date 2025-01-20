@@ -2,7 +2,6 @@ import numpy as np
 # np.float_ = np.float64 # to fix the error: AttributeError: module 'numpy' has no attribute 'float_'
 from stl import mesh
 import sys
-import raster_geometry as rg
 
 # Align rounding function with the c program
 # From `rotate_image.c`:
@@ -118,27 +117,44 @@ with open('stl_data_template.h', 'r') as file:
 cache = {} # skip duplicate points
 nodes_count = 0
 
-# def bresenham_line(a, b):
+# customize from raster_geometry for float
+def bresenham_line(coord_a, coord_b,endpoint=False):
+    n_dim = len(coord_a)
+    diffs = [abs(b - a) for a, b in zip(coord_a, coord_b)]
+    steps = [1 if a < b else -1 for a, b in zip(coord_a, coord_b)]
+    max_diff = max(diffs)
+    updates = [max_diff / 2] * n_dim
+    coord = list(coord_a)
+    for i in range(my_round(max_diff)):
+        for j, (x, d, s, u) in enumerate(
+                zip(coord, diffs, steps, updates)):
+            updates[j] -= d
+            if u < 0:
+                coord[j] += s
+                updates[j] += max_diff
+        yield tuple(coord)
+    if endpoint:
+        yield tuple(coord_b)
     
 
 def full_triangle(a, b, c):
-    ab = rg.bresenham_line(a, b, endpoint=True)
+    ab = bresenham_line(a, b, endpoint=True)
     for x in set(ab):
-        yield from rg.bresenham_line(c, x, endpoint=True)
+        yield from bresenham_line(c, x, endpoint=True)
 
 coords_count = 0
-precision = 100
+precision = 1
 for vector in mesh_data.vectors:
     a,b,c = vector
     a = get_grid_coords_from_mesh_coords(a[0], a[1], a[2])
     a = (a[0]*precision, a[1]*precision, a[2]*precision )
-    a = (my_round(a[0]), my_round(a[1]), my_round(a[2]))
+    # a = (my_round(a[0]), my_round(a[1]), my_round(a[2]))
     b = get_grid_coords_from_mesh_coords(b[0], b[1], b[2])
     b = (b[0]*precision, b[1]*precision, b[2]*precision )
-    b = (my_round(b[0]), my_round(b[1]), my_round(b[2]))
+    # b = (my_round(b[0]), my_round(b[1]), my_round(b[2]))
     c = get_grid_coords_from_mesh_coords(c[0], c[1], c[2])
     c = (c[0]*precision, c[1]*precision, c[2]*precision)
-    c = (my_round(c[0]), my_round(c[1]), my_round(c[2]))
+    # c = (my_round(c[0]), my_round(c[1]), my_round(c[2]))
     coords = set(full_triangle(a, b, c))
     coords_count += len(coords)
     for x, y, z in coords:
