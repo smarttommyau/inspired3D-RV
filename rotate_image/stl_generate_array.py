@@ -27,20 +27,21 @@ if sys.argv[1] == "--help":
     print("M: y dimension")
     print("O: z dimension")
     print("default dimension is 5x5x5")
-    print("--scale x")
-    print("x: scale factor")
-    print("default scale factor is 1")
+    print("--margin x")
+    print("x: margin between object and the grid")
+    print("default scale margin is 0")
     sys.exit(0)
 
 arg_mode = ""
 filename = ""
 dimension = [5, 5, 5]
+margin = 0
 for arg in sys.argv:
     if arg == "--dimension":
         arg_mode = "dimension"
         continue
-    if arg == "--scale":
-        arg_mode = "scale"
+    if arg == "--margin":
+        arg_mode = "margin"
         continue
     if arg_mode == "dimension":
         dimension = arg.split('x')
@@ -50,8 +51,8 @@ for arg in sys.argv:
         dimension = [int(x) for x in dimension]
         arg_mode = ""
         continue
-    if arg_mode == "scale":
-        scale = float(arg)
+    if arg_mode == "margin":
+        margin = float(arg)
         arg_mode = ""
         continue
     if arg_mode == "":
@@ -59,7 +60,7 @@ for arg in sys.argv:
         filename = arg
 print(f"Filename: {filename}")
 print(f"Dimension: {dimension}")
-print(f"Scale: {scale}")
+print(f"Margin: {margin}")
 # filename = input("Enter the filename of the stl file: ")
 # filename = "basic_sphere.stl"
 mesh_data = mesh.Mesh.from_file(filename)
@@ -73,9 +74,12 @@ print(f"max_x: {max_x}, min_x: {min_x}, max_y: {max_y}, min_y: {min_y}, max_z: {
 
 # map mesh coords to dimension x dimension x dimension grid
 def get_grid_coords_from_mesh_coords(x, y, z):
-    grid_x = (x - min_x) * (dimension[0] - 1) / (max_x - min_x)
-    grid_y = (y - min_y) * (dimension[1] - 1) / (max_y - min_y)
-    grid_z = (z - min_z) * (dimension[2] - 1) / (max_z - min_z)
+    # scale to 0 to dimension and also add margin
+    # fit xyz scale with same ratio
+    min_scale = min((dimension[0] - 1 - margin*2) / (max_x - min_x), (dimension[1] - 1 - margin*2) / (max_y - min_y), (dimension[2] - 1 - margin*2) / (max_z - min_z))
+    grid_x = (x - min_x) * min_scale + margin
+    grid_y = (y - min_y) * min_scale + margin
+    grid_z = (z - min_z) * min_scale + margin
     return grid_x, grid_y, grid_z
 
 
