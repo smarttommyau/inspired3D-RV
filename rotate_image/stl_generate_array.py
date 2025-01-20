@@ -23,7 +23,7 @@ if len(sys.argv) > 1:
     dimension = [int(x) for x in dimension]
 else:
     dimension = [5, 5, 5]
-
+print(f"Dimension: {dimension}")
 filename = input("Enter the filename of the stl file: ")
 # filename = "basic_sphere.stl"
 mesh_data = mesh.Mesh.from_file(filename)
