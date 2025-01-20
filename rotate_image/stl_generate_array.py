@@ -76,10 +76,29 @@ print(f"max_x: {max_x}, min_x: {min_x}, max_y: {max_y}, min_y: {min_y}, max_z: {
 def get_grid_coords_from_mesh_coords(x, y, z):
     # scale to 0 to dimension and also add margin
     # fit xyz scale with same ratio
-    min_scale = min((dimension[0] - 1 - margin*2) / (max_x - min_x), (dimension[1] - 1 - margin*2) / (max_y - min_y), (dimension[2] - 1 - margin*2) / (max_z - min_z))
-    grid_x = (x - min_x) * min_scale + margin
-    grid_y = (y - min_y) * min_scale + margin
-    grid_z = (z - min_z) * min_scale + margin
+    rx = (max_x - min_x) / (dimension[0] - 1 - margin)
+    ry = (max_y - min_y) / (dimension[1] - 1 - margin)
+    rz = (max_z - min_z) / (dimension[2] - 1 - margin)
+    max_r = max(rx, ry, rz)
+    nx,ny,nz = dimension
+    if max_r == rx:
+        ny = int((max_y - min_y) / rx + 1)
+        nz = int((max_z - min_z) / rx + 1)
+    elif max_r == ry:
+        nx = int((max_x - min_x) / ry + 1)
+        nz = int((max_z - min_z) / ry + 1)
+    else:
+        nx = int((max_x - min_x) / rz + 1)
+        ny = int((max_y - min_y) / rz + 1)
+    # scale to 0 to dimension
+    grid_x = (x - min_x) / (max_x - min_x) * (nx - 1)
+    grid_y = (y - min_y) / (max_y - min_y) * (ny - 1)
+    grid_z = (z - min_z) / (max_z - min_z) * (nz - 1)
+    # add margin
+    grid_x += margin
+    grid_y += margin
+    grid_z += margin
+
     return grid_x, grid_y, grid_z
 
 
