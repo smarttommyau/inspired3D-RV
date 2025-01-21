@@ -148,12 +148,17 @@ def full_triangle(a, b, c):
     elif (a[0] == c[0] + a[1] == c[1] + a[2] == c[2]) > 1:
         ab = bresenham_line(a, c, endpoint=True)
         pt_c = b
-    else:
+    elif (b[0] == c[0] + b[1] == c[1] + b[2] == c[2]) > 1:
         ab = bresenham_line(b, c, endpoint=True)
         pt_c = a
+    else:
+        ab = list(bresenham_line(a, b, endpoint=True))
+        ab += list(bresenham_line(b,a, endpoint=True))
+        pt_c = c
 
     for x in set(ab):
         yield from bresenham_line(pt_c, x, endpoint=True)
+        yield from bresenham_line(x, pt_c, endpoint=True)
 
 coords_count = 0
 for vector in mesh_data.vectors:
