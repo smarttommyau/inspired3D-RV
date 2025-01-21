@@ -62,16 +62,15 @@
 					console.log(r, g, b);
 				}
 			};
+			const beforeload = function () {
+				// pop up a confirm dialog
+				return false;
+			};
+			window.addEventListener('beforeunload', beforeload);
 			ws.onclose = function (event) {
 				console.log('Connection closed leaving');
+				window.removeEventListener('onbeforeunload', beforeload);
 				window.close();
-			};
-
-			window.onbeforeunload = function () {
-				// pop up a confirm dialog
-				alert('Connection closed leaving');
-				ws.close();
-				return false;
 			};
 
 			function init() {
