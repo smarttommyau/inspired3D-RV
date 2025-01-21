@@ -143,21 +143,20 @@ def full_triangle(a, b, c):
         yield from bresenham_line(c, x, endpoint=True)
 
 coords_count = 0
-precision = 1
 for vector in mesh_data.vectors:
     a,b,c = vector
     a = get_grid_coords_from_mesh_coords(a[0], a[1], a[2])
-    a = (a[0]*precision, a[1]*precision, a[2]*precision )
+    a = (a[0], a[1], a[2])
     b = get_grid_coords_from_mesh_coords(b[0], b[1], b[2])
-    b = (b[0]*precision, b[1]*precision, b[2]*precision )
+    b = (b[0], b[1], b[2])
     c = get_grid_coords_from_mesh_coords(c[0], c[1], c[2])
-    c = (c[0]*precision, c[1]*precision, c[2]*precision)
+    c = (c[0], c[1], c[2])
     coords = set(full_triangle(a, b, c))
     coords_count += len(coords)
     for x, y, z in coords:
-        x= float(x)/precision
-        y= float(y)/precision
-        z= float(z)/precision
+        x= float(x)
+        y= float(y)
+        z= float(z)
         query = f"{my_round(x)},{my_round(y)},{my_round(z)}"
         if(query in cache):
             cache[query][0] += x
