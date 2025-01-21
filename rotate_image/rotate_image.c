@@ -175,7 +175,6 @@ void rotate(int rotate_vector[2]){
             newz = (image[i].z - CENTER_Z)*cos_value - (image[i].y - CENTER_Y)*sin_value;
             newy = (image[i].z - CENTER_Z)*sin_value + (image[i].y - CENTER_Y)*cos_value + CENTER_Y;
             printf("newz: %d, newy: %d\n", (int)newz, (int)newy);
-            printf("cos: %d.%d, sin: %d.%d\n", (int)cos_value, (int)((cos_value - (int)cos_value)*100), (int)sin_value, (int)((sin_value - (int)sin_value)*100));
         }
         else{
             newz = image[i].z - CENTER_Z;
@@ -281,9 +280,8 @@ int main(void) {
         }
         if(arrow == ARROW_UP){
             rotate_vector[0] += 1;
-            if(rotate_vector[0] >= 6)
+            if(rotate_vector[0] > 6)
                 rotate_vector[0] -= 12;
-            rotate_vector[0] %= 3*2+1;// 3*30 = 90 180 deg 6*30
             rotate(rotate_vector);
         }else if(arrow == ARROW_DOWN){
             rotate_vector[0] -= 1;
