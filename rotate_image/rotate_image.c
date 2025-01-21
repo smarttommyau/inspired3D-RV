@@ -79,14 +79,81 @@ void show_image(struct coords img[NUM_NODES]){
         Inspire3D_Display_SetColor(display, index, Inspire3D_Color_Blue);// color blue is temp random color
     }
     Inspire3D_Display_Update(display);
+    printf("show image\n");
 }
 
 
 #define cos30 0.86602540378
 #define sin30 0.5
+#define cos60 sin30
+#define sin60 cos30
+#define cos90 0
+#define sin90 1
+#define cos120 -sin30
+#define sin120 cos30
+#define cos150 -cos30
+#define sin150 sin30
+#define cos180 -1
+#define sin180 0
 
-void rotate(uint8_t dir){
-    printf("Rotating %d\n",dir);
+float my_cos(int degree){
+    if(degree < 0){
+        return my_cos(-degree);
+    }
+    switch(degree){
+        case 30:
+            return cos30;
+            break;
+        case 60:
+            return cos60;
+            break;
+        case 90:
+            return cos90;
+            break;
+        case 120:
+            return cos120;
+            break;
+        case 150:
+            return cos150;
+            break;
+        case 180:
+            return cos180;
+            break;
+        default:
+            return 0;
+    }
+
+}
+
+float my_sin(int degree){
+    if(degree < 0){
+        return -my_sin(-degree);
+    }
+    switch(degree){
+        case 30:
+            return sin30;
+            break;
+        case 60:
+            return sin60;
+            break;
+        case 90:
+            return sin90;
+            break;
+        case 120:
+            return sin120;
+            break;
+        case 150:
+            return sin150;
+            break;
+        case 180:
+            return sin180;
+            break;
+        default:
+            return 0;
+    }
+}
+
+void rotate(int rotate_vector[2]){
     // dir 0: up
     // dir 1: down
     // dir 2: left
@@ -95,35 +162,65 @@ void rotate(uint8_t dir){
     // cos(30) = 0.86602540378
     // sin(30) = 0.5
     // center 2,2
+    // note: change to calculate once only
+    // prevent error increase when rotate multiple times
+    int rotatey = rotate_vector[0];
+    int rotatex = rotate_vector[1];
+    printf("rotatey: %d, rotatex: %d\n", rotatey, rotatex);
     for(uint8_t i=0;i<NUM_NODES;i++){
-        float newx,newy,newz;
-        switch(dir){
-            case 0:
-                newz = (image_rotated[i].z - CENTER_Z)*cos30 - (image_rotated[i].y - CENTER_Y)*sin30 + CENTER_Z;
-                newy = (image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].y - CENTER_Y)*cos30 + CENTER_Y;
-                image_rotated[i].y = newy;
-                image_rotated[i].z = newz;
-                break;
-            case 1:
-                newz =  (image_rotated[i].z - CENTER_Z)*cos30 + (image_rotated[i].y - CENTER_Y)*sin30 + CENTER_Z;
-                newy = -(image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].y - CENTER_Y)*cos30 + CENTER_Y;
-                image_rotated[i].y = newy;
-                image_rotated[i].z = newz;
-                break;
-            case 2:
-                newz = (image_rotated[i].z - CENTER_Z)*cos30 - (image_rotated[i].x - CENTER_X)*sin30 + CENTER_Z;
-                newx = (image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].x - CENTER_X)*cos30 + CENTER_X;
-                image_rotated[i].x = newx;
-                image_rotated[i].z = newz;
-                break;
-            case 3:
-                newz =  (image_rotated[i].z - CENTER_Z)*cos30 + (image_rotated[i].x - CENTER_X)*sin30 + CENTER_Z;
-                newx = -(image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].x - CENTER_X)*cos30 + CENTER_X;
-                image_rotated[i].x = newx;
-                image_rotated[i].z = newz;
-                break;
-
+        float newx,newy,newz,cos_value,sin_value;
+        if(rotatey != 0){
+            cos_value = my_cos(rotatey*30);
+            sin_value = my_sin(rotatey*30);
+            newz = (image[i].z - CENTER_Z)*cos_value - (image[i].y - CENTER_Y)*sin_value;
+            newy = (image[i].z - CENTER_Z)*sin_value + (image[i].y - CENTER_Y)*cos_value + CENTER_Y;
+            printf("newz: %d, newy: %d\n", (int)newz, (int)newy);
+            printf("cos: %d.%d, sin: %d.%d\n", (int)cos_value, (int)((cos_value - (int)cos_value)*100), (int)sin_value, (int)((sin_value - (int)sin_value)*100));
         }
+        else{
+            newz = image[i].z - CENTER_Z;
+            newy = image[i].y;
+        }
+        if(rotatex != 0){
+            cos_value = my_cos(rotatex*30);
+            sin_value = my_sin(rotatex*30);
+            newz = newz*cos_value - (image[i].x - CENTER_X)*sin_value + CENTER_Z;
+            newx = newz*sin_value + (image[i].x - CENTER_X)*cos_value + CENTER_X;
+        }
+        else{
+            newz = newz + CENTER_Z;
+            newx = image[i].x;
+        }
+        image_rotated[i].x = newx;
+        image_rotated[i].y = newy;
+        image_rotated[i].z = newz;
+        // switch(dir){
+        //     case 0:
+        //         newz = (image_rotated[i].z - CENTER_Z)*cos30 - (image_rotated[i].y - CENTER_Y)*sin30 + CENTER_Z;
+        //         newy = (image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].y - CENTER_Y)*cos30 + CENTER_Y;
+        //         image_rotated[i].y = newy;
+        //         image_rotated[i].z = newz;
+        //         break;
+        //     case 1:
+        //         newz =  (image_rotated[i].z - CENTER_Z)*cos30 + (image_rotated[i].y - CENTER_Y)*sin30 + CENTER_Z;
+        //         newy = -(image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].y - CENTER_Y)*cos30 + CENTER_Y;
+        //         image_rotated[i].y = newy;
+        //         image_rotated[i].z = newz;
+        //         break;
+        //     case 2:
+        //         newz = (image_rotated[i].z - CENTER_Z)*cos30 - (image_rotated[i].x - CENTER_X)*sin30 + CENTER_Z;
+        //         newx = (image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].x - CENTER_X)*cos30 + CENTER_X;
+        //         image_rotated[i].x = newx;
+        //         image_rotated[i].z = newz;
+        //         break;
+        //     case 3:
+        //         newz =  (image_rotated[i].z - CENTER_Z)*cos30 + (image_rotated[i].x - CENTER_X)*sin30 + CENTER_Z;
+        //         newx = -(image_rotated[i].z - CENTER_Z)*sin30 + (image_rotated[i].x - CENTER_X)*cos30 + CENTER_X;
+        //         image_rotated[i].x = newx;
+        //         image_rotated[i].z = newz;
+        //         break;
+
+        // }
     }
 }
 
@@ -164,6 +261,7 @@ int main(void) {
     imageCopyToRotated();
     show_image(image_rotated);
     Delay_Ms(1000);
+    int rotate_vector[2] = {0,0};
     while(1){
         ABCD_KEY abcd = abcd_key_down(abcd_key_read_ADC());
         ARROW_KEY arrow = arrow_key_down(arrow_key_read_ADC());
@@ -182,13 +280,26 @@ int main(void) {
             Inspire3D_Display_SetBrightness(display, display->brightness + 0.1);
         }
         if(arrow == ARROW_UP){
-            rotate(0);
+            rotate_vector[0] += 1;
+            if(rotate_vector[0] >= 6)
+                rotate_vector[0] -= 12;
+            rotate_vector[0] %= 3*2+1;// 3*30 = 90 180 deg 6*30
+            rotate(rotate_vector);
         }else if(arrow == ARROW_DOWN){
-            rotate(1);
+            rotate_vector[0] -= 1;
+            if(rotate_vector[0] < -6)
+                rotate_vector[0] += 12;
+            rotate(rotate_vector);
         }else if(arrow == ARROW_LEFT){
-            rotate(2);
+            rotate_vector[1] += 1;
+            if(rotate_vector[1] > 6)
+                rotate_vector[1] -= 12;
+            rotate(rotate_vector);
         }else if(arrow == ARROW_RIGHT){
-            rotate(3);
+            rotate_vector[1] -= 1;
+            if(rotate_vector[1] < -6)
+                rotate_vector[1] += 12;
+            rotate(rotate_vector);
         }
         if(!(abcd == ABCD_NOT_FOUND && arrow == ARROW_NOT_FOUND)){
             show_image(image_rotated);
