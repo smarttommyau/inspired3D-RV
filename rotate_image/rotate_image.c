@@ -172,22 +172,22 @@ void rotate(int rotate_vector[2]){
         if(rotatey != 0){
             cos_value = my_cos(rotatey*30);
             sin_value = my_sin(rotatey*30);
-            newz = (image[i].z - CENTER_Z)*cos_value - (image[i].y - CENTER_Y)*sin_value;
+            newz = (image[i].z - CENTER_Z)*cos_value - (image[i].y - CENTER_Y)*sin_value + CENTER_Z;
             newy = (image[i].z - CENTER_Z)*sin_value + (image[i].y - CENTER_Y)*cos_value + CENTER_Y;
             printf("newz: %d, newy: %d\n", (int)newz, (int)newy);
         }
         else{
-            newz = image[i].z - CENTER_Z;
+            newz = image[i].z;
             newy = image[i].y;
         }
         if(rotatex != 0){
             cos_value = my_cos(rotatex*30);
             sin_value = my_sin(rotatex*30);
-            newz = newz*cos_value - (image[i].x - CENTER_X)*sin_value + CENTER_Z;
-            newx = newz*sin_value + (image[i].x - CENTER_X)*cos_value + CENTER_X;
+            newz = (newz - CENTER_Z)*cos_value - (image[i].x - CENTER_X)*sin_value + CENTER_Z;
+            newx = (newz - CENTER_Z)*sin_value + (image[i].x - CENTER_X)*cos_value + CENTER_X;
         }
         else{
-            newz = newz + CENTER_Z;
+            newz = newz;
             newx = image[i].x;
         }
         image_rotated[i].x = newx;
@@ -232,6 +232,7 @@ int main(void) {
 
     // initialize display
     Inspire3D_Display_Init(display, GPIOA, PA2);
+    Inspire3D_Display_SetBrightness(display, 0.1);
     Inspire3D_Display_Clear(display);
 
     // only generate random image if not using stl file
