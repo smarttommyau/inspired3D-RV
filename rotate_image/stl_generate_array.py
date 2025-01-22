@@ -2,6 +2,7 @@ import numpy as np
 # np.float_ = np.float64 # to fix the error: AttributeError: module 'numpy' has no attribute 'float_'
 from stl import mesh
 import sys
+import os.path
 
 # Align rounding function with the c program
 # From `rotate_image.c`:
@@ -57,6 +58,9 @@ for arg in sys.argv:
     if arg_mode == "":
         # if not in any mode, then it is the filename
         filename = arg
+        if os.path.isfile(filename) == False:
+            print("File not found")
+            sys.exit(1)
 print(f"Filename: {filename}")
 print(f"Dimension: {dimension}")
 print(f"Margin: {margin}")
@@ -148,19 +152,19 @@ def full_triangle(a, b, c):
             ]
     max_index = best.index(max(best))
     if max_index == 0:
-        ab = bresenham_line(a, b, endpoint=True)
+        ab = list(bresenham_line(a, b, endpoint=True))
         if best[0] < 2:
-            ab += bresenham_line(b,a,endpoint=True)
+            ab += list(bresenham_line(b,a,endpoint=True))
         pt_c = c
     elif max_index == 1:
-        ab = bresenham_line(a, c, endpoint=True)
+        ab = list(bresenham_line(a, c, endpoint=True))
         if best[0] < 2:
-            ab += bresenham_line(c,a,endpoint=True)
+            ab += list(bresenham_line(c,a,endpoint=True))
         pt_c = b
     else:
-        ab = bresenham_line(b, c, endpoint=True)
+        ab = list(bresenham_line(b, c, endpoint=True))
         if best[0] < 2:
-            ab += bresenham_line(c,b,endpoint=True)
+            ab += list(bresenham_line(c,b,endpoint=True))
         pt_c = a
 
     for x in set(ab):
