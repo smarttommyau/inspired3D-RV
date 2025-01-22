@@ -12,7 +12,7 @@ else:
 print("Generating stl_data...")
 proc = subprocess.run(["python", "stl_generate_array.py", stlfilename])
 if proc.returncode != 0:
-    print("Error in generating stl_data",file=sys.stderr)
+    print("\033[0;31mError:\033[0m in generating stl_data",file=sys.stderr)
     exit(1)
 # build new flash
 print("Building new flash...")
@@ -23,7 +23,9 @@ result = subprocess.run(
     universal_newlines = True
     )
 if "Error" in result.stdout:
-    print("Error in building new flash",file=sys.stderr)
+    print("\033[0;31mError:\033[0m in building new flash",file=sys.stderr)
+    if "`FLASH' overflowed" in result.stdout:
+        print("\033[0;31mError:\033[0m Flash overflowed",file=sys.stderr)
     exit(1)
 else:
     print("Build successful")
@@ -34,7 +36,7 @@ print("Note: for linux-arm64 or other error occurs in this step, you may need to
 if shutil.which("wlink"):
     proc = subprocess.run(["wlink", "flash", "rotate_image.bin"])
     if proc.returncode != 0:
-        print("Error in flashing new firmware",file=sys.stderr)
+        print("\033[0;31mError:\033[0m in flashing new firmware",file=sys.stderr)
         exit(1)
 else:
     print("wlink not found. Trying to run wlink from wlink_bin")
@@ -52,9 +54,9 @@ else:
         else:
             proc = subprocess.run(["./wlink_bin/wlink-mac-x86", "flash", "rotate_image.bin"])
     else:
-        print("Unsupported platform. Please install wlink from https://github.com/ch32-rs/wlink manually",file=sys.stderr)
+        print("\033[0;31mError:\033[0m Unsupported platform. Please install wlink from https://github.com/ch32-rs/wlink manually",file=sys.stderr)
         exit(1)
     if proc.returncode != 0:
-        print("Error in flashing new firmware",file=sys.stderr)
+        print("\033[0;31mError:\033[0m in flashing new firmware",file=sys.stderr)
         exit(1)
 print("Done")
