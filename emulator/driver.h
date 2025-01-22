@@ -17,12 +17,13 @@ typedef enum
     I2C_TIMEOUT_NO_ACK
 }i2c_result_e;
 
-i2c_result_e EEPROM_write(uint16_t regAddr, uint8_t *data, uint8_t sz){
+i2c_result_e EEPROM_write(uint16_t regAddr, uint8_t *data, uint16_t sz){
+    printf("Writing to EEPROM\n");
     FILE *fp = fopen("eeprom.bin", "wb+");
     fseek(fp, 0, SEEK_END); // seek to end of file
-    int size = ftell(fp); // get current file pointer
+    uint16_t size = ftell(fp); // get current file pointer
     fseek(fp, 0, SEEK_SET); // seek back to beginning of file
-    if(size < sizeof(data + regAddr)){
+    if(size < sizeof(data + regAddr)){  
         //write zeros till regAddr
         uint8_t zero = 0;
         fseek(fp, size, SEEK_SET);
@@ -37,9 +38,10 @@ i2c_result_e EEPROM_write(uint16_t regAddr, uint8_t *data, uint8_t sz){
     fseek(fp, regAddr, SEEK_SET);
     fwrite(data, sz, 1, fp);
     fclose(fp);
+    return I2C_RESULT_OK;
 }
 
-i2c_result_e EEPROM_read(uint16_t regAddr, uint8_t *data, uint8_t sz){
+i2c_result_e EEPROM_read(uint16_t regAddr, uint8_t *data, uint16_t sz){
     FILE *fp = fopen("eeprom.bin", "rb");
     if (fp == NULL)
     {
@@ -48,6 +50,7 @@ i2c_result_e EEPROM_read(uint16_t regAddr, uint8_t *data, uint8_t sz){
     fseek(fp, regAddr, SEEK_SET);
     fread(data, sz, 1, fp);
     fclose(fp);
+    return I2C_RESULT_OK;
 }
 
 // Detect arrow key press

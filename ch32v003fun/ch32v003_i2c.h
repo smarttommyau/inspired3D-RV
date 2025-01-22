@@ -129,11 +129,11 @@ static inline uint32_t i2c_chk_evt(uint32_t event_mask);
 i2c_result_e i2c_write( uint16_t devAddr,
 						uint16_t regAddr,
 						i2c_regAddr_bytes_e regAddrBytes,
-						uint8_t *data, uint8_t sz);
+						uint8_t *data, uint16_t sz);
 i2c_result_e i2c_read(	uint16_t devAddr,
 						uint16_t regAddr,
 						i2c_regAddr_bytes_e regAddrBytes,
-						uint8_t *data, uint8_t sz);
+						uint8_t *data, uint16_t sz);
 i2c_result_e i2c_scan();
 i2c_result_e i2c_ping(uint8_t addr, uint8_t *found) ;
 /*----------------------------------------------------------*/
@@ -281,7 +281,7 @@ i2c_result_e i2c_scan()
 i2c_result_e i2c_write( uint16_t devAddr,
 						uint16_t regAddr,
 						i2c_regAddr_bytes_e regAddrBytes,
-						uint8_t *data, uint8_t sz)
+						uint8_t *data, uint16_t sz)
 {
 	int32_t timeout;
 	i2c_err_flags = 0x00;
@@ -338,7 +338,7 @@ i2c_result_e i2c_write( uint16_t devAddr,
 i2c_result_e i2c_read(	uint16_t devAddr,
 						uint16_t regAddr,
 						i2c_regAddr_bytes_e regAddrBytes,
-						uint8_t *data, uint8_t sz)
+						uint8_t *data, uint16_t sz)
 {
 	int32_t timeout;
 #ifdef I2C_MODE_IRQ		
