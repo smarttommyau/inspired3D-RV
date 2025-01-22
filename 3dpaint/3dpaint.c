@@ -237,11 +237,13 @@ void drawBox(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_
 #define MAX_PAGE_NUM 8
 
 void save_paint(uint8_t page_num, Inspire3D_Color * buffer){
-    EEPROM_write(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
+    i2c_result_e err = EEPROM_write(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
+    printf("EEPROM write result: %d\n",err);
 }
 
 void load_paint(uint8_t page_num, Inspire3D_Color * buffer){
-    EEPROM_read(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
+    i2c_result_e err = EEPROM_read(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
+    printf("EEPROM read result: %d\n",err);
 }
 
 typedef enum {
@@ -277,7 +279,6 @@ void show_canvas_mode(Inspire3D_Display * display, CANVAS_MODE mode){
             Inspire3D_Display_Update(display);
             Delay_Ms(1000);
             return;
-            break;
         default:
             break;
     }
@@ -366,6 +367,10 @@ int main(void) {
             }else if(arrow == ARROW_RIGHT && abcd == ABCD_D){
                 // save paint
                 save_paint(0,canvas);
+                Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Green);
+                Inspire3D_Display_Update(display);
+                Delay_Ms(1000);
+                pushCanvas(display, canvas);
             }else if(arrow == ARROW_RIGHT && abcd == ABCD_C){
                 // load paint
                 load_paint(0,canvas);
@@ -377,19 +382,16 @@ int main(void) {
         if(arrow == ARROW_UP){
             y = (y + 1) % 5;
         } else if(arrow == ARROW_DOWN){
-            y = (y - 1) % 5;
-            y = y < 0 ? 4 : y;
+            y = (y + 4) % 5;
         } else if(arrow == ARROW_RIGHT){
             x = (x + 1) % 5;
         } else if(arrow == ARROW_LEFT){
-            x = (x - 1) % 5;
-            x = x < 0 ? 4 : x;
+            x = (x + 4) % 5;
         }
         if(abcd == ABCD_A){
             z = (z + 1) % 5;
         } else if(abcd == ABCD_B){
-            z = (z - 1) % 5;
-            z = z < 0 ? 4 : z;
+            z = (z + 4) % 5;
         }
         //select
         if(abcd == ABCD_D || abcd == ABCD_C){
