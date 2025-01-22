@@ -4,6 +4,8 @@
 
 #include "ch32v003fun.h"
 #include <stdio.h>
+#define WAIT_WS_CONNECT // emulator wait for ws connection
+#define CLOSE_WS_ON_CLOSE // close emulator when connection is closed
 #include "driver.h"
 #include "inspire3d_display.h"
 /// coords to led index
@@ -217,6 +219,15 @@ void drawBox(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_
     }
 }
 
+#define MAX_PAGE_NUM 8
+
+void save_paint(uint8_t page_num, Inspire3D_Color * buffer){
+    EEPROM_write(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
+}
+
+void load_paint(uint8_t page_num, Inspire3D_Color * buffer){
+    EEPROM_read(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
+}
 
 typedef enum {
     CANVAS_POINT,
@@ -289,7 +300,7 @@ int main(void) {
     int x = 0,y = 0,z = 0;// selector coords
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
-    Inspire3D_Display_SetBrightness(display, .02);
+    Inspire3D_Display_SetBrightness(display, 1);
     Inspire3D_Display_Clear(display);// reset data and update
     uint8_t mode = 0; //0: canvas; 1: color pallete
     CANVAS_MODE canvas_mode = CANVAS_POINT;
@@ -345,6 +356,13 @@ int main(void) {
                 }
                 Inspire3D_Display_Clear(display);
                 Inspire3D_Display_Update(display);
+            }else if(arrow == ARROW_RIGHT && abcd == ABCD_D){
+                // save paint
+                save_paint(0,canvas);
+            }else if(arrow == ARROW_RIGHT && abcd == ABCD_C){
+                // load paint
+                load_paint(0,canvas);
+                pushCanvas(display, canvas);
             }
         }
         // normal moving logic
@@ -371,6 +389,7 @@ int main(void) {
             if(mode == 1){
                 selected_color = Inspire3D_Color_setRGB(y*50,x*50,z*50);
                 Inspire3D_Display_Clear(display);
+                pushCanvas(display, canvas);
                 mode = 0;
             }else if(mode == 0){
                 canvas[Inspire3D_Display_Coords2Index(x,y,z)] = selected_color;
