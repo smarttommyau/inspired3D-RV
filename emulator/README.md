@@ -32,7 +32,7 @@ press keyboard to control the matrix emulator, listing out the keys
 
 
 ## Notes for emulator
-
+* emulator brightness is significant lower than the real device
 * Highly recommended to use dark theme terminal for best user experience
 * For Windows, Disable "Device default effects" before using the `JOY_sound()` function.
 * For MacOS version, go to settings -> Privacy & Security -> Accessibility and allow terminal/your IDE to control your computer to enable keyboard control (will pop up during first run, need to restart the program after enable)
