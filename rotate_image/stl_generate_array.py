@@ -142,19 +142,26 @@ def full_triangle(a, b, c):
     # if ab have z=z or y=y or x=x
     ab = None
     pt_c = None
-    if (a[0] == b[0] + a[1] == b[1] + a[2] == b[2]) > 1:
+    best = [(a[0] == b[0] + a[1] == b[1] + a[2] == b[2]),
+            (a[0] == c[0] + a[1] == c[1] + a[2] == c[2]),
+            (b[0] == c[0] + b[1] == c[1] + b[2] == c[2]),
+            ]
+    max_index = best.index(max(best))
+    if max_index == 0:
         ab = bresenham_line(a, b, endpoint=True)
+        if best[0] < 2:
+            ab += bresenham_line(b,a,endpoint=True)
         pt_c = c
-    elif (a[0] == c[0] + a[1] == c[1] + a[2] == c[2]) > 1:
+    elif max_index == 1:
         ab = bresenham_line(a, c, endpoint=True)
+        if best[0] < 2:
+            ab += bresenham_line(c,a,endpoint=True)
         pt_c = b
-    elif (b[0] == c[0] + b[1] == c[1] + b[2] == c[2]) > 1:
-        ab = bresenham_line(b, c, endpoint=True)
-        pt_c = a
     else:
-        ab = list(bresenham_line(a, b, endpoint=True))
-        ab += list(bresenham_line(b,a, endpoint=True))
-        pt_c = c
+        ab = bresenham_line(b, c, endpoint=True)
+        if best[0] < 2:
+            ab += bresenham_line(c,b,endpoint=True)
+        pt_c = a
 
     for x in set(ab):
         yield from bresenham_line(pt_c, x, endpoint=True)
