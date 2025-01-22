@@ -20,10 +20,20 @@ i2c_result_e EEPROM_write(uint16_t regAddr, uint8_t *data, uint16_t sz){
     printf("EEPROM write\n");   
     return i2c_write_pages(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
 }
+// for saving flash space
+void void_EEPROM_write(uint16_t regAddr, uint8_t *data, uint16_t sz){
+    // printf("EEPROM write\n");   
+    i2c_write_pages(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
+}
 
 i2c_result_e EEPROM_read(uint16_t regAddr, uint8_t *data, uint16_t sz){
     printf("EEPROM read\n");
     return i2c_read_pages(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
+}
+// for saving flash space
+void void_EEPROM_read(uint16_t regAddr, uint8_t *data, uint16_t sz){
+    printf("EEPROM read\n");
+    i2c_read_pages(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
 }
 
 

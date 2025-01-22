@@ -19,27 +19,48 @@ typedef enum
 
 i2c_result_e EEPROM_write(uint16_t regAddr, uint8_t *data, uint16_t sz){
     printf("Writing to EEPROM\n");
-    FILE *fp = fopen("eeprom.bin", "wb+");
-    fseek(fp, 0, SEEK_END); // seek to end of file
-    uint16_t size = ftell(fp); // get current file pointer
-    fseek(fp, 0, SEEK_SET); // seek back to beginning of file
-    if(size < sizeof(data + regAddr)){  
-        //write zeros till regAddr
-        uint8_t zero = 0;
-        fseek(fp, size, SEEK_SET);
-        for(int i = size; i < regAddr; i++){
-            fwrite(&zero, 1, 1, fp);
+    FILE *fp = fopen("eeprom.bin", "rb");
+    char *temp;
+    uint16_t size;
+    if(fp == NULL){
+        fp = fopen("eeprom.bin", "wb");
+        if (fp == NULL)
+        {
+            return I2C_TIMEOUT_NOT_BUSY;
         }
+        temp = malloc(sz + regAddr);
+    }else{
+    fseek(fp, 0, SEEK_END); // seek to end of file
+    size = ftell(fp); // get current file pointer
+    fseek(fp, 0, SEEK_SET); // seek back to beginning of file
+    if(size < sz + regAddr){  
+        size = sz  + regAddr;
+        temp = malloc(sz+regAddr);
+        fread(temp, 1, size, fp);
+        // //write zeros till regAddr
+        for(int i = size; i < regAddr; i++){
+            temp[i] = 0;
+        }
+    }else{
+        temp = malloc(size);
+        fread(temp, 1, size, fp);
     }
+    fclose(fp);
+    }
+    fp = fopen("eeprom.bin", "wb");
     if (fp == NULL)
     {
         return I2C_TIMEOUT_NOT_BUSY;
     }
-    fseek(fp, regAddr, SEEK_SET);
-    fwrite(data, sz, 1, fp);
+    for(int i = 0; i < sz; i++){
+        temp[regAddr + i] = data[i];
+    }
+    printf("test %d\n",sizeof(temp));
+    fwrite(temp, 1, size, fp);
     fclose(fp);
     return I2C_RESULT_OK;
 }
+#define void_EEPROM_write(regAddr, data, sz) EEPROM_write(regAddr, data, sz)
 
 i2c_result_e EEPROM_read(uint16_t regAddr, uint8_t *data, uint16_t sz){
     FILE *fp = fopen("eeprom.bin", "rb");
@@ -48,11 +69,11 @@ i2c_result_e EEPROM_read(uint16_t regAddr, uint8_t *data, uint16_t sz){
         return I2C_TIMEOUT_NOT_BUSY;
     }
     fseek(fp, regAddr, SEEK_SET);
-    fread(data, sz, 1, fp);
+    fread(data, 1, sz, fp);
     fclose(fp);
     return I2C_RESULT_OK;
 }
-
+#define void_EEPROM_read(regAddr, data, sz) EEPROM_read(regAddr, data, sz)
 // Detect arrow key press
 typedef enum {
     ARROW_UP    = 1,
