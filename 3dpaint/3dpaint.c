@@ -319,15 +319,11 @@ int main(void) {
             // search compound key 
             if(arrow == ARROW_DOWN && abcd == ABCD_C){
                 // clear buffer
-                points_buff[0] = -1;
-                points_buff[1] = -1;
                 points_buff_index = 0;
                 mode = 1;
                 show_color_pallete(display);
             }else if(arrow == ARROW_UP && abcd == ABCD_C){
                 // clear buffer
-                points_buff[0] = -1;
-                points_buff[1] = -1;
                 points_buff_index = 0;
                 // decrement paint mode
                 canvas_mode -= 1;
@@ -337,8 +333,6 @@ int main(void) {
                 pushCanvas(display, canvas);
             }else if(arrow == ARROW_UP && abcd == ABCD_D){
                 // clear buffer
-                points_buff[0] = -1;
-                points_buff[1] = -1;
                 points_buff_index = 0;
                 // increment paint mode
                 canvas_mode += 1;
@@ -347,8 +341,6 @@ int main(void) {
                 pushCanvas(display, canvas);
             }else if(arrow == ARROW_LEFT && abcd == ABCD_C){
                 // clear buffer
-                points_buff[0] = -1;
-                points_buff[1] = -1;
                 points_buff_index = 0;
                 // clear canvas
                 for(int i = 0; i < 125; i++){
