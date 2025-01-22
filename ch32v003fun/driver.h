@@ -14,14 +14,16 @@ void MY_I2C_init(){
     i2c_init();
     i2c_scan();
 }
-#define EEPROM_ADDR 0x52 // obtained from i2c_scan(), before shifting by 1 bit
+#define EEPROM_ADDR 0x51 // obtained from i2c_scan()
 
 i2c_result_e EEPROM_write(uint16_t regAddr, uint8_t *data, uint16_t sz){
-    return i2c_write(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
+    printf("EEPROM write\n");   
+    return i2c_write_pages(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
 }
 
 i2c_result_e EEPROM_read(uint16_t regAddr, uint8_t *data, uint16_t sz){
-    return i2c_read(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
+    printf("EEPROM read\n");
+    return i2c_read_pages(EEPROM_ADDR, regAddr, I2C_REGADDR_2B, data, sz);
 }
 
 
