@@ -9,3 +9,6 @@ down arrow + C: select color. then C/D to select<br>
 left arrow + C: clear screen.<br>
 right arrow + D: save screen to file.<br>
 right arrow + C: load screen from file.<br>
+
+### Note
+> To support larger display some variables need to be changed to uint16_t
