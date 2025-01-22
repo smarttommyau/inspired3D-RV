@@ -8,6 +8,8 @@
 #define CLOSE_WS_ON_CLOSE // close emulator when connection is closed
 #include "driver.h"
 #include "inspire3d_display.h"
+
+// NOTE: to support larger display some variables need to be changed to uint16_t
 /// coords to led index
 // Back layer
 // 0,5,10,15,20
@@ -24,6 +26,10 @@
 // 104,109,114,119,124
 
 Inspire3D_Color canvas[125];
+
+static inline bool isValidCoord(int x, int y, int z) {
+    return (x >= 0 && x < 5 && y >= 0 && y < 5 && z >= 0 && z < 5);
+}
 
 // https://stackoverflow.com/a/29019938
 #define MINDIFF 2.25e-308                   // use for convergence check
@@ -141,30 +147,39 @@ void drawLine(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8
 // reference https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 // and https://en.wikipedia.org/wiki/Midpoint_circle_algorithm#Jesko's_Method
 void _plotCirclePoints(Inspire3D_Color * buffer, int xc, int yc, int x, int y, uint8_t z, Inspire3D_Color color) {
-    if (xc + x >= 0 && xc + x < 5 && yc + y >= 0 && yc + y < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc + x, yc + y, z)] = color;
+    int coords[8][2] = {
+        {xc + x, yc + y}, {xc - x, yc + y}, {xc + x, yc - y}, {xc - x, yc - y},
+        {xc + y, yc + x}, {xc - y, yc + x}, {xc + y, yc - x}, {xc - y, yc - x}
+    };
+    for(int i=0; i<8; i++){
+        if(isValidCoord(coords[i][0], coords[i][1], z)){
+            buffer[Inspire3D_Display_Coords2Index(coords[i][0], coords[i][1], z)] = color;
+        }
     }
-    if (xc - x >= 0 && xc - x < 5 && yc + y >= 0 && yc + y < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc - x, yc + y, z)] = color;
-    }
-    if (xc + x >= 0 && xc + x < 5 && yc - y >= 0 && yc - y < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc + x, yc - y, z)] = color;
-    }
-    if (xc - x >= 0 && xc - x < 5 && yc - y >= 0 && yc - y < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc - x, yc - y, z)] = color;
-    }
-    if (xc + y >= 0 && xc + y < 5 && yc + x >= 0 && yc + x < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc + y, yc + x, z)] = color;
-    }
-    if (xc - y >= 0 && xc - y < 5 && yc + x >= 0 && yc + x < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc - y, yc + x, z)] = color;
-    }
-    if (xc + y >= 0 && xc + y < 5 && yc - x >= 0 && yc - x < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc + y, yc - x, z)] = color;
-    }
-    if (xc - y >= 0 && xc - y < 5 && yc - x >= 0 && yc - x < 5) {
-        buffer[Inspire3D_Display_Coords2Index(xc - y, yc - x, z)] = color;
-    }
+    // if (xc + x >= 0 && xc + x < 5 && yc + y >= 0 && yc + y < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc + x, yc + y, z)] = color;
+    // }
+    // if (xc - x >= 0 && xc - x < 5 && yc + y >= 0 && yc + y < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc - x, yc + y, z)] = color;
+    // }
+    // if (xc + x >= 0 && xc + x < 5 && yc - y >= 0 && yc - y < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc + x, yc - y, z)] = color;
+    // }
+    // if (xc - x >= 0 && xc - x < 5 && yc - y >= 0 && yc - y < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc - x, yc - y, z)] = color;
+    // }
+    // if (xc + y >= 0 && xc + y < 5 && yc + x >= 0 && yc + x < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc + y, yc + x, z)] = color;
+    // }
+    // if (xc - y >= 0 && xc - y < 5 && yc + x >= 0 && yc + x < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc - y, yc + x, z)] = color;
+    // }
+    // if (xc + y >= 0 && xc + y < 5 && yc - x >= 0 && yc - x < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc + y, yc - x, z)] = color;
+    // }
+    // if (xc - y >= 0 && xc - y < 5 && yc - x >= 0 && yc - x < 5) {
+    //     buffer[Inspire3D_Display_Coords2Index(xc - y, yc - x, z)] = color;
+    // }
 }
 
 void drawCircle(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_t x2, uint8_t y2, uint8_t z2, Inspire3D_Color color){
@@ -384,7 +399,11 @@ int main(void) {
                 pushCanvas(display, canvas);
                 mode = 0;
             }else if(mode == 0){
-                canvas[Inspire3D_Display_Coords2Index(x,y,z)] = selected_color;
+                uint8_t index = Inspire3D_Display_Coords2Index(x,y,z);
+                if(canvas[index].r == selected_color.r && canvas[index].g == selected_color.g && canvas[index].b == selected_color.b)
+                    canvas[index] = Inspire3D_Color_Black;
+                else
+                    canvas[index] = selected_color;
                 points_buff[points_buff_index] = Inspire3D_Display_Coords2Index(x,y,z);
                 points_buff_index = (points_buff_index + 1) % 2;
                 if(points_buff_index == 0){
