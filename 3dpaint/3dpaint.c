@@ -218,14 +218,14 @@ void drawCircle(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uin
 void drawBox(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_t x2, uint8_t y2, uint8_t z2, Inspire3D_Color color){
     // only draw outline
     int x = x1>x2?x2:x1;
-    int ex = x1>x2?x1:x2;
-    int ey = y1>y2?y1:y2;
-    int ez = z1>z2?z1:z2;
-    for(; x <= ex; x++){
+    // int ex = ;
+    // int ey =;
+    // int ez = ;
+    for(; x <= (x1>x2?x1:x2); x++){
         int y = y1>y2?y2:y1;
-        for(; y <= ey; y++){
+        for(; y <= (y1>y2?y1:y2); y++){
             int z = z1>z2?z2:z1;
-            for(; z <= ez; z++){
+            for(; z <= (z1>z2?z1:z2); z++){
                 if(((x == x1)+(x == x2)+(y == y1)+(y == y2)+(z == z1)+(z == z2))>1){
                     buffer[Inspire3D_Display_Coords2Index(x,y,z)] = color;
                 }
@@ -235,15 +235,26 @@ void drawBox(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_
 }
 
 #define MAX_PAGE_NUM 8
-
+// As page size of the eeprom is 64, we take multiple of 64 to write
+// or else, some weird behaviour may occur
+#define PIANT_SIZE 384 // ceil(125*3/64) * 64
 void save_paint(uint8_t page_num, Inspire3D_Color * buffer){
-    i2c_result_e err = EEPROM_write(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
-    printf("EEPROM write result: %d\n",err);
+    // printf("S%d",(uint16_t)page_num * 3*125);
+    // for(int i=0;i<125;i++){
+    //     printf("%d %d %d\n",((uint8_t *)buffer)[i*3],((uint8_t *)buffer)[i*3+1],((uint8_t *)buffer)[i*3+2]);
+    // }
+    void_EEPROM_write((uint16_t)page_num * PIANT_SIZE, (uint8_t *)buffer, 3*125);
+    // printf("EEPROM write result: %d\n",err);
 }
 
-void load_paint(uint8_t page_num, Inspire3D_Color * buffer){
-    i2c_result_e err = EEPROM_read(page_num * sizeof(Inspire3D_Color), (uint8_t *)buffer, 125 * sizeof(Inspire3D_Color));
-    printf("EEPROM read result: %d\n",err);
+void load_paint(uint8_t page_num, Inspire3D_Color* buffer){
+    // printf("%d",(uint16_t)page_num * 3*125);
+    void_EEPROM_read((uint16_t)page_num * PIANT_SIZE, (uint8_t *)buffer, 3*125);
+    // for(int i=0;i<125;i++){
+    //     printf("%d %d %d\n",((uint8_t *)buffer)[i*3],((uint8_t *)buffer)[i*3+1],((uint8_t *)buffer)[i*3+2]);
+    // }
+    
+    // printf("EEPROM read result: %d\n",err);
 }
 
 typedef enum {
@@ -316,12 +327,12 @@ int main(void) {
     int x = 0,y = 0,z = 0;// selector coords
     Inspire3D_Display * display = (Inspire3D_Display *)&display_buffer;
     Inspire3D_Display_Init(display,GPIOA, PA2);
-    Inspire3D_Display_SetBrightness(display, 1);
-    Inspire3D_Display_Clear(display);// reset data and update
+    Inspire3D_Display_SetBrightness(display, 0.02);// recommend to set to 1 for emulator
+    // Inspire3D_Display_Clear(display);// reset data and update
     uint8_t mode = 0; //0: canvas; 1: color pallete
     CANVAS_MODE canvas_mode = CANVAS_POINT;
     Inspire3D_Color selected_color = Inspire3D_Color_White;
-    int points_buff[2] = { -1, -1};
+    int point_buff = -1;
     uint8_t points_buff_index = 0;
     printf("Main Loop\n");
     while(1){
@@ -362,18 +373,23 @@ int main(void) {
                 for(int i = 0; i < 125; i++){
                     canvas[i] = Inspire3D_Color_Black;
                 }
-                Inspire3D_Display_Clear(display);
-                Inspire3D_Display_Update(display);
+                pushCanvas(display, canvas);
+                // Inspire3D_Display_Clear(display);
+                // Inspire3D_Display_Update(display);
             }else if(arrow == ARROW_RIGHT && abcd == ABCD_D){
                 // save paint
-                save_paint(0,canvas);
-                Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Green);
+                Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Red);
                 Inspire3D_Display_Update(display);
+                // pushCanvas(display, (Inspire3D_Color*){0});
                 Delay_Ms(1000);
+                save_paint(x,canvas);
                 pushCanvas(display, canvas);
             }else if(arrow == ARROW_RIGHT && abcd == ABCD_C){
                 // load paint
-                load_paint(0,canvas);
+                // Inspire3D_Display_SetBGColor(display, Inspire3D_Color_Green);
+                // Inspire3D_Display_Update(display);
+                // Delay_Ms(1000);
+                load_paint(x,canvas);
                 pushCanvas(display, canvas);
             }
         }
@@ -397,7 +413,6 @@ int main(void) {
         if(abcd == ABCD_D || abcd == ABCD_C){
             if(mode == 1){
                 selected_color = Inspire3D_Color_setRGB(y*50,x*50,z*50);
-                Inspire3D_Display_Clear(display);
                 pushCanvas(display, canvas);
                 mode = 0;
             }else if(mode == 0){
@@ -406,21 +421,20 @@ int main(void) {
                     canvas[index] = Inspire3D_Color_Black;
                 else
                     canvas[index] = selected_color;
-                points_buff[points_buff_index] = Inspire3D_Display_Coords2Index(x,y,z);
                 points_buff_index = (points_buff_index + 1) % 2;
                 if(points_buff_index == 0){
-                    uint8_t x1,y1,z1,x2,y2,z2;
-                    Inspire3D_Display_Index2Coords(points_buff[0], &x1, &y1, &z1);
-                    Inspire3D_Display_Index2Coords(points_buff[1], &x2, &y2, &z2);
+                    uint8_t x1,y1,z1;
+                    Inspire3D_Display_Index2Coords(point_buff, &x1, &y1, &z1);
+                    // Inspire3D_Display_Index2Coords(points_buff[1], &x2, &y2, &z2);
                     switch(canvas_mode){
                         case CANVAS_LINE:
-                            drawLine((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
+                            drawLine((Inspire3D_Color*)&canvas,x1,y1,z1,x,y,z,selected_color);
                             break;
                         case CANVAS_CIRCLE:
-                            drawCircle((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
+                            drawCircle((Inspire3D_Color*)&canvas,x1,y1,z1,x,y,z,selected_color);
                             break;
                         case CANVAS_BOX:
-                            drawBox((Inspire3D_Color*)&canvas,x1,y1,z1,x2,y2,z2,selected_color);
+                            drawBox((Inspire3D_Color*)&canvas,x1,y1,z1,x,y,z,selected_color);
                             break;
                         case CANVAS_FILL:
                             // fill
@@ -432,6 +446,8 @@ int main(void) {
                         default:
                             break;
                     }
+                }else{
+                    point_buff = index;
                 }
                 pushCanvas(display, canvas);
             }
