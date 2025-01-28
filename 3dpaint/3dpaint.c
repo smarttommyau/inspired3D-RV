@@ -239,10 +239,6 @@ void drawBox(Inspire3D_Color * buffer,uint8_t x1, uint8_t y1, uint8_t z1, uint8_
 // or else, some weird behaviour may occur
 #define PIANT_SIZE 384 // ceil(125*3/64) * 64
 void save_paint(uint8_t page_num, Inspire3D_Color * buffer){
-    // printf("S%d",(uint16_t)page_num * 3*125);
-    // for(int i=0;i<125;i++){
-    //     printf("%d %d %d\n",((uint8_t *)buffer)[i*3],((uint8_t *)buffer)[i*3+1],((uint8_t *)buffer)[i*3+2]);
-    // }
     void_EEPROM_write((uint16_t)page_num * PIANT_SIZE, (uint8_t *)buffer, 3*125);
     // printf("EEPROM write result: %d\n",err);
 }
@@ -250,10 +246,6 @@ void save_paint(uint8_t page_num, Inspire3D_Color * buffer){
 void load_paint(uint8_t page_num, Inspire3D_Color* buffer){
     // printf("%d",(uint16_t)page_num * 3*125);
     void_EEPROM_read((uint16_t)page_num * PIANT_SIZE, (uint8_t *)buffer, 3*125);
-    // for(int i=0;i<125;i++){
-    //     printf("%d %d %d\n",((uint8_t *)buffer)[i*3],((uint8_t *)buffer)[i*3+1],((uint8_t *)buffer)[i*3+2]);
-    // }
-    
     // printf("EEPROM read result: %d\n",err);
 }
 
@@ -425,7 +417,6 @@ int main(void) {
                 if(points_buff_index == 0){
                     uint8_t x1,y1,z1;
                     Inspire3D_Display_Index2Coords(point_buff, &x1, &y1, &z1);
-                    // Inspire3D_Display_Index2Coords(points_buff[1], &x2, &y2, &z2);
                     switch(canvas_mode){
                         case CANVAS_LINE:
                             drawLine((Inspire3D_Color*)&canvas,x1,y1,z1,x,y,z,selected_color);
