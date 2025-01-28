@@ -29,7 +29,7 @@ If you want to develop upon this, you may reference these codes. Mostly **templa
 - [**`template`**](./template) for all the basic setup required for developing a new program, using similar structure as arduino  
 - [`test_inspire3d_screen_control`](./test_inspire3d_screen_control) for controlling inspired3d screen
 - [`test_buttons_detection`](./test_buttons_detection) for button key detection
-- [`3dpaint`](./3dpaint) for 3D paint, refer for line drawing algorithm
+- [`3dpaint`](./3dpaint) for 3D paint, refer for **line drawing algorithm** and **eeprome** read/write
 
 ### Games
 - [`pong`](./pong) a pong game
@@ -39,7 +39,7 @@ If you want to develop upon this, you may reference these codes. Mostly **templa
 - [x] Basic Button key detection(down or up) 
 - [x] Basic LED control
 - [x] emulator of inspired3d
-- [ ] eeprome read/write
+- [x] eeprome read/write
 - [ ] Button click detection
 - [x] Intresting games and animations
 - [ ] Add more features
